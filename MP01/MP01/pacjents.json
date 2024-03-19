@@ -1,0 +1,38 @@
+[
+  {
+    "Id": 0,
+    "Pesel": "67041662152",
+    "Imie": [
+      "Jan",
+      "Mateusz"
+    ],
+    "Nazwisko": "Kowalski",
+    "Telefon": "790708165",
+    "Email": null,
+    "Adres": {
+      "Ulica": "Wawerska",
+      "Numer": "125A",
+      "NumerMieszkania": 19,
+      "Miasto": "Warszawa",
+      "KodPocztowy": "05-123"
+    }
+  },
+  {
+    "Id": 1,
+    "Pesel": "67041662152",
+    "Imie": [
+      "Jan",
+      "Mateusz"
+    ],
+    "Nazwisko": "Kowalski",
+    "Telefon": "790708165",
+    "Email": null,
+    "Adres": {
+      "Ulica": "Wawerska",
+      "Numer": "125A",
+      "NumerMieszkania": 19,
+      "Miasto": "Warszawa",
+      "KodPocztowy": "05-123"
+    }
+  }
+]
