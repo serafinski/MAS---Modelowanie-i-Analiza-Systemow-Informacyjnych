@@ -1,7 +1,7 @@
 ﻿using MP01;
 using MP01.Models;
 
-// Ekstensja - trwałość
+// Ekstensja - trwałość - przechowywanie danych w pliku
 Pacjent.LoadJson("pacjents.json");
 
 
@@ -25,7 +25,7 @@ var pacjent = new Pacjent
 };
 Console.WriteLine(Pacjent.ListaPacjentow());
 
-// Ekstensja - trwałość
+// Ekstensja - trwałość - przechowywanie danych w pliku
 Pacjent.SaveJson("pacjents.json");
 
 pacjent.Kaszlnij();

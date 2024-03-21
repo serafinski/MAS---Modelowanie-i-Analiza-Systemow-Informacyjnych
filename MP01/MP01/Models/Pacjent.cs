@@ -6,8 +6,8 @@ namespace MP01.Models;
 
 public class Pacjent
 {
-    // Ekstensja
-    public static List<Pacjent> Pacjenci { get; set; }= new();
+    // Ekstensja - przechowywanie wszystkich instancji klasy Pacjent
+    private static List<Pacjent> Pacjenci { get; set; }= new();
     
     public Pacjent()
     {
@@ -40,7 +40,7 @@ public class Pacjent
     // Składa się z atrybutów prostych lub innych atrybutów złożonych.
     public required Adres Adres { get; set; }
     
-    // Przesłonięcie
+    // Przesłonięcie - zmienienie zachowania metody klasy bazowej
     public override string ToString()
     {
         var imiona = string.Join(" ", Imie);
@@ -63,18 +63,21 @@ public class Pacjent
         return $"Pajent: {imiona} {Nazwisko} {emailTekst}, Adres: {adresTekst}";
     }
     
-    // Met. klasowa - znajdź pacjenta po peselu
+    // Met. klasowa - static
     public static string ListaPacjentow()
     {
         return string.Join(", ", Pacjenci);
     }
     
-    // Przeciążenie
+    // Przeciążenie - definiowanie wielu metod w jednej klasie
+    // Z tą samą nazwą, ale różnymi parametrami 
     public void Kaszlnij()
     {
         Console.WriteLine($"Pacjent {Imie[0]} {Nazwisko} kaszle.");
     }
-
+    
+    // Przeciążenie - definiowanie wielu metod w jednej klasie
+    // Z tą samą nazwą, ale różnymi parametrami 
     public void Kaszlnij(int x)
     {
         Console.WriteLine("Atak kaszlu!");
@@ -84,7 +87,7 @@ public class Pacjent
         }
     }
     
-    // Ekstensja - trwałość
+    // Ekstensja - trwałość - ładowanie danych z pliku
     public static void LoadJson(string path)
     {
         if (!File.Exists(path))
@@ -97,7 +100,7 @@ public class Pacjent
         Pacjenci = json!;
     }
     
-    // Ekstensja - trwałość
+    // Ekstensja - trwałość - zapisywanie danych do pliku
     public static void SaveJson(string path)
     {
         var data = JsonSerializer.Serialize(Pacjenci,new JsonSerializerOptions()
