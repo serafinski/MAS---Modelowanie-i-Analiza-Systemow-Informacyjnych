@@ -5,22 +5,11 @@
 // Asocjacja zwykła
 // Łączenie klas - które mają jakieś biznesowe zależności
 // np. Doktor jest przypisany do Wizyty. Doktor może mieć wiele wizyt - relacja 1-*
-var doktor = new Doktor
-{
-    IdDoktora = 1,
-    Imie = "Jan",
-    Nazwisko = "Kowalski",
-    Telefon = "123 456 789",
-    NumerPrawaWykonywaniaZawodu = "1234567"
-};
-
-var wizyta1 = new Wizyta
-{
-    IdWizyty = 1,
-    OpisWizyty = "Pacjent jest zdrowy"
-};
-
-doktor.DodajWizyte(wizyta1);
+var doktor = new Doktor(1, "Jan", "Kowalski","123 456 789","1234567");
+var wizyta1 = new Wizyta(1, DateTime.Now, "Pacjent jest zdrowy");
+var wizyta2 = new Wizyta(2, DateTime.Today, "Pacjent jest chory");
+doktor.DodajWizyteDoktora(wizyta1);
+doktor.DodajWizyteDoktora(wizyta2);
 
 // Asocjacja z atrybutem (klasa asocjacji)
 // [] 1-* [] *-1 []
@@ -60,8 +49,18 @@ var lekiNaRecepcie = new List<LekiNaRecepcie>
 
 // Asocjacja kwalifikowana
 // Polega na tym, iż dostęp do obiektu docelowego odbywa się na podstawie unikatowego kwalifikatora
-// Pacjent - Wizyta, pacjent może mieć wiele wizyt (zakładamy 1 wizytę na dzień)
-// Kwalifikator - Data_Wizyty
+// Pacjent - Wizyta, pacjent może mieć wiele wizyt
+// Kwalifikator - IdWizyty
+var pacjent1 = new Pacjent
+{
+    IdPacjenta = 1,
+    Imie = "Mateusz",
+    Nazwisko = "Nowak",
+    Telefon = "987 654 321",
+    PESEL = "010101678901"
+};
+pacjent1.DodajWizytePacjenta(wizyta1);
+pacjent1.PobierzWizytePacjenta(1);
 
 
 // Kompozycja
@@ -71,3 +70,5 @@ var szpital = new Szpital(1, "Szpital miejski");
 szpital.DodajOddzial(1,"Kardiologia");
 szpital.DodajOddzial(2,"Neurologia");
 szpital.UsunOddzial(1);
+
+//var oddzial = new Oddzial(5,"Chirurgia",);

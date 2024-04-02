@@ -22,15 +22,26 @@ public class Recepta
     //Dodawanie leku do recepty
     public void DodajLekiNaRecepte(Lek lek, int iloscLeku)
     {
-        var lekNaRecepcie = new LekiNaRecepcie
+        //Sprawdzenie czy lek od danym Id juz nie jest na recepcie
+        var lekIstniejeNaRecepcie = LekiNaRecepcie.Any(l => l.Lek.IdLeku == lek.IdLeku);
+
+        if (!lekIstniejeNaRecepcie)
         {
-            Recepta = this,
-            Lek = lek,
-            IloscLeku = iloscLeku
-        };
-        //Sledzenie lekow przypisanych do danej recepty
-        LekiNaRecepcie.Add(lekNaRecepcie);
-        //Sledzenie na jakich receptach znajduje sie danych lek
-        lek.LekiNaRecepcie.Add(lekNaRecepcie);
+            var lekNaRecepcie = new LekiNaRecepcie
+            {
+                Recepta = this,
+                Lek = lek,
+                IloscLeku = iloscLeku
+            };
+            
+            //Śledzenie leków przypisanych do danej recepty
+            LekiNaRecepcie.Add(lekNaRecepcie);
+            //Śledzenie na jakich receptach znajduje sie danych lek
+            lek.LekiNaRecepcie.Add(lekNaRecepcie);
+        }
+        else
+        {
+            throw new Exception("Lek o podanym ID już istniej na recepcie!");
+        }
     }
 }

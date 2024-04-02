@@ -2,9 +2,19 @@
 
 public class Wizyta
 {
-    public required int IdWizyty { get; set; }
-    public required string OpisWizyty { get; set; }
+    public int IdWizyty { get; set; }
+    
+    public DateTime DataWizyty { get; set; }
+    
+    public string OpisWizyty { get; set; }
     
     // Doktor jest przypisany do Wizyty. Doktor może mieć wiele wizyt - relacja 1-*
     public Doktor Doktor { get; set; }
+
+    public Wizyta(int idWizyty, DateTime dataWizyty, string opisWizyty)
+    {
+        IdWizyty = idWizyty;
+        DataWizyty = dataWizyty;
+        OpisWizyty = opisWizyty;
+    }
 }
