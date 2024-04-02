@@ -10,6 +10,9 @@ public class Wizyta
     
     // Doktor jest przypisany do Wizyty. Doktor może mieć wiele wizyt - relacja 1-*
     public Doktor Doktor { get; set; }
+    
+    //Referencja zwrotna do pacjenta
+    public Pacjent Pacjent { get; set; }
 
     public Wizyta(int idWizyty, DateTime dataWizyty, string opisWizyty)
     {

@@ -14,6 +14,12 @@ public class Szpital
         NazwaSzpitala = nazwaSzpitala;
     }
     
+    //Publiczny interfejs do zwracania listy, która jest prywatna
+    public IEnumerable<Oddzial> OddzialyEnumerable
+    {
+        get { return _oddzialy.AsEnumerable(); }
+    }
+    
     //Kontrola dodawania oddziałów przez klasę Szpital - Kompozycja
     public void DodajOddzial(int idOddzialu, string nazwaOddzialu)
     {

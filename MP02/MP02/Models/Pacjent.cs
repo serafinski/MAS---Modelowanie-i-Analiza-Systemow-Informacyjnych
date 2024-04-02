@@ -16,6 +16,8 @@ public class Pacjent
         if (!_wizyty.ContainsKey(wizyta.IdWizyty))
         {
             _wizyty.Add(wizyta.IdWizyty,wizyta);
+            //Referencja zwrotna do Pacjenta
+            wizyta.Pacjent = this;
         }
         else
         {
