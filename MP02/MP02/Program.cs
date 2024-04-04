@@ -1,5 +1,7 @@
 ﻿using MP02.Models;
 
+namespace MP02;
+
 class Program
 {
     private static void Main(string[] args)
