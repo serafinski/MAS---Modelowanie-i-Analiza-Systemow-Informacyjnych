@@ -13,7 +13,7 @@ class Program
         // Klasa abstrakcyjna i polimorficzne wołanie metod
         // Klasa abstrakcyjna - klasa, która nie może mieć bezpośrednich wystąpień (nie mogą istnieć obiekty należące do tej klasy).
         // Metoda abstrakcyjna - metoda, która posiada tylko deklarację, ale nie posiada definicji (ciała).
-        // Polimorficzne wołanie metody - umożliwia odpowiednie wybranie metody do wywołania.
+        // Polimorficzne wołanie metody - wywołanie tej samej metody w różnych klasach dziedziczących, z różnymi implementacjami.
         var doktor = new Doktor(1, "Jan", "Kowalski", 
             "123 456 789", "71031678901","7654321");
         var pacjent = new Pacjent(1, "Mateusz","Nowak","987654321","010101678901");
@@ -24,7 +24,7 @@ class Program
         
         Console.WriteLine("\nDZIEDZICZENIE OVERLAPPING");
         
-        // Dziedzicznie Overlapping
+        // Dziedzicznie Overlapping - za pomocą grupowania
         // Zbliżone do wielodziedziczenia - obiekt może należeć do do kilku klas na raz
         // (może być ich dowolną kombinacją - będzie miał ich wszystkie cechy)
         var badanie = new UslugaMedyczna
@@ -62,17 +62,23 @@ class Program
         Console.WriteLine($"\nIdUsługi: {konsultacjaZBadaniem.IdUslugi}");
         konsultacjaZBadaniem.JakiTyp();
         
-
-
+        Console.WriteLine("\nWIELODZIEDZICZENIE (DZIEDZICZENIE WIELOKROTNE)\n");
+        
         // Wielodziedziczenie (Dziedziczenie wielokrotne)
         // Wielodziedziczenie - dziedziczymy z więcej niż jednej nadklasy (w przeciwieństwie do abstract)
-
+        // W przeciwieństwie do Overlapping - dziedziczymy wszystko - nie jest to konkretna kombinacja
+        var koordynator = new PielegniarkaKoordynator(1,"Halina","Sosnowska",
+            "7776665555","71060665434","98765432");
+        koordynator.WyswietlDane();
+        koordynator.PlanujGrafik();
+        koordynator.PobierzKrew();
 
         // Dziedziczenie Wieloaspektowe
         // Dziedziczenie Wieloaspektowe - uwzględnia więcej niż 1 aspekt (kryterium podziału)
-
+        
 
         // Dziedziczenie Dynamiczne
         // Zmiana stanu z jednego na drugi - obiekty podklas mogą dowolnie zmieniać swoją przynależność
+        
     }
 }

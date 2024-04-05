@@ -10,7 +10,7 @@ public class Pacjent : Osoba
         IdPacjenta = idPacjenta;
     }
     
-    // Polimorficzne wołanie metody - umożliwia odpowiednie wybranie metody do wywołania.
+    // Polimorficzne wołanie metody - wywołanie tej samej metody w różnych klasach dziedziczących, z różnymi implementacjami.
     public override void WyswietlDane()
     {
         Console.WriteLine($"IdPacjenta: {IdPacjenta}," +

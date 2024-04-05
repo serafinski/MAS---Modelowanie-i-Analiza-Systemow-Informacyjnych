@@ -1,8 +1,10 @@
 ﻿namespace MP03.Models;
 
-// Dziedzicznie Overlapping
+// Dziedzicznie Overlapping - za pomocą grupowania
 // Zbliżone do wielodziedziczenia - obiekt może należeć do do kilku klas na raz
 // (może być ich dowolną kombinacją - będzie miał ich wszystkie cechy)
+
+// Dyskryminitator
 public enum TypUslugi
 {
     Badanie,
