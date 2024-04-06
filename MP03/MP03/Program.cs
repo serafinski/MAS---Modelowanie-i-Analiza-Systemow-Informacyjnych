@@ -22,7 +22,8 @@ class Program
         Console.WriteLine();
         pacjent.WyswietlDane();
         
-        Console.WriteLine("\nDZIEDZICZENIE OVERLAPPING");
+        Console.WriteLine("\n/////////////////////////\n" +
+                          "DZIEDZICZENIE OVERLAPPING");
         
         // Dziedzicznie Overlapping - za pomocą grupowania
         // Zbliżone do wielodziedziczenia - obiekt może należeć do do kilku klas na raz
@@ -62,7 +63,8 @@ class Program
         Console.WriteLine($"\nIdUsługi: {konsultacjaZBadaniem.IdUslugi}");
         konsultacjaZBadaniem.JakiTyp();
         
-        Console.WriteLine("\nWIELODZIEDZICZENIE (DZIEDZICZENIE WIELOKROTNE)\n");
+        Console.WriteLine("\n//////////////////////////////////////////////\n" +
+                          "WIELODZIEDZICZENIE (DZIEDZICZENIE WIELOKROTNE)\n");
         
         // Wielodziedziczenie (Dziedziczenie wielokrotne)
         // Wielodziedziczenie - dziedziczymy z więcej niż jednej nadklasy (w przeciwieństwie do abstract)
@@ -72,13 +74,21 @@ class Program
         koordynator.WyswietlDane();
         koordynator.PlanujGrafik();
         koordynator.PobierzKrew();
-
+        
+        Console.WriteLine("\n////////////////////////\n" +
+                          "DZIEDZICZENIE WIELOASPEKTOWE\n");
         // Dziedziczenie Wieloaspektowe
         // Dziedziczenie Wieloaspektowe - uwzględnia więcej niż 1 aspekt (kryterium podziału)
         
 
+        Console.WriteLine("\n////////////////////////\n" +
+                          "DZIEDZICZENIE DYNAMICZNE\n");
         // Dziedziczenie Dynamiczne
         // Zmiana stanu z jednego na drugi - obiekty podklas mogą dowolnie zmieniać swoją przynależność
-        
+        var staryDoktor = new Doktor(1,"Tomasz","Serafinski","123123123","55053083938","1234567");
+        staryDoktor.WyswietlDane();
+        Console.WriteLine();
+        var pacjentDoktor = new Pacjent(staryDoktor, 2);
+        pacjentDoktor.WyswietlDane();
     }
 }

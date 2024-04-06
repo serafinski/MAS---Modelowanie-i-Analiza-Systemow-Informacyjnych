@@ -4,8 +4,8 @@
 // Klasa abstrakcyjna - klasa, która nie może mieć bezpośrednich wystąpień (nie mogą istnieć obiekty należące do tej klasy).
 public abstract class Osoba
 {
-    protected string Imie { get; set; }
-    protected string Nazwisko { get; set; }
+    public string Imie { get; set; }
+    public string Nazwisko { get; set; }
     public string Telefon { get; set; } 
     public string Pesel { get; set; }
     
