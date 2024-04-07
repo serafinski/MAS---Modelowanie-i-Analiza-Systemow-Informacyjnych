@@ -77,18 +77,33 @@ class Program
         
         Console.WriteLine("\n////////////////////////\n" +
                           "DZIEDZICZENIE WIELOASPEKTOWE\n");
-        // Dziedziczenie Wieloaspektowe
-        // Dziedziczenie Wieloaspektowe - uwzględnia więcej niż 1 aspekt (kryterium podziału)
         
-
+        // Dziedziczenie Wieloaspektowe - uwzględnia więcej niż 1 aspekt (kryterium podziału)
+        // np. podzial na Dziecko, Dorosły, Senior
+        var pacjentdziecko = new Pacjent(2, "abc", "def", "3005", "123456789", new Dziecko());
+        pacjentdziecko.WyswietlDane();
+        pacjentdziecko.KategoriaWiekowa.UmowWizyte();
+        Console.WriteLine();
+        
+        var pacjentdorosly = new Pacjent(3, "cba", "fed", "5003", "123456789", new Dorosly());
+        pacjentdorosly.WyswietlDane();
+        pacjentdorosly.KategoriaWiekowa.UmowWizyte();
+        Console.WriteLine();
+        
+        var pacjentsenior = new Pacjent(4, "senior", "senior", "999", "123456789", new Senior());
+        pacjentsenior.WyswietlDane();
+        pacjentsenior.KategoriaWiekowa.UmowWizyte();
+        
         Console.WriteLine("\n////////////////////////\n" +
                           "DZIEDZICZENIE DYNAMICZNE\n");
+        
         // Dziedziczenie Dynamiczne
         // Zmiana stanu z jednego na drugi - obiekty podklas mogą dowolnie zmieniać swoją przynależność
         var staryDoktor = new Doktor(1,"Tomasz","Serafinski","123123123","55053083938","1234567");
         staryDoktor.WyswietlDane();
         Console.WriteLine();
-        var pacjentDoktor = new Pacjent(staryDoktor, 2);
+        var pacjentDoktor = new Pacjent(staryDoktor, 5);
         pacjentDoktor.WyswietlDane();
+        // Czy to wystarcza / czy mamy dodać dodatkowe rozbudowania do powiązań (Dodaj/Aktualizuj/Zamień)?
     }
 }

@@ -18,6 +18,13 @@ public class Pacjent : Osoba
         IdPacjenta = idPacjenta;
     }
     
+    // Dziedziczenie Wieloaspektowe - uwzględnia więcej niż 1 aspekt (kryterium podziału)
+    // Dodatkowy konstruktor 
+    public Pacjent(int idPacjenta, string imie, string nazwisko, string telefon, string pesel, KategoriaWiekowa kategoriaWiekowa) : base(imie, nazwisko, telefon, pesel, kategoriaWiekowa)
+    {
+        IdPacjenta = idPacjenta;
+    }
+
     // Polimorficzne wołanie metody - wywołanie tej samej metody w różnych klasach dziedziczących, z różnymi implementacjami.
     public override void WyswietlDane()
     {
