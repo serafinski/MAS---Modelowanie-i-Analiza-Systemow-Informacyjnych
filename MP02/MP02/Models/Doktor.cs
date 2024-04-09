@@ -18,7 +18,9 @@ public class Doktor
     }
 
     // Doktor jest przypisany do Wizyty. Doktor może mieć wiele wizyt - relacja 1-*
-    public List<Wizyta> Wizyty { get; set; } = new List<Wizyta>();
+    
+    //LISTA MA BYĆ PRYWATNA
+    private List<Wizyta> Wizyty { get; set; } = new List<Wizyta>();
 
     public void DodajWizyteDoktora(Wizyta wizyta)
     {

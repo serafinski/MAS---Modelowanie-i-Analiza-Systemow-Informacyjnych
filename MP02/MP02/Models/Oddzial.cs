@@ -4,6 +4,8 @@ public class Oddzial
 {
     public int IdOddzialu { get; set; }
     public string NazwaOddzialu { get; set; }
+    
+    // Połączenie zwrotne
     public Szpital Szpital { get; set; }
 
     public Oddzial(int id, string nazwaOddzialu, Szpital szpital)
@@ -23,4 +25,6 @@ public class Oddzial
         }
         Szpital = szpital;
     }
+    
+    //DODAĆ POŁĄCZENIE ZWROTNE?
 }

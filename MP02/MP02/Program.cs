@@ -49,9 +49,12 @@ class Program
             IdRecepty = 1,
             IloscOpakowan = 2
         };
-
+        
+        //Na receptę dodajemy lek
         recepta.DodajLekiNaRecepte(leki[0],5);
-        recepta.DodajLekiNaRecepte(leki[1],3);
+        
+        //Lek jest przydzielany na receptę
+        leki[1].PrzydzielNaRecepte(recepta,3);
         
 
         Console.WriteLine("\nASOCJACJA Z ATRYBUTEM\n");
@@ -105,6 +108,17 @@ class Program
         szpital.DodajOddzial(2,"Neurologia");
         szpital.UsunOddzial(1);
         
+        foreach (var oddzial in szpital.OddzialyEnumerable)
+        {
+            Console.WriteLine($"Oddział: {oddzial.NazwaOddzialu}, Szpital: {oddzial.Szpital.NazwaSzpitala}");
+        }
+        Szpital.UsunSzpital(1);
+        
+        //Jak nie usuniemy szpitala to to powinno zwrócić nam wartości
+        foreach (var s in szpital.SzpitaleEnumerable)
+        {
+            Console.WriteLine($"IdSzpitala: {s.IdSzpitala}");
+        }
         foreach (var oddzial in szpital.OddzialyEnumerable)
         {
             Console.WriteLine($"Oddział: {oddzial.NazwaOddzialu}, Szpital: {oddzial.Szpital.NazwaSzpitala}");

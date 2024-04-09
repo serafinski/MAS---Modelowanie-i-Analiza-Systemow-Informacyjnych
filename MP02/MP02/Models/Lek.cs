@@ -17,4 +17,25 @@ public class Lek
         // Każdy lek może być przypisany do wielu recept
         LekiNaRecepcie = new List<LekiNaRecepcie>();
     }
+    
+    //Przydzielenie leku na receptę
+    public void PrzydzielNaRecepte(Recepta recepta, int iloscLeku)
+    {
+        //Sprawdzenie czy lek od danym Id juz nie jest na recepcie
+        var lekIstniejeNaRecepcie = recepta.LekiNaRecepcie.Any(l => l.Lek.IdLeku == IdLeku);
+
+        if (!lekIstniejeNaRecepcie)
+        {
+            var lekNaRecepcie = new LekiNaRecepcie(recepta, this, iloscLeku);
+
+            // Dodajemy powiązanie do recepty
+            recepta.LekiNaRecepcie.Add(lekNaRecepcie);
+            // Dodajemy powiązanie zwrotne do tego leku
+            LekiNaRecepcie.Add(lekNaRecepcie);
+        }
+        else
+        {
+            throw new Exception("Ten lek jest już przypisany do podanej recepty.");
+        }
+    }
 }

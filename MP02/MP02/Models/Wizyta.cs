@@ -9,6 +9,7 @@ public class Wizyta
     public string OpisWizyty { get; set; }
     
     // Doktor jest przypisany do Wizyty. Doktor może mieć wiele wizyt - relacja 1-*
+    //PRYWATNY + SETTER (DO POŁĄCZEŃ ZWROTNYCH)
     public Doktor Doktor { get; set; }
     
     //Referencja zwrotna do pacjenta

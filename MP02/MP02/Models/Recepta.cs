@@ -27,12 +27,7 @@ public class Recepta
 
         if (!lekIstniejeNaRecepcie)
         {
-            var lekNaRecepcie = new LekiNaRecepcie
-            {
-                Recepta = this,
-                Lek = lek,
-                IloscLeku = iloscLeku
-            };
+            var lekNaRecepcie = new LekiNaRecepcie(this, lek, iloscLeku);
             
             //Śledzenie leków przypisanych do danej recepty
             LekiNaRecepcie.Add(lekNaRecepcie);

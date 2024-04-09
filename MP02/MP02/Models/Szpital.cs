@@ -7,14 +7,25 @@ public class Szpital
     
     // Lista oddziałów jest zarządzana wyłącznie przez klasę Szpital - kompozycja.
     private List<Oddzial> _oddzialy = new List<Oddzial>();
+    
+    //Lista współdzielona między szpitalami
+    private static List<Szpital> _szpitale = new List<Szpital>();
 
+    //Publiczny interfejs do zwracania prywatnej listy szpitali 
+    public IEnumerable<Szpital> SzpitaleEnumerable
+    {
+        get { return _szpitale.AsEnumerable(); }
+    }
+    
     public Szpital(int idSzpitala, string nazwaSzpitala)
     {
         IdSzpitala = idSzpitala;
         NazwaSzpitala = nazwaSzpitala;
+        //Dodajemy do listy kiedy stworzymy szpital
+        _szpitale.Add(this);
     }
     
-    //Publiczny interfejs do zwracania listy, która jest prywatna
+    //Publiczny interfejs do zwracania prywatnej listy oddziałów
     public IEnumerable<Oddzial> OddzialyEnumerable
     {
         get { return _oddzialy.AsEnumerable(); }
@@ -47,6 +58,22 @@ public class Szpital
         else
         {
             throw new ArgumentException("Oddział o podanym ID nie istnieje!");
+        }
+    }
+    
+    // Usuwanie szpitala wraz z usunięciem wszystkich oddziałów
+    public static void UsunSzpital(int idSzpitala)
+    {
+        var szpital = _szpitale.FirstOrDefault(s => s.IdSzpitala == idSzpitala);
+        if (szpital != null)
+        {
+            //Usuwanie wszystkich oddziałów przypisanych do szpitala
+            szpital._oddzialy.Clear();
+            _szpitale.Remove(szpital);
+        }
+        else
+        {
+            throw new ArgumentException("Szpital o podanym ID nie istnieje!");
         }
     }
 }

@@ -11,4 +11,13 @@ public class LekiNaRecepcie
     public Lek Lek { get; set; }
     
     public int IloscLeku { get; set; }
+    
+    //Konstruktor by wartości nie były null'em
+
+    public LekiNaRecepcie(Recepta recepta, Lek lek, int iloscLeku)
+    {
+        Recepta = recepta;
+        Lek = lek;
+        IloscLeku = iloscLeku;
+    }
 }
