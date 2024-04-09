@@ -19,22 +19,44 @@ public class UslugaMedyczna
     public string OpisUslugi { get; set; }
     
     //Odpowiednik EnumSet'a z Javy
-    public HashSet<TypUslugi> Typy { get; set; }
+    public HashSet<TypUslugi> Typy { get; set; } = new HashSet<TypUslugi>();
     
     //Specyficzne dla Badania
     public string CoJestBadane { get; set; }
     
     //Specyficzne dla Konsultacji
     public string SpecjalizacjaLekarza { get; set; }
-
-    public UslugaMedyczna()
+    
+    //Konstruktor badanie
+    public UslugaMedyczna(int idUslugi, string nazwaUslugi, string opisUslugi, CoJestBadane coJestBadane)
     {
-        Typy = new HashSet<TypUslugi>();
+        IdUslugi = idUslugi;
+        NazwaUslugi = nazwaUslugi;
+        OpisUslugi = opisUslugi;
+        CoJestBadane = coJestBadane.Wartosc;
+        Typy.Add(TypUslugi.Badanie);
     }
-
-    public void DodajTypUslugi(TypUslugi typUslugi)
+    
+    // Konstruktor konsultacja
+    public UslugaMedyczna(int idUslugi, string nazwaUslugi, string opisUslugi, string specjalizacjaLekarza)
     {
-        Typy.Add(typUslugi);
+        IdUslugi = idUslugi;
+        NazwaUslugi = nazwaUslugi;
+        OpisUslugi = opisUslugi;
+        SpecjalizacjaLekarza = specjalizacjaLekarza;
+        Typy.Add(TypUslugi.Konsultacja);
+    }
+    
+    // Konstruktor konsultacjaZBadaniem
+    public UslugaMedyczna(int idUslugi, string nazwaUslugi, string opisUslugi, CoJestBadane coJestBadane, string specjalizacjaLekarza)
+    {
+        IdUslugi = idUslugi;
+        NazwaUslugi = nazwaUslugi;
+        OpisUslugi = opisUslugi;
+        CoJestBadane = coJestBadane.Wartosc;
+        SpecjalizacjaLekarza = specjalizacjaLekarza;
+        Typy.Add(TypUslugi.Badanie);
+        Typy.Add(TypUslugi.Konsultacja);
     }
 
     public void JakiTyp()

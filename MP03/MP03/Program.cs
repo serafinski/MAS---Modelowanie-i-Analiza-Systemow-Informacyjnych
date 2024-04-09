@@ -28,38 +28,18 @@ class Program
         // Dziedzicznie Overlapping - za pomocą grupowania
         // Zbliżone do wielodziedziczenia - obiekt może należeć do do kilku klas na raz
         // (może być ich dowolną kombinacją - będzie miał ich wszystkie cechy)
-        var badanie = new UslugaMedyczna
-        {
-            IdUslugi = 1,
-            NazwaUslugi = "Morfologia Krwi",
-            OpisUslugi = "Badanie morfologi krwi",
-            CoJestBadane = "TSH"
-        };
-        badanie.DodajTypUslugi(TypUslugi.Badanie);
+
+        var badanie = new UslugaMedyczna(1, "Morfologia Krwi", "Badanie morfologii krwi", new CoJestBadane("TSH"));
         Console.WriteLine($"\nIdUsługi: {badanie.IdUslugi}");
         badanie.JakiTyp();
 
-        var konsultacja = new UslugaMedyczna
-        {
-            IdUslugi = 2,
-            NazwaUslugi = "Konsultacja neurologiczna",
-            OpisUslugi = "Konsultacja z neurologiem specjalizującym się w problemach z równowagą.",
-            SpecjalizacjaLekarza = "Neurolog"
-        };
-        konsultacja.DodajTypUslugi(TypUslugi.Konsultacja);
+        var konsultacja = new UslugaMedyczna(2,"Konsultacja neurologiczna", 
+            "onsultacja z neurologiem specjalizującym się w problemach z równowagą.", "Neurolog");
         Console.WriteLine($"\nIdUsługi: {konsultacja.IdUslugi}");
         konsultacja.JakiTyp();
 
-        var konsultacjaZBadaniem = new UslugaMedyczna
-        {
-            IdUslugi = 3,
-            NazwaUslugi = "Konsultacja chirurgiczna",
-            OpisUslugi = "Konsultacja z chirurgiem naczyniowym",
-            SpecjalizacjaLekarza = "Chirurg",
-            CoJestBadane = "Znamiona na plecach"
-        };
-        konsultacjaZBadaniem.DodajTypUslugi(TypUslugi.Badanie);
-        konsultacjaZBadaniem.DodajTypUslugi(TypUslugi.Konsultacja);
+        var konsultacjaZBadaniem = new UslugaMedyczna(3, "Konsultacja chirurgiczna", "Konsultacja z chirurgiem naczyniowym",
+            new CoJestBadane("Znamiona na plecach"),"Chirurg");
         Console.WriteLine($"\nIdUsługi: {konsultacjaZBadaniem.IdUslugi}");
         konsultacjaZBadaniem.JakiTyp();
         
