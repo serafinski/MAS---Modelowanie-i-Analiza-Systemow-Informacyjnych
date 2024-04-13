@@ -11,6 +11,8 @@ class Program
         //Ograniczenie Atrybutu
         //Reguła określająca dopuszczalne operacje lub wartości dla atrybutu klasy,
         //mająca na celu zapewnienie poprawności i spójności danych w systemie.
+        
+        //Dzielenie na klasy pacjenta w zależności od PESELU
         Console.WriteLine("OGRANICZENIE ATRYBUTU\n");
         
         var dziecko = new Pacjent(1, "Jan", "Kowalski","123456789","1524187160");
@@ -29,7 +31,9 @@ class Program
         //Ograniczenie Unique
         //Atrybut ma unikalną wartość w ramach ekstensji — może istnieć tylko jeden obiekt należący do danej klasy,
         //który ma atrybut z daną wartością
-        Console.WriteLine("OGRANICZENIE UNIQUE\n");
+        
+        //Nie może być ten sam PESEL
+        Console.WriteLine("\nOGRANICZENIE UNIQUE\n");
         try
         {
             //Ten sam pesel
@@ -40,14 +44,23 @@ class Program
             Console.WriteLine();
             Console.WriteLine(ex.Message);
         }
-
-
+        
         //Ograniczenie Subset — może być nakładane na dwie asocjacje (lub agregacje)
         //Obydwie asocjacje powinny być pomiędzy tymi samymi klasami oraz obydwa powiązania powinny być pomiędzy tymi samymi obiektami
-
+        
+        Console.WriteLine("\nOGRANICZENIE SUBSET\n");
+        var pielegniarka = new Pielegniarka("Anna", "Nowak", "7776665555", "9404218011", 1, "98765432");
+        pielegniarka.WyswietlDane();
+        pielegniarka.PobierzKrew();
+        
+        //Pielęgniarka Koordynator musi być w również pielęgniarką
+        var koordynator = new PielegniarkaKoordynator(1, pielegniarka);
+        koordynator.PlanujGrafik();
+        
         //Ograniczenie Ordered — może być nakładane na asocjacje lub na klase
         //Asocjacja — powiązania są przechowywane (oraz otrzymywane i przetwarzane) w pewnej ustalonej kolejności.
         //Klasa — obiekty w ekstensji są przechowywane (oraz otrzymywane i przetwarzane) w pewnej ustalonej kolejności
+        
 
         //Ograniczenie Bag — umożliwia przechowywanie duplikatów elementów
         //Asocjacja — może istnieć wiele powiązań pomiędzy tymi samymi obiektami (niedozwolone w klasycznej asocjacji)
