@@ -57,11 +57,39 @@ class Program
         var koordynator = new PielegniarkaKoordynator(1, pielegniarka);
         koordynator.PlanujGrafik();
         
-        //Ograniczenie Ordered — może być nakładane na asocjacje lub na klase
+        //Ograniczenie Ordered — może być nakładane na asocjacje lub na klasę
         //Asocjacja — powiązania są przechowywane (oraz otrzymywane i przetwarzane) w pewnej ustalonej kolejności.
         //Klasa — obiekty w ekstensji są przechowywane (oraz otrzymywane i przetwarzane) w pewnej ustalonej kolejności
         
+        Console.WriteLine("\nOGRANICZENIE ORDERED\n");
+        
+        var doktor = new Doktor("Andrzej", "Wodecki", "111 222 333",
+            "7603030321",1,"7654321");
+        var pacjent = new Pacjent(4, "Mateusz", "Nowak", "987 654 321", "012101678901");
 
+        var wizyta1 = new Wizyta(1, DateTime.Now, "Kontrola", doktor, pacjent);
+        var wizyta2 = new Wizyta(2, DateTime.Now.AddHours(1),"Diagnoza",doktor,dorosly);
+        var wizyta3 = new Wizyta(3, DateTime.Now.AddHours(2), "Szczepienie", doktor, senior);
+        doktor.DodajWizyteDoKolejki(wizyta1);
+        doktor.DodajWizyteDoKolejki(wizyta2);
+        doktor.DodajWizyteDoKolejki(wizyta3);
+        Console.WriteLine();
+        
+        doktor.WyswietlKolejke();
+
+
+        doktor.ObsluzNastepnaWizyte();
+        Console.WriteLine("\nPo obsłudze 1 wizyty:");
+        doktor.WyswietlKolejke();
+        
+        doktor.ObsluzNastepnaWizyte();
+        doktor.ObsluzNastepnaWizyte();
+        // Brak wizyt
+        doktor.ObsluzNastepnaWizyte();
+        
+        Console.WriteLine("Kolejka po obsłużeniu wizyt:");
+        doktor.WyswietlKolejke();
+        
         //Ograniczenie Bag — umożliwia przechowywanie duplikatów elementów
         //Asocjacja — może istnieć wiele powiązań pomiędzy tymi samymi obiektami (niedozwolone w klasycznej asocjacji)
 
