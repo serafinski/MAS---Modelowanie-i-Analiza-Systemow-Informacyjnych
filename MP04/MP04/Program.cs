@@ -61,11 +61,12 @@ class Program
         //Asocjacja — powiązania są przechowywane (oraz otrzymywane i przetwarzane) w pewnej ustalonej kolejności.
         //Klasa — obiekty w ekstensji są przechowywane (oraz otrzymywane i przetwarzane) w pewnej ustalonej kolejności
         
+        //Np. kolejka pacjentów u doktora
         Console.WriteLine("\nOGRANICZENIE ORDERED\n");
         
-        var doktor = new Doktor("Andrzej", "Wodecki", "111 222 333",
+        var doktor = new Doktor("Andrzej", "Wodecki", "111222333",
             "7603030321",1,"7654321");
-        var pacjent = new Pacjent(4, "Mateusz", "Nowak", "987 654 321", "012101678901");
+        var pacjent = new Pacjent(4, "Mateusz", "Nowak", "987654321", "012101678901");
 
         var wizyta1 = new Wizyta(1, DateTime.Now, "Kontrola", doktor, pacjent);
         var wizyta2 = new Wizyta(2, DateTime.Now.AddHours(1),"Diagnoza",doktor,dorosly);
@@ -92,7 +93,16 @@ class Program
         
         //Ograniczenie Bag — umożliwia przechowywanie duplikatów elementów
         //Asocjacja — może istnieć wiele powiązań pomiędzy tymi samymi obiektami (niedozwolone w klasycznej asocjacji)
-
+        Console.WriteLine("\nOGRANICZENIE BAG\n");
+        
+        //Np. ten sam pacjent może mieć wiele wizyt u tego samego doktora
+        var wizyta4 = new Wizyta(4, DateTime.Now.AddMonths(1), "Kontrola po miesiącu", doktor, pacjent);
+        var wizyta5 = new Wizyta(5, DateTime.Now.AddYears(1), "Kontrola po roku", doktor, pacjent);
+        doktor.DodajWizyteDoKolejki(wizyta4);
+        doktor.DodajWizyteDoKolejki(wizyta5);
+        Console.WriteLine();
+        doktor.WyswietlWizytyPacjenta(4);
+        
         //Ograniczenie Xor — dotyczy co najmniej 2 asocjacji
         //Zapewnia, że będzie istniało tylko jedno powiązanie w ramach asocjacji, które ogranicza.
 

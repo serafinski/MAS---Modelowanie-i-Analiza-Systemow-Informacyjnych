@@ -13,9 +13,15 @@ public class Doktor : Osoba
 
     //Gwarancja Ordered — kolejka na zasadzie FIFO
     private Queue<Wizyta> KolejkaWizyt { get; set; } = new Queue<Wizyta>();
+    
+    //Bag — lista wszystkich wizyt doktora, gdzie doktor może mieć wizytę z tym samym pacjentem po kilka razy
+    private List<Wizyta> WszystkieWizyty { get; set; } = new List<Wizyta>();
 
     public void DodajWizyteDoKolejki(Wizyta wizyta)
     {
+        //Dodawanie wizyt do listy
+        WszystkieWizyty.Add(wizyta);
+        //Dodawanie wizyt do kolejki
         KolejkaWizyt.Enqueue(wizyta);
         Console.WriteLine($"Dodano wizytę ID: {wizyta.IdWizyty} do kolejki doktora {Imie} {Nazwisko}.");
     }
@@ -41,6 +47,29 @@ public class Doktor : Osoba
             Console.WriteLine($"Wizyta ID: {wizyta.IdWizyty}, Data: {wizyta.DataWizyty},\n" +
                               $"Pacjent: {wizyta.Pacjent.Imie} {wizyta.Pacjent.Nazwisko}");
             Console.WriteLine();
+        }
+    }
+    
+    //Wyświetlanie wszystkich wizyt pacjenta u danego doktora
+    public void WyswietlWizytyPacjenta(int idPacjenta)
+    {
+        var wizytyPacjenta = WszystkieWizyty.Where(w => w.Pacjent.IdPacjenta == idPacjenta);
+
+        if (wizytyPacjenta.Any())
+        {
+            Console.WriteLine($"Wizyty pacjenta o ID: {idPacjenta} u doktora: {Imie} {Nazwisko}:");
+            foreach (var wizyta in wizytyPacjenta)
+            {
+                Console.WriteLine($"ID Wizyty: {wizyta.IdWizyty}\n" +
+                                  $"Data wizyty: {wizyta.DataWizyty}\n" +
+                                  $"Opis wizyt: {wizyta.OpisWizyty}");
+                Console.WriteLine();
+            }
+            
+        }
+        else
+        {
+            Console.WriteLine($"Brak wizyt dla pacjenta o ID {idPacjenta}");
         }
     }
     
