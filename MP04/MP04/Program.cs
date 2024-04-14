@@ -103,8 +103,31 @@ class Program
         Console.WriteLine();
         doktor.WyswietlWizytyPacjenta(4);
         
-        //Ograniczenie Xor — dotyczy co najmniej 2 asocjacji
+        //Ograniczenie Xor — w ramach grupy asocjacji występuje tylko jedno powiązanie naraz
         //Zapewnia, że będzie istniało tylko jedno powiązanie w ramach asocjacji, które ogranicza.
+        Console.WriteLine("\nOGRANICZENIE XOR\n");
+        
+        //Np. dany lek nie może zostać przepisany na receptę, ponieważ będzie wchodził w interakcje z innym lekiem
+        var lek1 = new Lek(1, "Paracetamol");
+        var lek2 = new Lek(2, "Ibuprofen");
+        var lek3 = new Lek(3, "Aspiryna");
+        var lek4 = new Lek (4, "Warfaryna");
+
+        var recepta = new Recepta(1);
+        recepta.DodajLekiNaRecepte(lek1,1);
+        recepta.DodajLekiNaRecepte(lek2,1);
+        
+        //Dodawanie leku wchodzącego w interakcje
+        try
+        {
+            recepta.DodajLekiNaRecepte(lek3,1);
+        }
+        catch (InvalidOperationException ex)
+        {
+            Console.WriteLine();
+            Console.WriteLine(ex.Message);
+        }
+
 
         //Ograniczenie Własne
         //Niestandardowy warunek/ reguła wprowadzona do modelu systemu, określająca specyficzne wymagania dotyczące jego zachowania lub struktury,
