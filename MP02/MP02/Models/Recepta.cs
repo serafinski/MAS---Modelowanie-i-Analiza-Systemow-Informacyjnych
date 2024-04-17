@@ -5,38 +5,48 @@
 // np. Recepta - LekiNaRecepcie - Lek
 public class Recepta
 {
-    public required int IdRecepty { get; set; }
+    public int IdRecepty { get; set; }
     
-    public required int IloscOpakowan { get; set; }
+    public int IloscOpakowan { get; set; }
     
-    // Definicja typu i dostępności do listy (zarówno do odczytu, jak i do zapisu) z zewnątrz klasy Recepta.
-    public List<LekiNaRecepcie> LekiNaRecepcie { get; set; }
+    // Musi być prywatna!
+    //STWORZYĆ ASOCJACJE Z KLASY LEKINARECEPCIE DO LEK I RECEPTA - Z POZIOMU KONSTRUKTORA
+    private List<LekiNaRecepcie> _lekiNaRecepcie = new List<LekiNaRecepcie>();
 
-    public Recepta()
+    public Recepta(int idRecepty, int iloscOpakowan)
     {
-        // Zapewnienie relacji *-*
-        // Każda recepta może zawierać wiele leków
-        LekiNaRecepcie = new List<LekiNaRecepcie>();
+        IdRecepty = idRecepty;
+        IloscOpakowan = iloscOpakowan;
     }
     
     //Dodawanie leku do recepty
-    public void DodajLekiNaRecepte(Lek lek, int iloscLeku)
+    public void DodajLek(Lek lek, int iloscLeku, bool inicjalizacja = true)
     {
-        //Sprawdzenie czy lek od danym Id juz nie jest na recepcie
-        var lekIstniejeNaRecepcie = LekiNaRecepcie.Any(l => l.Lek.IdLeku == lek.IdLeku);
-
-        if (!lekIstniejeNaRecepcie)
+        if (!CzyLekJestPrzypisany(lek))
         {
             var lekNaRecepcie = new LekiNaRecepcie(this, lek, iloscLeku);
+            _lekiNaRecepcie.Add(lekNaRecepcie);
             
-            //Śledzenie leków przypisanych do danej recepty
-            LekiNaRecepcie.Add(lekNaRecepcie);
-            //Śledzenie na jakich receptach znajduje sie danych lek
-            lek.LekiNaRecepcie.Add(lekNaRecepcie);
+            //Sprawdzamy stan — czy zostało już zainicjowane, by uniknąć zapętlenia
+            if (inicjalizacja)
+            {
+                lek.DodajLekNaRecepte(this, iloscLeku, false);
+            }
         }
         else
         {
-            throw new Exception("Lek o podanym ID już istniej na recepcie!");
+            throw new Exception("Podany lek istnieje już na recepcie!");
         }
+    }
+
+    
+    public IEnumerable<LekiNaRecepcie> PobierzLekiNaRecepcie()
+    {
+        return _lekiNaRecepcie.AsReadOnly();
+    }
+
+    private bool CzyLekJestPrzypisany(Lek lek)
+    {
+        return _lekiNaRecepcie.Any(l => l.Lek == lek);
     }
 }

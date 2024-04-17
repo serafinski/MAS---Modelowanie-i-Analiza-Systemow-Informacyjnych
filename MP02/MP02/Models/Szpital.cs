@@ -10,11 +10,11 @@ public class Szpital
     
     //Lista współdzielona między szpitalami
     private static List<Szpital> _szpitale = new List<Szpital>();
-
-    //Publiczny interfejs do zwracania prywatnej listy szpitali 
-    public IEnumerable<Szpital> SzpitaleEnumerable
+    
+    //Publiczny interfejs do zwracania prywatnej listy oddziałów
+    public IEnumerable<Oddzial> OddzialyEnumerable
     {
-        get { return _szpitale.AsEnumerable(); }
+        get { return _oddzialy.AsReadOnly(); }
     }
     
     public Szpital(int idSzpitala, string nazwaSzpitala)
@@ -25,39 +25,27 @@ public class Szpital
         _szpitale.Add(this);
     }
     
-    //Publiczny interfejs do zwracania prywatnej listy oddziałów
-    public IEnumerable<Oddzial> OddzialyEnumerable
-    {
-        get { return _oddzialy.AsEnumerable(); }
-    }
-    
     //Kontrola dodawania oddziałów przez klasę Szpital - Kompozycja
-    public void DodajOddzial(int idOddzialu, string nazwaOddzialu)
+    public void DodajOddzial(Oddzial oddzial)
     {
         //Error handling
-        if (_oddzialy.Any(oddzial => oddzial.IdOddzialu == idOddzialu))
+        if (_oddzialy.Any(o => o.IdOddzialu == oddzial.IdOddzialu))
         {
-            throw new ArgumentException("Podane ID już istnieje!");
+            throw new ArgumentException("Oddział o tym ID już istnieje w szpitalu!");
         }
-        
-        // Połączenie zwrotne - Oddział jest świadomy do którego Szpitala należy
-        var oddzial = new Oddzial(idOddzialu, nazwaOddzialu, this);
         _oddzialy.Add(oddzial);
     }
 
     //Kontrola usuwania oddziałów przez klasę Szpital - Kompozycja
-    public void UsunOddzial(int idOddzialu)
+    public void UsunOddzial(Oddzial oddzial)
     {
-        var oddzial = _oddzialy.FirstOrDefault(oddzial => oddzial.IdOddzialu == idOddzialu);
-
-        if (oddzial != null)
+        if (_oddzialy.Contains(oddzial))
         {
             _oddzialy.Remove(oddzial);
         }
-        //Error handling
         else
         {
-            throw new ArgumentException("Oddział o podanym ID nie istnieje!");
+            throw new ArgumentException("Taki oddział nie istnieje w tym szpitalu!");
         }
     }
     
@@ -67,9 +55,9 @@ public class Szpital
         var szpital = _szpitale.FirstOrDefault(s => s.IdSzpitala == idSzpitala);
         if (szpital != null)
         {
-            //Usuwanie wszystkich oddziałów przypisanych do szpitala
+            // Usunięcie wszystkich oddziałów związanych z szpitalem
             szpital._oddzialy.Clear();
-            _szpitale.Remove(szpital);
+            _szpitale.Remove(szpital);  // Usunięcie szpitala z globalnej listy szpitali
         }
         else
         {

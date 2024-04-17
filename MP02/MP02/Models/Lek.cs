@@ -5,37 +5,47 @@
 // np. Recepta - LekiNaRecepcie - Lek
 public class Lek
 {
-    public required int IdLeku { get; set; }
-    public required string NazwaChemiczna { get; set; }
+    public int IdLeku { get; set; }
+    public string NazwaChemiczna { get; set; }
     
-    // Definicja typu i dostępności do listy (zarówno do odczytu, jak i do zapisu) z zewnątrz klasy Lek.
-    public List<LekiNaRecepcie> LekiNaRecepcie { get; set; }
+    // Musi być prywatna!
+    //STWORZYĆ ASOCJACJE Z KLASY LEKINARECEPCIE DO LEK I RECEPTA - Z POZIOMU KONSTRUKTORA
+    private List<LekiNaRecepcie> _lekiNaRecepcie = new List<LekiNaRecepcie>();
 
-    public Lek()
+
+    public Lek(int idLeku, string nazwaChemiczna)
     {
-        // Zapewnienie relacji *-*
-        // Każdy lek może być przypisany do wielu recept
-        LekiNaRecepcie = new List<LekiNaRecepcie>();
+        IdLeku = idLeku;
+        NazwaChemiczna = nazwaChemiczna;
     }
     
     //Przydzielenie leku na receptę
-    public void PrzydzielNaRecepte(Recepta recepta, int iloscLeku)
+    public void DodajLekNaRecepte(Recepta recepta, int iloscLeku, bool inicjalizacja = true)
     {
-        //Sprawdzenie czy lek od danym Id juz nie jest na recepcie
-        var lekIstniejeNaRecepcie = recepta.LekiNaRecepcie.Any(l => l.Lek.IdLeku == IdLeku);
-
-        if (!lekIstniejeNaRecepcie)
+        if (!CzyReceptaJestPrzypisana(recepta))
         {
             var lekNaRecepcie = new LekiNaRecepcie(recepta, this, iloscLeku);
-
-            // Dodajemy powiązanie do recepty
-            recepta.LekiNaRecepcie.Add(lekNaRecepcie);
-            // Dodajemy powiązanie zwrotne do tego leku
-            LekiNaRecepcie.Add(lekNaRecepcie);
+            _lekiNaRecepcie.Add(lekNaRecepcie);
+            
+            //Sprawdzamy stan — czy zostało już zainicjowane, by uniknąć zapętlenia
+            if (inicjalizacja)
+            {
+                recepta.DodajLek(this, iloscLeku, false);
+            }
         }
         else
         {
             throw new Exception("Ten lek jest już przypisany do podanej recepty.");
         }
+    }
+
+    public IEnumerable<LekiNaRecepcie> PobierzLekiNaRecepcie()
+    {
+        return _lekiNaRecepcie.AsReadOnly();
+    }
+
+    private bool CzyReceptaJestPrzypisana(Recepta recepta)
+    {
+        return _lekiNaRecepcie.Any(l => l.Recepta == recepta);
     }
 }

@@ -6,7 +6,8 @@ public class Oddzial
     public string NazwaOddzialu { get; set; }
     
     // Połączenie zwrotne
-    public Szpital Szpital { get; set; }
+    // SZPITAL MA BYĆ PRYWATNY
+    private Szpital Szpital { get; set; }
 
     public Oddzial(int id, string nazwaOddzialu, Szpital szpital)
     {
@@ -24,7 +25,12 @@ public class Oddzial
             throw new ArgumentException("Oddział musi posiadać szpital!!");
         }
         Szpital = szpital;
+        //POŁĄCZENIE ZWROTNE
+        Szpital.DodajOddzial(this);
     }
-    
-    //DODAĆ POŁĄCZENIE ZWROTNE?
+
+    public Szpital GetSzpital()
+    {
+        return Szpital;
+    }
 }
