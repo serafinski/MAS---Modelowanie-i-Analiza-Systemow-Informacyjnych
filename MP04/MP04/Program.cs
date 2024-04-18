@@ -111,16 +111,24 @@ class Program
         var lek1 = new Lek(1, "Paracetamol");
         var lek2 = new Lek(2, "Ibuprofen");
         var lek3 = new Lek(3, "Aspiryna");
-        var lek4 = new Lek (4, "Warfaryna");
+        // Definiowanie interakcji
+        lek1.Interakcje.Add(lek3);
+        // Interakcja dwukierunkowa
+        lek3.Interakcje.Add(lek1);  
 
         var recepta = new Recepta(1);
-        recepta.DodajLekiNaRecepte(lek1,1);
-        recepta.DodajLekiNaRecepte(lek2,1);
+        recepta.DodajLekDoRecepty(lek1,1);
+        recepta.DodajLekDoRecepty(lek2,1);
+        Console.WriteLine("Leki na recepcie przed próbą dodania Aspiryny:");
+        foreach (var lekNaRecepcie in recepta.PobierzLekiNaRecepcie())
+        {
+            Console.WriteLine($"Lek: {lekNaRecepcie.Lek.NazwaChemiczna}, Ilość: {lekNaRecepcie.IloscLeku}");
+        }
         
         //Dodawanie leku wchodzącego w interakcje
         try
         {
-            recepta.DodajLekiNaRecepte(lek3,1);
+            recepta.DodajLekDoRecepty(lek3,1);
         }
         catch (InvalidOperationException ex)
         {
