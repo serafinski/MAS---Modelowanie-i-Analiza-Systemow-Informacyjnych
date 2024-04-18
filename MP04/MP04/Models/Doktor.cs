@@ -5,6 +5,9 @@ public class Doktor : Osoba
     public int IdDoktora { get; set; }
     public string NumerPrawaWykonywaniaZawodu { get; set; }
 
+    //Ograniczenie Własne
+    private const int MaxLiczbaWizytNaDzien = 10;
+
     public Doktor(string imie, string nazwisko, string telefon, string pesel, int idDoktora, string numerPrawaWykonywaniaZawodu) : base(imie, nazwisko, telefon, pesel)
     {
         IdDoktora = idDoktora;
@@ -17,13 +20,26 @@ public class Doktor : Osoba
     //Bag — lista wszystkich wizyt doktora, gdzie doktor może mieć wizytę z tym samym pacjentem po kilka razy
     private List<Wizyta> WszystkieWizyty { get; set; } = new List<Wizyta>();
 
+    private int LiczbaWizytDzisiaj(DateTime data)
+    {
+        return WszystkieWizyty.Count(wizyta => wizyta.DataWizyty.Date == data.Date);
+    }
+    
     public void DodajWizyteDoKolejki(Wizyta wizyta)
     {
-        //Dodawanie wizyt do listy
-        WszystkieWizyty.Add(wizyta);
-        //Dodawanie wizyt do kolejki
-        KolejkaWizyt.Enqueue(wizyta);
-        Console.WriteLine($"Dodano wizytę ID: {wizyta.IdWizyty} do kolejki doktora {Imie} {Nazwisko}.");
+        //Ograniczenie Własne
+        if (LiczbaWizytDzisiaj(wizyta.DataWizyty) < MaxLiczbaWizytNaDzien)
+        {
+            //Dodawanie wizyt do listy
+            WszystkieWizyty.Add(wizyta);
+            //Dodawanie wizyt do kolejki
+            KolejkaWizyt.Enqueue(wizyta);
+            Console.WriteLine($"Dodano wizytę ID: {wizyta.IdWizyty} do kolejki doktora {Imie} {Nazwisko}.");
+        }
+        else
+        {
+            Console.WriteLine("Nie można dodać więcej wizyt - osiągnięto max. liczbe wizyt!");
+        }
     }
     
     public void ObsluzNastepnaWizyte()

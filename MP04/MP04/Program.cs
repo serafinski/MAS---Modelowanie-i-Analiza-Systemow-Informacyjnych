@@ -96,8 +96,10 @@ class Program
         Console.WriteLine("\nOGRANICZENIE BAG\n");
         
         //Np. ten sam pacjent może mieć wiele wizyt u tego samego doktora
-        var wizyta4 = new Wizyta(4, DateTime.Now.AddMonths(1), "Kontrola po miesiącu", doktor, pacjent);
-        var wizyta5 = new Wizyta(5, DateTime.Now.AddYears(1), "Kontrola po roku", doktor, pacjent);
+        
+        //Edit daty by zadziałało dla Ogranicznia Własnego!
+        var wizyta4 = new Wizyta(4, DateTime.Now, "Kontrola po miesiącu", doktor, pacjent);
+        var wizyta5 = new Wizyta(5, DateTime.Now, "Kontrola po roku", doktor, pacjent);
         doktor.DodajWizyteDoKolejki(wizyta4);
         doktor.DodajWizyteDoKolejki(wizyta5);
         Console.WriteLine();
@@ -140,5 +142,23 @@ class Program
         //Ograniczenie Własne
         //Niestandardowy warunek/ reguła wprowadzona do modelu systemu, określająca specyficzne wymagania dotyczące jego zachowania lub struktury,
         //nieobjęte przez standardowe elementy UML.
+        Console.WriteLine("\nOGRANICZENIE WŁASNE\n");
+        var wizyta6 = new Wizyta(6, DateTime.Now, "Kontrola", doktor, pacjent);
+        doktor.DodajWizyteDoKolejki(wizyta6);
+        var wizyta7 = new Wizyta(7, DateTime.Now.AddHours(1),"Diagnoza",doktor,dorosly);
+        doktor.DodajWizyteDoKolejki(wizyta7);
+        var wizyta8 = new Wizyta(8, DateTime.Now.AddHours(2), "Szczepienie", doktor, senior);
+        doktor.DodajWizyteDoKolejki(wizyta8);
+        var wizyta9 = new Wizyta(9, DateTime.Now, "Kontrola", doktor, pacjent);
+        doktor.DodajWizyteDoKolejki(wizyta9);
+        var wizyta10 = new Wizyta(10, DateTime.Now.AddHours(1),"Diagnoza",doktor,dorosly);
+        doktor.DodajWizyteDoKolejki(wizyta10);
+        var wizyta11 = new Wizyta(11, DateTime.Now.AddHours(2), "Szczepienie", doktor, senior);
+        doktor.DodajWizyteDoKolejki(wizyta11);
+        
+        //MA TO BYĆ DOWOLNE OGRANICZENIE KTÓRE JEST NIE NA ATRYBUCIE - OGRANICZENIE NA ASSOCJACJI/METODZIE
+        // np. doktor może mieć max. 10 wizyt dziennie
+        
+        
     }
 }
