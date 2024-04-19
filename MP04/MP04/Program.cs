@@ -142,6 +142,10 @@ class Program
         //Ograniczenie Własne
         //Niestandardowy warunek/ reguła wprowadzona do modelu systemu, określająca specyficzne wymagania dotyczące jego zachowania lub struktury,
         //nieobjęte przez standardowe elementy UML.
+        
+        //MA TO BYĆ DOWOLNE OGRANICZENIE KTÓRE JEST NIE NA ATRYBUCIE - OGRANICZENIE NA ASSOCJACJI/METODZIE
+        // np. doktor może mieć max. 10 wizyt dziennie
+        
         Console.WriteLine("\nOGRANICZENIE WŁASNE\n");
         var wizyta6 = new Wizyta(6, DateTime.Now, "Kontrola", doktor, pacjent);
         doktor.DodajWizyteDoKolejki(wizyta6);
@@ -155,10 +159,5 @@ class Program
         doktor.DodajWizyteDoKolejki(wizyta10);
         var wizyta11 = new Wizyta(11, DateTime.Now.AddHours(2), "Szczepienie", doktor, senior);
         doktor.DodajWizyteDoKolejki(wizyta11);
-        
-        //MA TO BYĆ DOWOLNE OGRANICZENIE KTÓRE JEST NIE NA ATRYBUCIE - OGRANICZENIE NA ASSOCJACJI/METODZIE
-        // np. doktor może mieć max. 10 wizyt dziennie
-        
-        
     }
 }

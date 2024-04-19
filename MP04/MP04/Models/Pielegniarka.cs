@@ -8,6 +8,10 @@ public class Pielegniarka : Osoba
 
     //Lista przechowująca wszystkie pielęgniarki
     private static List<Pielegniarka> _pielegniarki = new List<Pielegniarka>();
+    
+    //Publiczny dostęp do listy
+    public static IReadOnlyList<Pielegniarka> WszystkiePielegniarki => _pielegniarki;
+    
     public Pielegniarka(string imie, string nazwisko, string telefon, string pesel, int idPielegniarki, string numerPrawaWykonywaniaZawodu) : base(imie, nazwisko, telefon, pesel)
     {
         IdPielegniarki = idPielegniarki;
