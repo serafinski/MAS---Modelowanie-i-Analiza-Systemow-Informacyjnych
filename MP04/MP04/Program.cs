@@ -47,15 +47,27 @@ class Program
         
         //Ograniczenie Subset — może być nakładane na dwie asocjacje (lub agregacje)
         //Obydwie asocjacje powinny być pomiędzy tymi samymi klasami oraz obydwa powiązania powinny być pomiędzy tymi samymi obiektami
+        //Subset jest przeciwieństwem XOR'a — jedna asocjacja może istnieć, jeżeli istnieje druga
         
+        //Np. doktor kieruje szpitalem, pod warunkiem, iż pracuje w tym szpitalu
         Console.WriteLine("\nOGRANICZENIE SUBSET\n");
-        var pielegniarka = new Pielegniarka("Anna", "Nowak", "7776665555", "9404218011", 1, "98765432");
-        pielegniarka.WyswietlDane();
-        pielegniarka.PobierzKrew();
+        var kierownikOddzialu = new Doktor("Jan","Serafiński","987654321","710304678901",2,
+            "1234567");
+        var szpital = new Szpital(1, "Zielony szpital");
+        kierownikOddzialu.DodajDoktoraDoSzpitala(szpital);
+        kierownikOddzialu.ZostanKierownikiemSzpitala(szpital);
         
-        //Pielęgniarka Koordynator musi być w również pielęgniarką
-        var koordynator = new PielegniarkaKoordynator(1, pielegniarka);
-        koordynator.PlanujGrafik();
+        try
+        {
+            var falszywyKierownik = new Doktor("Stefan", "Parmezan", "978645312", "690403678901", 3,
+                "1468967");
+            falszywyKierownik.ZostanKierownikiemSzpitala(szpital);
+        }
+        catch (InvalidOperationException ex)
+        {
+            Console.WriteLine();
+            Console.WriteLine(ex.Message);
+        }
         
         //Ograniczenie Ordered — może być nakładane na asocjacje lub na klasę
         //Asocjacja — powiązania są przechowywane (oraz otrzymywane i przetwarzane) w pewnej ustalonej kolejności.

@@ -1,5 +1,9 @@
 ﻿namespace MP04.Models;
 
+// ASSOCJACJA - DOKTOR PRACUJE W SZPITALU - MUSI ISTNIEC BY ASSOCJACJA - DOKTOR KIERUJE SZPITALEM WYSTAPILA (POD WARUNKIEM ZE PRACUJE W TYM SZPITALU)
+// DOKTOR MA LISTE SZPITALI W KTÓRYCH PRACUJE I MA LISTĘ SZPITALI KTÓRYMI KIERUJE. MOZE KIEROWAC SZPITALEM JESLI JEST REKORD ZE W NIM PRACUJE
+// MAMY 2 ASOCJACJE CZYLI 2 LISTY PRACOWNIKOW W KLASIE DOKTOR - SA 2 LISTY SZPITALI JEDNA NAZYWA SIE PRACUJEW A DRUGA KIERUJE
+// JAK ZROBIMY METODE ZOSTANKIEROWNIKIEMSZPITALA W KLASIE DOKTOR KTORA PRZYJMUJE SZPITAL - TO MUSIMY SPRAWDZIC CZY TEN DOKTOR PRACUJE W DANYM SZPITALU
 public class Doktor : Osoba
 {
     public int IdDoktora { get; set; }
@@ -7,6 +11,10 @@ public class Doktor : Osoba
 
     //Ograniczenie Własne
     private const int MaxLiczbaWizytNaDzien = 10;
+    
+    //Listy do Subset'a
+    public List<Szpital> PracujeWSzpitalu { get; set; } = new List<Szpital>();
+    public List<Szpital> KierujeSzpitalem { get; set; } = new List<Szpital>();
 
     public Doktor(string imie, string nazwisko, string telefon, string pesel, int idDoktora, string numerPrawaWykonywaniaZawodu) : base(imie, nazwisko, telefon, pesel)
     {
@@ -86,6 +94,42 @@ public class Doktor : Osoba
         else
         {
             Console.WriteLine($"Brak wizyt dla pacjenta o ID {idPacjenta}");
+        }
+    }
+    
+    //Metody do Subset
+    //Metoda do dodawania doktora do pracy w danym szpitalu
+    public void DodajDoktoraDoSzpitala(Szpital szpital)
+    {
+        if (!PracujeWSzpitalu.Contains(szpital))
+        {
+            PracujeWSzpitalu.Add(szpital);
+        }
+        else
+        {
+            Console.WriteLine($"Dr {Imie} {Nazwisko} pracuje juz w tym szpitalu!");
+        }
+    }
+    
+    //Metoda pozwalajaca dodać doktora kierującego szpitalem — pod warunkiem że już w nim pracuje
+    public void ZostanKierownikiemSzpitala(Szpital szpital)
+    {
+        //Gwarancja 2 assocjacji
+        if (PracujeWSzpitalu.Contains(szpital))
+        {
+            if (!KierujeSzpitalem.Contains(szpital))
+            {
+                KierujeSzpitalem.Add(szpital);
+                Console.WriteLine($"Dr {Imie} {Nazwisko} został kierownikiem szpitala: {szpital.NazwaSzpitala}");
+            }
+            else
+            {
+                Console.WriteLine($"Dr {Imie} {Nazwisko} już jest kierownikiem {szpital.NazwaSzpitala}");
+            }
+        }
+        else
+        {
+            throw new InvalidOperationException("Doktor nie może kierować szpitalem w którym nie pracuje!");
         }
     }
     
