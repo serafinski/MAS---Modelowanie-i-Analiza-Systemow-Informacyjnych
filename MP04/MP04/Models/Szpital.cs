@@ -2,7 +2,7 @@
 
 public class Szpital
 {
-    public int IdSzpitala { get; set; }
+    private int IdSzpitala { get; set; }
     public string NazwaSzpitala { get; set; }
     
     // Lista oddziałów jest zarządzana wyłącznie przez klasę Szpital - kompozycja.

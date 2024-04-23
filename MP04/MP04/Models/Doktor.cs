@@ -6,15 +6,15 @@
 // JAK ZROBIMY METODE ZOSTANKIEROWNIKIEMSZPITALA W KLASIE DOKTOR KTORA PRZYJMUJE SZPITAL - TO MUSIMY SPRAWDZIC CZY TEN DOKTOR PRACUJE W DANYM SZPITALU
 public class Doktor : Osoba
 {
-    public int IdDoktora { get; set; }
-    public string NumerPrawaWykonywaniaZawodu { get; set; }
+    private int IdDoktora { get; set; }
+    private string NumerPrawaWykonywaniaZawodu { get; set; }
 
     //Ograniczenie Własne
     private const int MaxLiczbaWizytNaDzien = 10;
     
     //Listy do Subset'a
-    public List<Szpital> PracujeWSzpitalu { get; set; } = new List<Szpital>();
-    public List<Szpital> KierujeSzpitalem { get; set; } = new List<Szpital>();
+    private List<Szpital> PracujeWSzpitalu { get; set; } = new List<Szpital>();
+    private List<Szpital> KierujeSzpitalem { get; set; } = new List<Szpital>();
 
     public Doktor(string imie, string nazwisko, string telefon, string pesel, int idDoktora, string numerPrawaWykonywaniaZawodu) : base(imie, nazwisko, telefon, pesel)
     {
