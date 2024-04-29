@@ -5,9 +5,9 @@ public class Wizyta
 {
     public int IdWizyta { get; set; }
     
-    public DateTime DataWizyt { get; set; }
+    public DateTime DataWizyty { get; set; }
 
-    public string OpisWizyt { get; set; } = null!;
+    public string OpisWizyty { get; set; } = null!;
     
     //IdDoktor'a do ForeignKey
     public int IdDoktor { get; set; }
