@@ -4,7 +4,7 @@
 // Klasa, by pokazać: MR — asocjacje (1: *)
 public class Doktor : Osoba
 {
-    public int IdDoktora { get; set; }
+    public int IdDoktor { get; set; }
     public string NumerPrawaWykonywaniaZawodu { get; set; } = null!;
     
     //Lista wizyt

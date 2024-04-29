@@ -3,7 +3,7 @@
 // Klasa, by pokazać: MR — klasy
 public class Lek
 {
-    public int IdLeku { get; set; }
+    public int IdLek { get; set; }
 
     public string NazwaChemiczna { get; set; } = null!;
 

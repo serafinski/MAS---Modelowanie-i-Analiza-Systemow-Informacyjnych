@@ -9,6 +9,9 @@ public class Wizyta
 
     public string OpisWizyt { get; set; } = null!;
     
+    //IdDoktor'a do ForeignKey
+    public int IdDoktor { get; set; }
+    
     //Wiele wizyt może być prowadzonych przez tego samego doktora (*: 1)
     public virtual Doktor Doktor { get; set; } = null!;
     
