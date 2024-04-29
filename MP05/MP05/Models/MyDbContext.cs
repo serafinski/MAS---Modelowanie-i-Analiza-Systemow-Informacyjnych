@@ -78,7 +78,8 @@ public class MyDbContext : DbContext
                 {
                     IdWizyta = 1,
                     DataWizyty = DateTime.Now,
-                    OpisWizyty = "Wizyta kontrolna"
+                    OpisWizyty = "Wizyta kontrolna",
+                    IdDoktor = 1
                 }
             });
         });
