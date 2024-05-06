@@ -2,12 +2,29 @@
 
 namespace MP05.Models;
 
+
+//Po każdej modyfikacji pliku trzeba zrobić migracje i update bazy!
+//Pamiętać o odświeżeniu bazy będą na dbo/@localhost
+        
+// Tworzymy migracje za pomocą
+// dotnet ef migrations add Init
+// ALE musimy znajdować się w folderze niżej z naszą solucją
+        
+// Aktualizujemy bazę danych za pomocą
+// dotnet ef database update
+        
+//Jak coś zrobimy z _EFMigrations History -> to najprostszym sposobem na ogarnięcie tego jest
+//usunięcie wszystkich tabelek i foldera migracji i odpalenie jeszcze raz tworzenia migracji
 public class MyDbContext : DbContext
 {
     public MyDbContext(DbContextOptions options) : base(options)
     {
-        
     }
+    
+    //Rzutowanie tabel na listy
+    public DbSet<Doktor> Doktorzy { get; set; }
+    public DbSet<Lek> Leki { get; set; }
+    public DbSet<Wizyta> Wizyty { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

@@ -1,8 +1,22 @@
 using MP05.Models;
 using Microsoft.EntityFrameworkCore;
+using MP05.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//Dodanie Kontrolerów
+builder.Services.AddControllers();
+
+//Dodanie DoktorServices
+builder.Services.AddScoped<IDoktorServices,DoktorServices>();
+
+//Dodanie LekServices
+builder.Services.AddScoped<ILekServices, LekServices>();
+
+//Dodanie WizytaServices
+builder.Services.AddScoped<IWizytaServices, WizytaServices>();
+
+//Connection String
 builder.Services.AddDbContext<MyDbContext>(
     opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
 
@@ -21,5 +35,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.MapControllers();
 
 app.Run();
