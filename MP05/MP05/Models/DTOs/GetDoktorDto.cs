@@ -9,4 +9,7 @@ public class GetDoktorDto
     public string Pesel { get; set; } = null!;
     public int IdDoktor { get; set; }
     public string NumerPrawaWykonywaniaZawodu { get; set; } = null!;
+    
+    //Lista wizyt do DTO
+    public List<GetDoktorWizytaDto> GetDoktorWizytaDtos { get; set; }
 }

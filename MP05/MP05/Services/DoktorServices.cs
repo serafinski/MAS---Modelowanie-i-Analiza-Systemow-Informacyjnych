@@ -26,13 +26,13 @@ public class DoktorServices : IDoktorServices
     // Będzie dodatkowy wiersz: "wizyty": null, bo lazy loading -> obejście przez DTO poniżej
     public async Task<Doktor?> GetDoktor(int id)
     {
-        return await _dbContext.Doktorzy.FindAsync(id);
+        return await _dbContext.Doktorzy.Include((d => d.Wizyty)).SingleOrDefaultAsync(d => d.IdDoktor == id);
     }
 
     // Zwracanie Doktora po ID — obejście DTO
     public async Task<GetDoktorDto?> GetDtoDoktor(int id)
     {
-        var doktor = await _dbContext.Doktorzy.FirstOrDefaultAsync(d => d.IdDoktor == id);
+        var doktor = await _dbContext.Doktorzy.Include((d => d.Wizyty)).SingleOrDefaultAsync(d => d.IdDoktor == id);
 
         if (doktor == null)
         {
@@ -47,7 +47,13 @@ public class DoktorServices : IDoktorServices
             Telefon = doktor.Telefon,
             Pesel = doktor.Pesel,
             IdDoktor = doktor.IdDoktor,
-            NumerPrawaWykonywaniaZawodu = doktor.NumerPrawaWykonywaniaZawodu
+            NumerPrawaWykonywaniaZawodu = doktor.NumerPrawaWykonywaniaZawodu,
+            GetDoktorWizytaDtos = doktor.Wizyty.Select(w => new GetDoktorWizytaDto
+            {
+                IdWizyta = w.IdWizyta,
+                DataWizyty = w.DataWizyty,
+                OpisWizyty = w.OpisWizyty
+            }).ToList()
         };
 
         return dtoDoktor;

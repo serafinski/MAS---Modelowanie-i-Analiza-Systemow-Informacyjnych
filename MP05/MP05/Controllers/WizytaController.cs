@@ -59,8 +59,17 @@ namespace MP05.Controllers
                 };
 
                 var dodajWizyte = await _wizytaServices.AddWizyta(nowaWizyta);
+                
+                //Response DTO
+                var responseDto = new WizytaResponseDto
+                {
+                    IdWizyta = dodajWizyte.IdWizyta,
+                    DataWizyty = dodajWizyte.DataWizyty,
+                    OpisWizyty = dodajWizyte.OpisWizyty,
+                    IdDoktor = dodajWizyte.IdDoktor
+                };
 
-                return CreatedAtAction(nameof(GetDto), new { id = dodajWizyte.IdWizyta }, dodajWizyte);
+                return CreatedAtAction(nameof(GetDto), new { id = dodajWizyte.IdWizyta }, responseDto);
             }
 
             return BadRequest(ModelState);
