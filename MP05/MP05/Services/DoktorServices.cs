@@ -65,9 +65,9 @@ public class DoktorServices : IDoktorServices
     }
     
     //Usuwanie Doktora po ID
-    public async Task<bool> DeleteDoktor(int id)
+    public async Task<bool> DeleteDoktor(int idDoktor)
     {
-        var doktor = await _dbContext.Doktorzy.FindAsync(id);
+        var doktor = await _dbContext.Doktorzy.Include(d => d.Wizyty).SingleOrDefaultAsync(d => d.IdDoktor == idDoktor);
         
         //Jeżeli doktor nie istnieje — nic nie rób
         if (doktor == null)

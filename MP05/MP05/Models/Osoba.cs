@@ -1,7 +1,7 @@
 ﻿namespace MP05.Models;
 
 // Klasa, by pokazać: MR — dziedziczenie
-public abstract class Osoba
+public class Osoba
 {
     public int IdOsoba { get; set; }
     public string Imie { get; set; } = null!;

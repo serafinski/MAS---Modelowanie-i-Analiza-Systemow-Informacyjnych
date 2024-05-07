@@ -28,10 +28,17 @@ public class MyDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Osoba>(e =>
+        {
+            e.HasKey(o=>o.IdOsoba);
+            e.ToTable("Osoby");
+        });
+        
         // DOKTOR
         modelBuilder.Entity<Doktor>(e =>
         {
-            e.HasKey(k => k.IdDoktor);
+            e.ToTable("Doktorzy");
+            e.Property(d => d.IdDoktor).ValueGeneratedOnAdd();
             e.Property(p => p.NumerPrawaWykonywaniaZawodu).HasMaxLength(7).IsRequired();
             
             // Dane Doktorów
@@ -86,7 +93,7 @@ public class MyDbContext : DbContext
             e.HasOne(e => e.Doktor)
                 .WithMany(e => e.Wizyty)
                 .HasForeignKey(e => e.IdDoktor)
-                .OnDelete(DeleteBehavior.ClientCascade);
+                .OnDelete(DeleteBehavior.Cascade);
             
             // Dane Wizyt
             e.HasData(new List<Wizyta>
