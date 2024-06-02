@@ -3,7 +3,11 @@
 // Dziedziczenie po doktor - subset?
 public class KierownikPlacowki : Doktor
 {
-    public int IdKierownika { get; set; }
+    public int IdKierownik
+    {
+        get => IdOsoba; 
+        set => IdOsoba = value;
+    }
     
     //Powiązanie z placówką
     public int IdPlacowki { get; set; }
@@ -15,7 +19,7 @@ public class KierownikPlacowki : Doktor
 
     public override string WyswietlDane()
     {
-        return $"Kierownik Placowki:\nID: {IdKierownika}" +
+        return $"Kierownik Placowki:\nID: {IdKierownik}" +
                $"\nImie: {Imiona.PierwszeImie} {Imiona.DrugieImie}" +
                $"\nNazwisko: {Nazwisko}" +
                $"\nIdPlacowki: {IdPlacowki}" +

@@ -2,8 +2,8 @@
 
 public class Oddzial
 {
-    public int IdOddzialu { get; set; }
-    public string NazwaOddzialu { get; set; } = null!;
+    public int IdOddzial { get; set; }
+    public string NazwaOddzial { get; set; } = null!;
     
     //Odwołanie do Placówki
     public int IdPlacowki { get; set; }

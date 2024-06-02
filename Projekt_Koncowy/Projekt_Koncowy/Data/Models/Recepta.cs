@@ -2,7 +2,7 @@
 
 public class Recepta
 {
-    public int IdRecepty { get; set; }
+    public int IdRecepta { get; set; }
     public DateTime DataWystawienia { get; set; }
     
     //Połączenie z Wizyta

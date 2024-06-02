@@ -2,7 +2,11 @@
 
 public class Pacjent : Osoba
 {
-    public int IdPacjenta { get; set; }
+    public int IdPacjent
+    {
+        get => IdOsoba; 
+        set => IdOsoba = value;
+    }
     public string NrKontaktuAlarmowego { get; set; } = null!;
     
     //Połączenie do Wizyty
@@ -10,7 +14,7 @@ public class Pacjent : Osoba
     
     public override string WyswietlDane()
     {
-        return $"Pacjent:\nID: {IdPacjenta}" +
+        return $"Pacjent:\nID: {IdPacjent}" +
                $"\nImie: {Imiona.PierwszeImie} {Imiona.DrugieImie}" +
                $"\nNazwisko: {Nazwisko}" +
                $"\nPESEL: {Pesel}" +

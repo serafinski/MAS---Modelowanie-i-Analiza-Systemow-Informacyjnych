@@ -2,7 +2,7 @@
 
 public class Imiona
 {
-    public int IdImion { get; set; }
+    public int IdImiona { get; set; }
     public string PierwszeImie { get; set; } = null!;
     public string? DrugieImie { get; set; }
 

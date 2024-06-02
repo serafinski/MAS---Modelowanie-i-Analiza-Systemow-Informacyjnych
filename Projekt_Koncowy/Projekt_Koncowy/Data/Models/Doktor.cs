@@ -2,7 +2,11 @@
 
 public class Doktor : Osoba
 {
-    public int IdDoktora { get; set; }
+    public int IdDoktor
+    {
+        get => IdOsoba; 
+        set => IdOsoba = value;
+    }
     public string NrPrawaWykonywaniaZawodu { get; set; } = null!;
     
     //Połączenie do Wizyty
@@ -10,7 +14,7 @@ public class Doktor : Osoba
     
     public override string WyswietlDane()
     {
-        return $"Doktor:\nID: {IdDoktora}" +
+        return $"Doktor:\nID: {IdDoktor}" +
                $"\nImie: {Imiona.PierwszeImie} {Imiona.DrugieImie}" +
                $"\nNazwisko: {Nazwisko}" +
                $"\nNumer prawa wykonywania zawodu: {NrPrawaWykonywaniaZawodu}";

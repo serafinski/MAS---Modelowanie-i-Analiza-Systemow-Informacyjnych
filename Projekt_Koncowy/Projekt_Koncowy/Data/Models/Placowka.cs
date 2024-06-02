@@ -2,8 +2,8 @@
 
 public class Placowka
 {
-    public int IdPlacowki { get; set; }
-    public string NazwaPlacowki { get; set; } = null!;
+    public int IdPlacowka { get; set; }
+    public string NazwaPlacowka { get; set; } = null!;
     
     //Powiązanie do kierownika
     public int IdKierownika { get; set; }

@@ -2,7 +2,7 @@
 
 public class Lek
 {
-    public int IdLeku { get; set; }
+    public int IdLek { get; set; }
     public string NazwaLeku { get; set; } = null!;
     
     //Połączenie z LekNaRecepcie

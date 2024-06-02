@@ -10,7 +10,7 @@ public class LekNaRecepcie
     public int IdLek { get; set; } 
         
     //Połączenie z Recepta
-    public int IdRecpeta { get; set; }
+    public int IdRecepta { get; set; }
     
     //Virtuals
     public virtual Lek Lek { get; set; } = null!;

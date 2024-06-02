@@ -2,13 +2,17 @@
 
 public class Senior : Pacjent
 {
-    public int IdSeniora { get; set; }
+    public int IdSenior
+    {
+        get => IdOsoba; 
+        set => IdOsoba = value;
+    }
     public string RokPrzejsciaNaEmeryture { get; set; } = null!;
     
     //Wyświetlenie danych
     public override string WyswietlDane()
     {
-        return $"Pacjent:\nID: {IdPacjenta}" +
+        return $"Pacjent:\nID: {IdPacjent}" +
                $"\nImie: {Imiona.PierwszeImie} {Imiona.DrugieImie}" +
                $"\nNazwisko: {Nazwisko}" +
                $"\nPESEL: {Pesel}" +
