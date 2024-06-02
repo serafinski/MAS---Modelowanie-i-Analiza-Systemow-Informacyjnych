@@ -1,4 +1,6 @@
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Projekt_Koncowy.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,8 +8,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 
-// Add controllers for API endpoints
+// Dodanie kontrolerów
 builder.Services.AddControllers();
+
+//Connection String
+builder.Services.AddDbContext<MyDbContext>(
+    opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
 
 // Configure Swagger
 builder.Services.AddSwaggerGen(c =>
