@@ -21,14 +21,6 @@ public class MyDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // //Konfiguracja dziedziczenia po Osobie
-        // modelBuilder.Entity<Osoba>()
-        //     .HasDiscriminator<string>("Discriminator")
-        //     .HasValue<Osoba>("Osoba")
-        //     .HasValue<Pacjent>("Pacjent")
-        //     .HasValue<Doktor>("Doktor")
-        //     .HasValue<Pielegniarka>("Pielegniarka");
-
         //Konfiguracja Osoba
         modelBuilder.Entity<Osoba>(e =>
         {
@@ -44,6 +36,8 @@ public class MyDbContext : DbContext
                 .HasMaxLength(11)
                 .IsRequired()
                 .IsFixedLength();
+
+            e.HasIndex(e => e.Pesel).IsUnique();
 
             e.HasOne(e => e.Imiona)
                 .WithMany(i => i.Osoby)
@@ -77,8 +71,19 @@ public class MyDbContext : DbContext
                 new Imiona
                 {
                     IdImiona = 2,
-                    PierwszeImie = "Anna"
-                }
+                    PierwszeImie = "Anna",
+                    DrugieImie = "Ewa"
+                },
+                new Imiona
+                {
+                    IdImiona = 3,
+                    PierwszeImie = "Piotr"
+                },
+                new Imiona
+                {
+                    IdImiona = 4,
+                    PierwszeImie = "Maria"
+                } 
             });
         });
 
@@ -124,7 +129,25 @@ public class MyDbContext : DbContext
                     NrDomu = "2",
                     KodPocztowy = "30-002",
                     Miejscowosc = "Kraków"
+                },
+                new Adres
+                {
+                    IdAdres = 3,
+                    Ulica = "Gdanska",
+                    NrDomu = "3",
+                    NrMieszkania = 3,
+                    KodPocztowy = "80-003",
+                    Miejscowosc = "Gdansk"
+                },
+                new Adres
+                {
+                    IdAdres = 4,
+                    Ulica = "Skierniewicka",
+                    NrDomu = "4",
+                    KodPocztowy = "96-100",
+                    Miejscowosc = "Skierniewice"
                 }
+                
             });
         });
 
@@ -136,7 +159,9 @@ public class MyDbContext : DbContext
             e.Property(e => e.NrPrawaWykonywaniaZawodu)
                 .HasMaxLength(7)
                 .IsRequired();
-
+            
+            e.HasIndex(e => e.NrPrawaWykonywaniaZawodu).IsUnique();
+            
             e.HasData(new List<Doktor>
             {
                 new Doktor
@@ -147,6 +172,15 @@ public class MyDbContext : DbContext
                     Pesel = "80010112345",
                     IdAdres = 1,
                     NrPrawaWykonywaniaZawodu = "1234567"
+                },
+                new Doktor
+                {
+                    IdOsoba = 4,
+                    IdImion = 4,
+                    Nazwisko = "Wiśniewska",
+                    Pesel = "95030378901",
+                    IdAdres = 3,
+                    NrPrawaWykonywaniaZawodu = "7654321"
                 }
             });
         });
@@ -159,6 +193,8 @@ public class MyDbContext : DbContext
             e.Property(e => e.NrPrawaWykonywaniaZawodu)
                 .HasMaxLength(7)
                 .IsRequired();
+            
+            e.HasIndex(e => e.NrPrawaWykonywaniaZawodu).IsUnique();
         });
 
         //Konfiguracja Pacjent
@@ -178,9 +214,18 @@ public class MyDbContext : DbContext
                     IdOsoba = 2,
                     IdImion = 2,
                     Nazwisko = "Nowak",
-                    Pesel = "90020267890",
+                    Pesel = "80110112346",
                     IdAdres = 2,
                     NrKontaktuAlarmowego = "123456789"
+                },
+                new Pacjent
+                {
+                    IdOsoba = 3,
+                    IdImion = 3,
+                    Nazwisko = "Zieliński",
+                    Pesel = "90020267890",
+                    IdAdres = 3,
+                    NrKontaktuAlarmowego = "987654321"
                 }
             });
 
@@ -191,7 +236,7 @@ public class MyDbContext : DbContext
         {
             e.HasKey(e => e.IdWizyty);
 
-            e.Property(e => e.OpisWizyty).HasMaxLength(255);
+            e.Property(e => e.OpisWizyty);
 
             e.HasOne(e => e.Pacjent)
                 .WithMany(p => p.Wizyty)
@@ -213,6 +258,22 @@ public class MyDbContext : DbContext
                     OpisWizyty = "Wizyta kontrolna",
                     IdDoktor = 1,
                     IdPacjent = 2
+                },
+                new Wizyta
+                {
+                    IdWizyty = 2,
+                    DataWizyty = new DateTime(2024, 6, 3),
+                    OpisWizyty = "Wizyta specjalistyczna",
+                    IdDoktor = 4,
+                    IdPacjent = 2
+                },
+                new Wizyta
+                {
+                    IdWizyty = 3,
+                    DataWizyty = new DateTime(2024, 6, 4),
+                    OpisWizyty = "Wizyta rutynowa",
+                    IdDoktor = 1,
+                    IdPacjent = 3
                 }
             });
         });

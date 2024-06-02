@@ -1,0 +1,176 @@
+﻿@page "/wizyta"
+@inject MyDbContext _context
+@using Microsoft.EntityFrameworkCore
+@using Projekt_Koncowy.Data
+@using Projekt_Koncowy.Data.Models
+
+<PageTitle>Dodanie nowej wizyty</PageTitle>
+
+<h3>Dodanie nowej wizyty</h3>
+
+@if (loading)
+{
+    <p>Loading...</p>
+}
+else
+{
+    @if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <p class="text-danger">@errorMessage</p>
+    }
+    @if (!string.IsNullOrEmpty(successMessage))
+    {
+        <div class="alert alert-success">@successMessage</div>
+    }
+
+    <div>
+        <div class="form-group">
+            <label for="pesel">PESEL Pacjenta:</label>
+            <InputText id="pesel" @bind-Value="pesel" class="form-control" @onkeypress="HandleKeyPress" />
+        </div>
+        <button type="button" class="btn btn-primary" @onclick="FetchPacjentData">Wyświetl dane pacjenta</button>
+
+        @if (pacjent != null)
+        {
+            <div>
+                <h4>Dane pacjenta</h4>
+                <p>Imię: @(pacjent.Imiona.PierwszeImie)</p>
+                <p>Drugie Imię: @(pacjent.Imiona.DrugieImie ?? "Brak danych")</p>
+                <p>Nazwisko: @pacjent.Nazwisko</p>
+                <p>PESEL: @pacjent.Pesel</p>
+                <p>Adres: @($"{pacjent.Adres.Ulica} {pacjent.Adres.NrDomu}" +
+                    $"{(pacjent.Adres.NrMieszkania.HasValue ? $"/{pacjent.Adres.NrMieszkania.Value}, " : $"{string.Empty}, ")}" +
+                    $"{pacjent.Adres.Miejscowosc}, {pacjent.Adres.KodPocztowy}")</p>
+                <p>Kontakt alarmowy: @pacjent.NrKontaktuAlarmowego</p>
+
+                <h4>Historia wizyt</h4>
+                <ul>
+                    @foreach (var w in pacjent.Wizyty.OrderBy(w => w.DataWizyty)) // Sortowanie wizyt chronologicznie
+                    {
+                        <li>@w.DataWizyty.ToShortDateString() - @(w.Doktor != null ? $"{w.Doktor.Imiona?.PierwszeImie} {w.Doktor.Nazwisko}" : "Brak danych"): @w.OpisWizyty</li>
+                    }
+                </ul>
+
+                <button type="button" class="btn btn-success" @onclick="ShowAddWizytaForm">Dodaj wizytę</button>
+
+                @if (showAddWizytaForm)
+                {
+                    <EditForm Model="@wizyta" OnValidSubmit="HandleValidSubmit">
+                        <DataAnnotationsValidator />
+                        <ValidationSummary />
+
+                        <div class="form-group">
+                            <label for="dataWizyty">Data wizyty:</label>
+                            <InputDate id="dataWizyty" @bind-Value="wizyta.DataWizyty" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label for="opisWizyty">Opis wizyty:</label>
+                            <InputTextArea id="opisWizyty" @bind-Value="wizyta.OpisWizyty" class="form-control" />
+                        </div>
+                        <button type="submit" class="btn btn-primary">Zatwierdź</button>
+                    </EditForm>
+                }
+            </div>
+        }
+    </div>
+}
+
+@code {
+    private string pesel;
+    private Pacjent pacjent;
+    // Inicjalizujemy DataWizyty jako DateTime
+    private Wizyta wizyta = new Wizyta { DataWizyty = DateTime.Now }; 
+    private bool loading;
+    private bool showAddWizytaForm;
+    private string errorMessage;
+    private string successMessage;
+
+    private async Task FetchPacjentData()
+    {
+        loading = true;
+        errorMessage = string.Empty;
+        successMessage = string.Empty;
+
+        try
+        {
+            pacjent = await _context.Pacjenci
+                .Include(p => p.Imiona)
+                .Include(p => p.Adres)
+                .Include(p => p.Wizyty)
+                .ThenInclude(w => w.Doktor)
+                .FirstOrDefaultAsync(p => p.Pesel == pesel);
+
+            if (pacjent == null)
+            {
+                errorMessage = "Pacjent o podanym numerze PESEL nie istnieje w bazie danych.";
+            }
+            else
+            {
+                // Sortowanie wizyt chronologicznie
+                pacjent.Wizyty = pacjent.Wizyty.OrderBy(w => w.DataWizyty).ToList();
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Błąd: {ex.Message}";
+        }
+
+        loading = false;
+    }
+
+    private void ShowAddWizytaForm()
+    {
+        if (pacjent != null)
+        {
+            showAddWizytaForm = true;
+            wizyta.IdPacjent = pacjent.IdPacjent;
+            // Przypisz pierwszego doktora z wizyt pacjenta lub domyślnego
+            wizyta.IdDoktor = pacjent.Wizyty.FirstOrDefault()?.IdDoktor ?? 1;
+        }
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        // Resetowanie błędów
+        errorMessage = string.Empty; 
+        if (string.IsNullOrEmpty(wizyta.OpisWizyty))
+        {
+            errorMessage = "Opis wizyty nie może być pusty.";
+            return;
+        }
+
+        try
+        {
+            _context.Wizyty.Add(wizyta);
+            await _context.SaveChangesAsync();
+            successMessage = $"Wizyta dodana poprawnie: " +
+                $"Imię: {pacjent.Imiona?.PierwszeImie} {pacjent.Imiona?.DrugieImie ?? string.Empty}, " +
+                $"Nazwisko: {pacjent.Nazwisko}, " +
+                $"PESEL: {pacjent.Pesel}, " +
+                $"Data wizyty: {wizyta.DataWizyty.ToShortDateString()}, " +
+                $"Opis wizyty: {wizyta.OpisWizyty}";
+            ResetForm();
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Błąd: {ex.Message}";
+        }
+    }
+
+    private async Task HandleKeyPress(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            // Dodanie krótkiego opóźnienia by nie wyświetlił się błąd
+            await Task.Delay(100); 
+            await FetchPacjentData();
+        }
+    }
+
+    private void ResetForm()
+    {
+        wizyta = new Wizyta { DataWizyty = DateTime.Now };
+        showAddWizytaForm = false;
+        pacjent = null;
+    }
+}
