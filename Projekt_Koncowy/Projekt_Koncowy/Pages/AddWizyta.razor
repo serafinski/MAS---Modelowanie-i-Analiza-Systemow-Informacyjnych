@@ -43,6 +43,19 @@ else
                     $"{pacjent.Adres.Miejscowosc}, {pacjent.Adres.KodPocztowy}")</p>
                 <p>Kontakt alarmowy: @pacjent.NrKontaktuAlarmowego</p>
 
+                @if (pacjent is Dorosly)
+                {
+                    <p>NIP Pracodawcy: @((pacjent as Dorosly).NipPracodawcy)</p>
+                }
+                else if (pacjent is Dziecko)
+                {
+                    <p>Nazwa Szkoły: @((pacjent as Dziecko).NazwaSzkoly)</p>
+                }
+                else if (pacjent is Senior)
+                {
+                    <p>Rok przejścia na emeryturę: @((pacjent as Senior).RokPrzejsciaNaEmeryture)</p>
+                }
+
                 <h4>Historia wizyt</h4>
                 <ul>
                     @foreach (var w in pacjent.Wizyty.OrderBy(w => w.DataWizyty)) // Sortowanie wizyt chronologicznie

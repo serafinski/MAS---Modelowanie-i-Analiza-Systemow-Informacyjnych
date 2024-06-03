@@ -1,6 +1,6 @@
 ﻿namespace Projekt_Koncowy.Data.Models;
 
-public class Pacjent : Osoba
+public abstract class Pacjent : Osoba
 {
     public int IdPacjent
     {

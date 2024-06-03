@@ -11,6 +11,10 @@ public class MyDbContext : DbContext
     }
     
     public DbSet<Pacjent> Pacjenci { get; set; }
+    public DbSet<Dziecko> Dzieci { get; set; }
+    public DbSet<Senior> Seniorzy { get; set; }
+    public DbSet<Dorosly> Dorosli { get; set; }
+    
     public DbSet<Doktor> Doktorzy { get; set; }
     public DbSet<Wizyta> Wizyty { get; set; }
     public DbSet<Imiona> Imiona { get; set; }
@@ -205,31 +209,103 @@ public class MyDbContext : DbContext
             e.Property(e => e.NrKontaktuAlarmowego)
                 .HasMaxLength(15)
                 .IsRequired();
-
-
-            e.HasData(new List<Pacjent>
+        });
+        
+        //Konfiguracja Dorosly
+        modelBuilder.Entity<Dorosly>(e =>
+        {
+            e.Property(e => e.NipPracodawcy)
+                .HasMaxLength(11)
+                .IsRequired();
+            
+            e.HasData(new List<Dorosly>
             {
-                new Pacjent
+                new Dorosly
                 {
                     IdOsoba = 2,
                     IdImion = 2,
                     Nazwisko = "Nowak",
                     Pesel = "80110112346",
                     IdAdres = 2,
-                    NrKontaktuAlarmowego = "123456789"
+                    NrKontaktuAlarmowego = "123456789",
+                    NipPracodawcy = "1070041074"
                 },
-                new Pacjent
+                new Dorosly
                 {
                     IdOsoba = 3,
                     IdImion = 3,
                     Nazwisko = "Zieliński",
                     Pesel = "90020267890",
                     IdAdres = 3,
-                    NrKontaktuAlarmowego = "987654321"
+                    NrKontaktuAlarmowego = "987654321",
+                    NipPracodawcy = "1070041074"
                 }
             });
-
         });
+        
+        //Konfiguracja Senior
+        modelBuilder.Entity<Senior>(e =>
+        {
+            e.Property(e => e.RokPrzejsciaNaEmeryture)
+                .HasMaxLength(4)
+                .IsRequired();
+
+            e.HasData(new List<Senior>
+            {
+                new Senior
+                {
+                    IdOsoba = 5,
+                    IdImion = 1,
+                    Nazwisko = "Nowicka",
+                    Pesel = "65010112345",
+                    IdAdres = 1,
+                    NrKontaktuAlarmowego = "123456789",
+                    RokPrzejsciaNaEmeryture = "2010"
+                },
+                new Senior
+                {
+                    IdOsoba = 6,
+                    IdImion = 4,
+                    Nazwisko = "Kowalska",
+                    Pesel = "60030378901",
+                    IdAdres = 3,
+                    NrKontaktuAlarmowego = "987654321",
+                    RokPrzejsciaNaEmeryture = "2005"
+                }
+            });
+        });
+        
+        //Konfiguracja Dziecko
+        modelBuilder.Entity<Dziecko>(e =>
+        {
+            e.Property(e => e.NazwaSzkoly)
+                .IsRequired();
+            
+            e.HasData(new List<Dziecko>
+            {
+                new Dziecko
+                {
+                    IdOsoba = 7,
+                    IdImion = 2,
+                    Nazwisko = "Zielinska",
+                    Pesel = "12010112345",
+                    IdAdres = 2,
+                    NrKontaktuAlarmowego = "456123789",
+                    NazwaSzkoly = "Szkoła Podstawowa nr 1"
+                },
+                new Dziecko
+                {
+                    IdOsoba = 8,
+                    IdImion = 3,
+                    Nazwisko = "Wojcik",
+                    Pesel = "13020267890",
+                    IdAdres = 3,
+                    NrKontaktuAlarmowego = "789654321",
+                    NazwaSzkoly = "Szkoła Podstawowa nr 2"
+                }
+            });
+        });
+        
 
         //Konfiguracja Wizyta
         modelBuilder.Entity<Wizyta>(e =>
@@ -274,6 +350,38 @@ public class MyDbContext : DbContext
                     OpisWizyty = "Wizyta rutynowa",
                     IdDoktor = 1,
                     IdPacjent = 3
+                },
+                new Wizyta
+                {
+                    IdWizyty = 4,
+                    DataWizyty = new DateTime(2024, 6, 5),
+                    OpisWizyty = "Wizyta kontrolna",
+                    IdDoktor = 1,
+                    IdPacjent = 7
+                },
+                new Wizyta
+                {
+                    IdWizyty = 5,
+                    DataWizyty = new DateTime(2024, 6, 6),
+                    OpisWizyty = "Wizyta kontrolna",
+                    IdDoktor = 4,
+                    IdPacjent = 8
+                },
+                new Wizyta
+                {
+                    IdWizyty = 6,
+                    DataWizyty = new DateTime(2024, 6, 7),
+                    OpisWizyty = "Wizyta specjalistyczna",
+                    IdDoktor = 1,
+                    IdPacjent = 5
+                },
+                new Wizyta
+                {
+                    IdWizyty = 7,
+                    DataWizyty = new DateTime(2024, 6, 8),
+                    OpisWizyty = "Wizyta kontrolna",
+                    IdDoktor = 4,
+                    IdPacjent = 6
                 }
             });
         });
