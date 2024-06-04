@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Projekt_Koncowy.Data;
+using Projekt_Koncowy.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,9 +12,12 @@ builder.Services.AddServerSideBlazor();
 // Dodanie kontrolerów
 builder.Services.AddControllers();
 
-//Connection String
+// Connection String
 builder.Services.AddDbContext<MyDbContext>(
     opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
+
+// Serwis PielegniarkaService
+builder.Services.AddScoped<PielegniarkaServices>();
 
 // Configure Swagger
 builder.Services.AddSwaggerGen(c =>
@@ -41,6 +45,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
 // Mapuj kontrolery
 app.MapControllers(); 
 app.MapBlazorHub();

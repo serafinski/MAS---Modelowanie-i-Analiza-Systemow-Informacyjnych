@@ -488,6 +488,8 @@ public class MyDbContext : DbContext
             e.Property(e => e.NrPrawaWykonywaniaZawodu)
                 .HasMaxLength(7)
                 .IsRequired();
+
+            e.Property(e => e.Grafik).IsRequired();
         
             e.HasIndex(e => e.NrPrawaWykonywaniaZawodu).IsUnique();
 
@@ -496,7 +498,7 @@ public class MyDbContext : DbContext
                 new Pielegniarka
                 {
                     IdOsoba = 9,
-                    IdImion = 1,
+                    IdImion = 4,
                     Nazwisko = "Kowalska",
                     Pesel = "85010112345",
                     IdAdres = 1,
