@@ -12,9 +12,6 @@ public class Doktor : Osoba
     //Połączenie do Wizyty
     public virtual ICollection<Wizyta> Wizyty { get; set; } = null!;
     
-    //Wiele doktorów, pracuje w wielu placówkach
-    public virtual ICollection<Placowka> Placowki { get; set; } = null!;
-    
     public override string WyswietlDane()
     {
         return $"Doktor:\nID: {IdDoktor}" +

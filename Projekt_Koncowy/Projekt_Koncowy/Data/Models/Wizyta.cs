@@ -12,11 +12,13 @@ public class Wizyta
     //Połączenie z Pacjentem
     public int IdPacjent { get; set; }
     
-    //Virtuals
+    //Połączenie z placówką
+    public int IdPlacowka { get; set; }
+    
     public virtual Doktor Doktor { get; set; } = null!;
     public virtual Pacjent Pacjent { get; set; } = null!;
+    public virtual Placowka Placowka { get; set; } = null!;
     
     //Połączenie z Recepta
     public virtual ICollection<Recepta> Recepty { get; set; } = null!;
-
 }

@@ -302,7 +302,8 @@ public class MyDbContext : DbContext
             });
         });
         
-
+        
+        
         //Konfiguracja Wizyta
         modelBuilder.Entity<Wizyta>(e =>
         {
@@ -320,6 +321,10 @@ public class MyDbContext : DbContext
                 .HasForeignKey(e => e.IdDoktor)
                 .OnDelete(DeleteBehavior.NoAction);
 
+            e.HasOne(e => e.Placowka)
+                .WithMany(p => p.Wizyty)
+                .HasForeignKey(e => e.IdPlacowka)
+                .OnDelete(DeleteBehavior.NoAction);
 
             e.HasData(new List<Wizyta>
             {
@@ -329,7 +334,8 @@ public class MyDbContext : DbContext
                     DataWizyty = new DateTime(2024, 6, 2),
                     OpisWizyty = "Wizyta kontrolna",
                     IdDoktor = 1,
-                    IdPacjent = 2
+                    IdPacjent = 2,
+                    IdPlacowka = 1
                 },
                 new Wizyta
                 {
@@ -337,7 +343,8 @@ public class MyDbContext : DbContext
                     DataWizyty = new DateTime(2024, 6, 3),
                     OpisWizyty = "Wizyta specjalistyczna",
                     IdDoktor = 4,
-                    IdPacjent = 2
+                    IdPacjent = 2,
+                    IdPlacowka = 2
                 },
                 new Wizyta
                 {
@@ -345,7 +352,8 @@ public class MyDbContext : DbContext
                     DataWizyty = new DateTime(2024, 6, 4),
                     OpisWizyty = "Wizyta rutynowa",
                     IdDoktor = 1,
-                    IdPacjent = 3
+                    IdPacjent = 3,
+                    IdPlacowka = 1
                 },
                 new Wizyta
                 {
@@ -353,7 +361,8 @@ public class MyDbContext : DbContext
                     DataWizyty = new DateTime(2024, 6, 5),
                     OpisWizyty = "Wizyta kontrolna",
                     IdDoktor = 1,
-                    IdPacjent = 7
+                    IdPacjent = 7,
+                    IdPlacowka = 1
                 },
                 new Wizyta
                 {
@@ -361,7 +370,8 @@ public class MyDbContext : DbContext
                     DataWizyty = new DateTime(2024, 6, 6),
                     OpisWizyty = "Wizyta kontrolna",
                     IdDoktor = 4,
-                    IdPacjent = 8
+                    IdPacjent = 8,
+                    IdPlacowka = 2
                 },
                 new Wizyta
                 {
@@ -369,7 +379,8 @@ public class MyDbContext : DbContext
                     DataWizyty = new DateTime(2024, 6, 7),
                     OpisWizyty = "Wizyta specjalistyczna",
                     IdDoktor = 1,
-                    IdPacjent = 5
+                    IdPacjent = 5,
+                    IdPlacowka = 1
                 },
                 new Wizyta
                 {
@@ -377,7 +388,8 @@ public class MyDbContext : DbContext
                     DataWizyty = new DateTime(2024, 6, 8),
                     OpisWizyty = "Wizyta kontrolna",
                     IdDoktor = 4,
-                    IdPacjent = 6
+                    IdPacjent = 6,
+                    IdPlacowka = 2
                 }
             });
         });
@@ -512,7 +524,7 @@ public class MyDbContext : DbContext
             });
         });
         
-        // Konfiguracja Placowka
+        //Konfiguracja Placowka
         modelBuilder.Entity<Placowka>(e =>
         {
             e.HasKey(p => p.IdPlacowka);
@@ -524,23 +536,10 @@ public class MyDbContext : DbContext
                 .WithOne(k => k.Placowka)
                 .HasForeignKey(k => k.IdPlacowki);
 
-            e.HasMany(p => p.Doktorzy)
-                .WithMany(d => d.Placowki)
-                .UsingEntity<Dictionary<string, object>>(
-                    "DoktorPlacowka",
-                    r => r.HasOne<Doktor>().WithMany().HasForeignKey("DoktorId"),
-                    l => l.HasOne<Placowka>().WithMany().HasForeignKey("PlacowkaId"),
-                    je =>
-                    {
-                        je.HasKey("DoktorId", "PlacowkaId");
-                        
-                        je.HasData(new List<object>
-                        {
-                            new { DoktorId = 1, PlacowkaId = 1 },
-                            new { DoktorId = 4, PlacowkaId = 2 }
-                        });
-                    });
-            
+            e.HasMany(p => p.Wizyty)
+                .WithOne(w => w.Placowka)
+                .HasForeignKey(w => w.IdPlacowka);
+
             e.HasData(new List<Placowka>
             {
                 new Placowka
@@ -563,13 +562,14 @@ public class MyDbContext : DbContext
             e.HasBaseType<Doktor>();
 
             e.Property(k => k.DataObjeciaStanowiska).IsRequired();
-
+            
+            //By usunąć placówkę - trzeba usunąć kierownika
             e.HasOne(k => k.Placowka)
                 .WithMany(p => p.Kierownicy)
                 .HasForeignKey(k => k.IdPlacowki)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // Upewnij się, że właściwości są mapowane do tej samej tabeli dla indeksu
+            // Indeks dla kierownika w danej placowce
             e.HasIndex(k => new { k.IdOsoba, k.IdPlacowki }).IsUnique();
             
             e.HasData(new List<KierownikPlacowki>
@@ -579,7 +579,7 @@ public class MyDbContext : DbContext
                     IdOsoba = 11,
                     IdImion = 4,
                     IdAdres = 3,
-                    Nazwisko = "Serafinski",
+                    Nazwisko = "Serafinska",
                     Pesel = "81061868372",
                     NrPrawaWykonywaniaZawodu = "1730501",
                     IdPlacowki = 2,
@@ -587,6 +587,5 @@ public class MyDbContext : DbContext
                 }
             });
         });
-
     }
 }

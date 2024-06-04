@@ -8,9 +8,9 @@ public class Placowka
     //Virtual Kierownika - placowka moze miec wielu kierownikow
     public virtual ICollection<KierownikPlacowki> Kierownicy { get; set; } = null!;
     
-    //Virtual Doktorzy
-    public virtual ICollection<Doktor> Doktorzy { get; set; } = null!;
-
+    // Virtual wizyty
+    public virtual ICollection<Wizyta> Wizyty { get; set; } = null!;
+    
     //Powiązanie do oddzialu
     //public virtual ICollection<Oddzial> Oddzialy { get; set; } = null!;
 }
