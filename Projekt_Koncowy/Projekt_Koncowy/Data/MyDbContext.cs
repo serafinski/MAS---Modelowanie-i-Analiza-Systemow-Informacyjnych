@@ -10,18 +10,22 @@ public class MyDbContext : DbContext
         
     }
     
-    public DbSet<Pacjent> Pacjenci { get; set; }
-    public DbSet<Dziecko> Dzieci { get; set; }
-    public DbSet<Senior> Seniorzy { get; set; }
-    public DbSet<Dorosly> Dorosli { get; set; }
-    
-    public DbSet<Doktor> Doktorzy { get; set; }
-    public DbSet<Wizyta> Wizyty { get; set; }
-    public DbSet<Imiona> Imiona { get; set; }
     public DbSet<Adres> Adresy { get; set; }
+    public DbSet<Doktor> Doktorzy { get; set; }
+    public DbSet<Dorosly> Dorosli { get; set; }
+    public DbSet<Dziecko> Dzieci { get; set; }
+    public DbSet<Imiona> Imiona { get; set; }
+    //Kierownik
     public DbSet<Lek> Leki { get; set; }
-    public DbSet<Recepta> Recepty { get; set; }
     public DbSet<LekNaRecepcie> LekiNaRecepcie { get; set; }
+    //Oddzialy
+    public DbSet<Osoba> Osoby { get; set; }
+    public DbSet<Pacjent> Pacjenci { get; set; }
+    public DbSet<Pielegniarka> Pielegniarki { get; set; }
+    //Placowki
+    public DbSet<Recepta> Recepty { get; set; }
+    public DbSet<Senior> Seniorzy { get; set; }
+    public DbSet<Wizyta> Wizyty { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -472,6 +476,42 @@ public class MyDbContext : DbContext
                     IdRecepta = 1,
                     Ilosc = "1 tabletka",
                     Dawkowanie = "2x dziennie"
+                }
+            });
+        });
+        
+        //Konfiguracja Pielegniarek
+        modelBuilder.Entity<Pielegniarka>(e =>
+        {
+            e.ToTable("Pielegniarki");
+            
+            e.Property(e => e.NrPrawaWykonywaniaZawodu)
+                .HasMaxLength(7)
+                .IsRequired();
+        
+            e.HasIndex(e => e.NrPrawaWykonywaniaZawodu).IsUnique();
+
+            e.HasData(new List<Pielegniarka>
+            {
+                new Pielegniarka
+                {
+                    IdOsoba = 9,
+                    IdImion = 1,
+                    Nazwisko = "Kowalska",
+                    Pesel = "85010112345",
+                    IdAdres = 1,
+                    NrPrawaWykonywaniaZawodu = "6543210",
+                    Grafik = "Poniedziałek-Piątek, 8:00-16:00"
+                },
+                new Pielegniarka
+                {
+                    IdOsoba = 10,
+                    IdImion = 2,
+                    Nazwisko = "Nowak",
+                    Pesel = "86020267890",
+                    IdAdres = 2,
+                    NrPrawaWykonywaniaZawodu = "1234560",
+                    Grafik = "Poniedziałek-Piątek, 9:00-17:00"
                 }
             });
         });

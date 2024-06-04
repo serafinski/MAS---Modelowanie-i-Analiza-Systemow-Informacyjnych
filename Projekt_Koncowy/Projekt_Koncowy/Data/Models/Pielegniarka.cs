@@ -8,8 +8,8 @@ public class Pielegniarka : Osoba
         set => IdOsoba = value;
     }
     public string NrPrawaWykonywaniaZawodu { get; set; } = null!;
-    
-    
+
+    public string Grafik { get; set; } = null!; 
     public override string WyswietlDane()
     {
         return $"Pielegniarka:\nID: {IdPielegniarka}" +
