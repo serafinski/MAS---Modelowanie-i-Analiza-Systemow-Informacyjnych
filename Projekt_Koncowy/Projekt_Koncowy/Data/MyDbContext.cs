@@ -15,14 +15,14 @@ public class MyDbContext : DbContext
     public DbSet<Dorosly> Dorosli { get; set; }
     public DbSet<Dziecko> Dzieci { get; set; }
     public DbSet<Imiona> Imiona { get; set; }
-    //Kierownik
+    public DbSet<KierownikPlacowki> KierownicyPlacowek { get; set; }
     public DbSet<Lek> Leki { get; set; }
     public DbSet<LekNaRecepcie> LekiNaRecepcie { get; set; }
     //Oddzialy
     public DbSet<Osoba> Osoby { get; set; }
     public DbSet<Pacjent> Pacjenci { get; set; }
     public DbSet<Pielegniarka> Pielegniarki { get; set; }
-    //Placowki
+    public DbSet<Placowka> Placowki { get; set; }
     public DbSet<Recepta> Recepty { get; set; }
     public DbSet<Senior> Seniorzy { get; set; }
     public DbSet<Wizyta> Wizyty { get; set; }
@@ -164,6 +164,8 @@ public class MyDbContext : DbContext
         {
             e.ToTable("Doktorzy");
             
+            e.HasBaseType<Osoba>();
+            
             e.Property(e => e.NrPrawaWykonywaniaZawodu)
                 .HasMaxLength(7)
                 .IsRequired();
@@ -192,23 +194,13 @@ public class MyDbContext : DbContext
                 }
             });
         });
-
-        //Konfiguracja Pielegniarka
-        modelBuilder.Entity<Pielegniarka>(e =>
-        {
-            e.ToTable("Pielegniarki");
-            
-            e.Property(e => e.NrPrawaWykonywaniaZawodu)
-                .HasMaxLength(7)
-                .IsRequired();
-            
-            e.HasIndex(e => e.NrPrawaWykonywaniaZawodu).IsUnique();
-        });
-
+        
         //Konfiguracja Pacjent
         modelBuilder.Entity<Pacjent>(e =>
         {
             e.ToTable("Pacjenci");
+            
+            e.HasBaseType<Osoba>();
             
             e.Property(e => e.NrKontaktuAlarmowego)
                 .HasMaxLength(15)
@@ -485,6 +477,8 @@ public class MyDbContext : DbContext
         {
             e.ToTable("Pielegniarki");
             
+            e.HasBaseType<Osoba>();
+            
             e.Property(e => e.NrPrawaWykonywaniaZawodu)
                 .HasMaxLength(7)
                 .IsRequired();
@@ -517,5 +511,82 @@ public class MyDbContext : DbContext
                 }
             });
         });
+        
+        // Konfiguracja Placowka
+        modelBuilder.Entity<Placowka>(e =>
+        {
+            e.HasKey(p => p.IdPlacowka);
+            e.Property(p => p.Nazwa)
+                .HasMaxLength(255)
+                .IsRequired();
+
+            e.HasMany(p => p.Kierownicy)
+                .WithOne(k => k.Placowka)
+                .HasForeignKey(k => k.IdPlacowki);
+
+            e.HasMany(p => p.Doktorzy)
+                .WithMany(d => d.Placowki)
+                .UsingEntity<Dictionary<string, object>>(
+                    "DoktorPlacowka",
+                    r => r.HasOne<Doktor>().WithMany().HasForeignKey("DoktorId"),
+                    l => l.HasOne<Placowka>().WithMany().HasForeignKey("PlacowkaId"),
+                    je =>
+                    {
+                        je.HasKey("DoktorId", "PlacowkaId");
+                        
+                        je.HasData(new List<object>
+                        {
+                            new { DoktorId = 1, PlacowkaId = 1 },
+                            new { DoktorId = 4, PlacowkaId = 2 }
+                        });
+                    });
+            
+            e.HasData(new List<Placowka>
+            {
+                new Placowka
+                {
+                    IdPlacowka = 1,
+                    Nazwa = "Szpital Miejski"
+                },
+                new Placowka
+                {
+                    IdPlacowka = 2,
+                    Nazwa = "Klinika Specjalistyczna"
+                }
+            });
+        });
+
+        
+        // Konfiguracja KierownikPlacowki
+        modelBuilder.Entity<KierownikPlacowki>(e =>
+        {
+            e.HasBaseType<Doktor>();
+
+            e.Property(k => k.DataObjeciaStanowiska).IsRequired();
+
+            e.HasOne(k => k.Placowka)
+                .WithMany(p => p.Kierownicy)
+                .HasForeignKey(k => k.IdPlacowki)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Upewnij się, że właściwości są mapowane do tej samej tabeli dla indeksu
+            e.HasIndex(k => new { k.IdOsoba, k.IdPlacowki }).IsUnique();
+            
+            e.HasData(new List<KierownikPlacowki>
+            {
+                new KierownikPlacowki
+                {
+                    IdOsoba = 11,
+                    IdImion = 4,
+                    IdAdres = 3,
+                    Nazwisko = "Serafinski",
+                    Pesel = "81061868372",
+                    NrPrawaWykonywaniaZawodu = "1730501",
+                    IdPlacowki = 2,
+                    DataObjeciaStanowiska = new DateTime(2021, 2, 1)
+                }
+            });
+        });
+
     }
 }

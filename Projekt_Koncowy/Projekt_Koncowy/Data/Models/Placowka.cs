@@ -3,14 +3,14 @@
 public class Placowka
 {
     public int IdPlacowka { get; set; }
-    public string NazwaPlacowka { get; set; } = null!;
+    public string Nazwa { get; set; } = null!;
     
-    //Powiązanie do kierownika
-    public int IdKierownika { get; set; }
+    //Virtual Kierownika - placowka moze miec wielu kierownikow
+    public virtual ICollection<KierownikPlacowki> Kierownicy { get; set; } = null!;
     
-    //Virtual Kierownika
-    public virtual KierownikPlacowki Kierownik { get; set; } = null!;
+    //Virtual Doktorzy
+    public virtual ICollection<Doktor> Doktorzy { get; set; } = null!;
 
     //Powiązanie do oddzialu
-    public virtual ICollection<Oddzial> Oddzialy { get; set; } = null!;
+    //public virtual ICollection<Oddzial> Oddzialy { get; set; } = null!;
 }
