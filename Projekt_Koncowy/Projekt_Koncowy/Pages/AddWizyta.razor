@@ -37,6 +37,7 @@ else
                 <p>Imię: @(pacjent.Imiona.PierwszeImie)</p>
                 <p>Drugie Imię: @(pacjent.Imiona.DrugieImie ?? "Brak danych")</p>
                 <p>Nazwisko: @pacjent.Nazwisko</p>
+                <p>Numer telefonu: @pacjent.NrTelefonu</p>
                 <p>PESEL: @pacjent.Pesel</p>
                 <p>Adres: @($"{pacjent.Adres.Ulica} {pacjent.Adres.NrDomu}" +
                     $"{(pacjent.Adres.NrMieszkania.HasValue ? $"/{pacjent.Adres.NrMieszkania.Value}, " : $"{string.Empty}, ")}" +
@@ -139,6 +140,9 @@ else
             wizyta.IdPacjent = pacjent.IdPacjent;
             // Przypisz pierwszego doktora z wizyt pacjenta lub domyślnego
             wizyta.IdDoktor = pacjent.Wizyty.FirstOrDefault()?.IdDoktor ?? 1;
+            
+            //Na sztywno przypisujemy 1 - kwestia pokazania działania
+            wizyta.IdPlacowka = 1;
         }
     }
 

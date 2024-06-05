@@ -112,6 +112,10 @@ public class MyDbContext : DbContext
                 .IsRequired()
                 .IsFixedLength();
 
+            e.Property(e => e.NrTelefonu)
+                .HasMaxLength(16)
+                .IsRequired();
+
             e.HasIndex(e => e.Pesel).IsUnique();
 
             e.HasOne(e => e.Imiona)
@@ -249,6 +253,7 @@ public class MyDbContext : DbContext
                     Pesel = "80010112345",
                     IdAdres = 1,
                     NrPrawaWykonywaniaZawodu = "1234567",
+                    NrTelefonu = "791 123 456"
                 },
                 new Doktor
                 {
@@ -258,6 +263,7 @@ public class MyDbContext : DbContext
                     Pesel = "95030378901",
                     IdAdres = 3,
                     NrPrawaWykonywaniaZawodu = "7654321",
+                    NrTelefonu = "698 987 654"
                 }
             });
         });
@@ -289,7 +295,8 @@ public class MyDbContext : DbContext
                     Pesel = "81061868372",
                     NrPrawaWykonywaniaZawodu = "1730501",
                     IdPlacowki = 2,
-                    DataObjeciaStanowiska = new DateTime(2021, 2, 1)
+                    DataObjeciaStanowiska = new DateTime(2021, 2, 1),
+                    NrTelefonu = "602 345 678"
                 }
             });
         });
@@ -323,7 +330,8 @@ public class MyDbContext : DbContext
                     Pesel = "80110112346",
                     IdAdres = 2,
                     NrKontaktuAlarmowego = "123456789",
-                    NipPracodawcy = "1070041074"
+                    NipPracodawcy = "1070041074",
+                    NrTelefonu = "785 654 321"
                 },
                 new Dorosly
                 {
@@ -333,7 +341,8 @@ public class MyDbContext : DbContext
                     Pesel = "90020267890",
                     IdAdres = 3,
                     NrKontaktuAlarmowego = "987654321",
-                    NipPracodawcy = "1070041074"
+                    NipPracodawcy = "1070041074",
+                    NrTelefonu = "691 234 567"
                 }
             });
         });
@@ -351,11 +360,12 @@ public class MyDbContext : DbContext
                 {
                     IdOsoba = 5,
                     IdImion = 1,
-                    Nazwisko = "Nowicka",
+                    Nazwisko = "Nowicki",
                     Pesel = "65010112345",
                     IdAdres = 1,
                     NrKontaktuAlarmowego = "123456789",
-                    RokPrzejsciaNaEmeryture = "2010"
+                    RokPrzejsciaNaEmeryture = "2010",
+                    NrTelefonu = "604 876 543"
                 },
                 new Senior
                 {
@@ -365,7 +375,8 @@ public class MyDbContext : DbContext
                     Pesel = "60030378901",
                     IdAdres = 3,
                     NrKontaktuAlarmowego = "987654321",
-                    RokPrzejsciaNaEmeryture = "2005"
+                    RokPrzejsciaNaEmeryture = "2005",
+                    NrTelefonu = "723 567 890"
                 }
             });
         });
@@ -386,7 +397,8 @@ public class MyDbContext : DbContext
                     Pesel = "12010112345",
                     IdAdres = 2,
                     NrKontaktuAlarmowego = "456123789",
-                    NazwaSzkoly = "Szkoła Podstawowa nr 1"
+                    NazwaSzkoly = "Szkoła Podstawowa nr 1",
+                    NrTelefonu = "786 345 123"
                 },
                 new Dziecko
                 {
@@ -396,7 +408,8 @@ public class MyDbContext : DbContext
                     Pesel = "13020267890",
                     IdAdres = 3,
                     NrKontaktuAlarmowego = "789654321",
-                    NazwaSzkoly = "Szkoła Podstawowa nr 2"
+                    NazwaSzkoly = "Szkoła Podstawowa nr 2",
+                    NrTelefonu = "693 876 234"
                 }
             });
         });
@@ -606,7 +619,8 @@ public class MyDbContext : DbContext
                     Pesel = "85010112345",
                     IdAdres = 1,
                     NrPrawaWykonywaniaZawodu = "6543210",
-                    Grafik = "Poniedziałek-Piątek, 8:00-16:00"
+                    Grafik = "Poniedziałek-Piątek, 8:00-16:00",
+                    NrTelefonu = "699 543 210"
                 },
                 new Pielegniarka
                 {
@@ -616,7 +630,8 @@ public class MyDbContext : DbContext
                     Pesel = "86020267890",
                     IdAdres = 2,
                     NrPrawaWykonywaniaZawodu = "1234560",
-                    Grafik = "Poniedziałek-Piątek, 9:00-17:00"
+                    Grafik = "Poniedziałek-Piątek, 9:00-17:00",
+                    NrTelefonu = "609 876 321"
                 }
             });
         });

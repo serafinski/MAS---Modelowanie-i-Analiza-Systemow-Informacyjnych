@@ -16,6 +16,8 @@ public abstract class Osoba
     
     public string Nazwisko { get; set; } = null!;
 
+    public string NrTelefonu { get; set; } = null!;
+
     public string Pesel { get; set; } = null!;
     
     //Adres

@@ -41,7 +41,8 @@ public class PielegniarkaServices : IPielegniarkaServices
             NrPrawaWykonywaniaZawodu = pielegniarkaDto.NrPrawaWykonywaniaZawodu,
             Grafik = pielegniarkaDto.Grafik,
             Imiona = imiona,
-            Adres = adres
+            Adres = adres,
+            NrTelefonu = pielegniarkaDto.NrTelefonu
         };
 
         _context.Pielegniarki.Add(pielegniarka);
@@ -74,7 +75,8 @@ public class PielegniarkaServices : IPielegniarkaServices
             Imiona = imionaList,
             Adres = adresString,
             NrPrawaWykonywaniaZawodu = pielegniarka.NrPrawaWykonywaniaZawodu,
-            Grafik = pielegniarka.Grafik
+            Grafik = pielegniarka.Grafik,
+            NrTelefonu = pielegniarka.NrTelefonu
         };
     }
 
@@ -124,7 +126,8 @@ public class PielegniarkaServices : IPielegniarkaServices
             Imiona = imiona,
             Adres = adres,
             NrPrawaWykonywaniaZawodu = pielegniarka.NrPrawaWykonywaniaZawodu,
-            Grafik = pielegniarka.Grafik
+            Grafik = pielegniarka.Grafik,
+            NrTelefonu = pielegniarka.NrTelefonu
         };
     }
 
