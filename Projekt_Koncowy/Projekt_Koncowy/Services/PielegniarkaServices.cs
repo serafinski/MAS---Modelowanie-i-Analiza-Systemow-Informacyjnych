@@ -7,7 +7,7 @@ namespace Projekt_Koncowy.Services;
 
 public interface IPielegniarkaServices
 {
-    Task<PielegniarkaResponseDto> DodajPielegniarke(DodajPielegniarkeDto pielegniarkaDto);
+    Task<PielegniarkaResponseDto> DodajPielegniarke(DodajPielegniarkaDto pielegniarkaDto);
     Task<bool> UsunPielegniarke(int id);
     Task<WyswietlPielegniarkeDto?> WyswietlDane(int id);
     Task<string> WyswietlGrafik(int id);
@@ -22,10 +22,10 @@ public class PielegniarkaServices : IPielegniarkaServices
         _context = context;
     }
 
-    public async Task<PielegniarkaResponseDto> DodajPielegniarke(DodajPielegniarkeDto pielegniarkaDto)
+    public async Task<PielegniarkaResponseDto> DodajPielegniarke(DodajPielegniarkaDto dodajPielegniarkaDto)
     {
-        var imiona = await _context.Imiona.FindAsync(pielegniarkaDto.IdImion);
-        var adres = await _context.Adresy.FindAsync(pielegniarkaDto.IdAdres);
+        var imiona = await _context.Imiona.FindAsync(dodajPielegniarkaDto.IdImion);
+        var adres = await _context.Adresy.FindAsync(dodajPielegniarkaDto.IdAdres);
 
         if (imiona == null || adres == null)
         {
@@ -34,15 +34,15 @@ public class PielegniarkaServices : IPielegniarkaServices
 
         var pielegniarka = new Pielegniarka
         {
-            IdImion = pielegniarkaDto.IdImion,
-            Nazwisko = pielegniarkaDto.Nazwisko,
-            Pesel = pielegniarkaDto.Pesel,
-            IdAdres = pielegniarkaDto.IdAdres,
-            NrPrawaWykonywaniaZawodu = pielegniarkaDto.NrPrawaWykonywaniaZawodu,
-            Grafik = pielegniarkaDto.Grafik,
+            IdImion = dodajPielegniarkaDto.IdImion,
+            Nazwisko = dodajPielegniarkaDto.Nazwisko,
+            Pesel = dodajPielegniarkaDto.Pesel,
+            IdAdres = dodajPielegniarkaDto.IdAdres,
+            NrPrawaWykonywaniaZawodu = dodajPielegniarkaDto.NrPrawaWykonywaniaZawodu,
+            Grafik = dodajPielegniarkaDto.Grafik,
             Imiona = imiona,
             Adres = adres,
-            NrTelefonu = pielegniarkaDto.NrTelefonu
+            NrTelefonu = dodajPielegniarkaDto.NrTelefonu
         };
 
         _context.Pielegniarki.Add(pielegniarka);
@@ -99,25 +99,25 @@ public class PielegniarkaServices : IPielegniarkaServices
             .Include(p => p.Imiona)
             .Include(p => p.Adres)
             .FirstOrDefaultAsync(p => p.IdOsoba == id);
-
+    
         if (pielegniarka == null)
         {
             return null;
         }
-
+    
         var imiona = new List<string> { pielegniarka.Imiona.PierwszeImie };
         if (!string.IsNullOrEmpty(pielegniarka.Imiona.DrugieImie))
         {
             imiona.Add(pielegniarka.Imiona.DrugieImie);
         }
-
+    
         var adres = $"{pielegniarka.Adres.Ulica} {pielegniarka.Adres.NrDomu}";
         if (pielegniarka.Adres.NrMieszkania.HasValue)
         {
             adres += $"/{pielegniarka.Adres.NrMieszkania}";
         }
         adres += $", {pielegniarka.Adres.KodPocztowy} {pielegniarka.Adres.Miejscowosc}";
-
+    
         return new WyswietlPielegniarkeDto
         {
             IdOsoba = pielegniarka.IdOsoba,

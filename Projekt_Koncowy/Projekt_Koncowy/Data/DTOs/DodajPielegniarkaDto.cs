@@ -1,6 +1,6 @@
 ﻿namespace Projekt_Koncowy.Data.DTOs;
 
-public class DodajPielegniarkeDto
+public class DodajPielegniarkaDto
 {
     public int IdImion { get; set; }
     public string Nazwisko { get; set; } = null!;

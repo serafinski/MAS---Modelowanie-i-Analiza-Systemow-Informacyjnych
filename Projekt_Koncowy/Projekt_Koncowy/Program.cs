@@ -22,6 +22,9 @@ builder.Services.AddScoped<PielegniarkaServices>();
 //Serwis OddzialService
 builder.Services.AddScoped<OddzialServices>();
 
+//Serwis Doktor
+builder.Services.AddScoped<DoktorServices>();
+
 // Configure Swagger
 builder.Services.AddSwaggerGen(c =>
 {

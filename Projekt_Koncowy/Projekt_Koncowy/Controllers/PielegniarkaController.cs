@@ -16,7 +16,7 @@ namespace Projekt_Koncowy.Controllers
         }
 
         [HttpPost("DodajPielegniarke")]
-        public async Task<IActionResult> DodajPielegniarke(DodajPielegniarkeDto pielegniarkaDto)
+        public async Task<IActionResult> DodajPielegniarke(DodajPielegniarkaDto pielegniarkaDto)
         {
             var result = await _service.DodajPielegniarke(pielegniarkaDto);
             return CreatedAtAction(nameof(WyswietlDane), new { id = result.IdOsoba }, result);
@@ -33,6 +33,7 @@ namespace Projekt_Koncowy.Controllers
             return Ok($"Pielegniarka o ID: {id} zostala usunieta!");
         }
 
+        //TO MUSI WYLECIEĆ JAK ZROBIE GLOBALNY
         [HttpGet("WyswietlDane/{id}")]
         public async Task<IActionResult> WyswietlDane(int id)
         {
