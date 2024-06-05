@@ -33,6 +33,18 @@ public class PielegniarkaServices : IPielegniarkaServices
         _context.Imiona.Add(imiona);
         await _context.SaveChangesAsync();
 
+        var adres = new Adres
+        {
+            Ulica = pielegniarkaDodajDto.Ulica,
+            NrDomu = pielegniarkaDodajDto.NrDomu,
+            NrMieszkania = pielegniarkaDodajDto.NrMieszkania,
+            KodPocztowy = pielegniarkaDodajDto.KodPocztowy,
+            Miejscowosc = pielegniarkaDodajDto.Miejscowosc
+        };
+        
+        _context.Adresy.Add(adres);
+        await _context.SaveChangesAsync();
+        
         var pielegniarka = new Pielegniarka
         {
             NrPrawaWykonywaniaZawodu = pielegniarkaDodajDto.NrPrawaWykonywaniaZawodu,
@@ -41,8 +53,8 @@ public class PielegniarkaServices : IPielegniarkaServices
             Nazwisko = pielegniarkaDodajDto.Nazwisko,
             NrTelefonu = pielegniarkaDodajDto.NrTelefonu,
             Pesel = pielegniarkaDodajDto.Pesel,
-            IdAdres = pielegniarkaDodajDto.IdAdres,
-            Grafik = pielegniarkaDodajDto.Grafik
+            IdAdres = adres.IdAdres,
+            Grafik = pielegniarkaDodajDto.Grafik,
         };
 
         _context.Pielegniarki.Add(pielegniarka);
@@ -62,7 +74,11 @@ public class PielegniarkaServices : IPielegniarkaServices
             Nazwisko = pielegniarka.Nazwisko,
             NrTelefonu = pielegniarka.NrTelefonu,
             Pesel = pielegniarka.Pesel,
-            IdAdres = pielegniarka.IdAdres,
+            Ulica = adres.Ulica,
+            NrDomu = adres.NrDomu,
+            NrMieszkania = adres.NrMieszkania,
+            KodPocztowy = adres.KodPocztowy,
+            Miejscowosc = adres.Miejscowosc,
             Grafik = pielegniarka.Grafik
         };
     }
@@ -74,8 +90,19 @@ public class PielegniarkaServices : IPielegniarkaServices
         {
             return false;
         }
-
+        
+        var imiona = await _context.Imiona.FindAsync(pielegniarka.IdImion);
+        var adres = await _context.Adresy.FindAsync(pielegniarka.IdAdres);
+        
         _context.Pielegniarki.Remove(pielegniarka);
+        if (imiona != null)
+        {
+            _context.Imiona.Remove(imiona);
+        }
+        if (adres != null)
+        {
+            _context.Adresy.Remove(adres);
+        }
         await _context.SaveChangesAsync();
         return true;
     }

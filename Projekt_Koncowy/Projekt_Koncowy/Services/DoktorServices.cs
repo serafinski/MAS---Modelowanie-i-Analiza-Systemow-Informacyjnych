@@ -32,6 +32,18 @@ public class DoktorServices : IDoktorServices
         _context.Imiona.Add(imiona);
         await _context.SaveChangesAsync();
 
+        var adres = new Adres
+        {
+            Ulica = doktorDodajDto.Ulica,
+            NrDomu = doktorDodajDto.NrDomu,
+            NrMieszkania = doktorDodajDto.NrMieszkania,
+            KodPocztowy = doktorDodajDto.KodPocztowy,
+            Miejscowosc = doktorDodajDto.Miejscowosc
+        };
+
+        _context.Adresy.Add(adres);
+        await _context.SaveChangesAsync();
+
         var doktor = new Doktor
         {
             NrPrawaWykonywaniaZawodu = doktorDodajDto.NrPrawaWykonywaniaZawodu,
@@ -40,7 +52,7 @@ public class DoktorServices : IDoktorServices
             Nazwisko = doktorDodajDto.Nazwisko,
             NrTelefonu = doktorDodajDto.NrTelefonu,
             Pesel = doktorDodajDto.Pesel,
-            IdAdres = doktorDodajDto.IdAdres
+            IdAdres = adres.IdAdres
         };
 
         _context.Doktorzy.Add(doktor);
@@ -60,7 +72,11 @@ public class DoktorServices : IDoktorServices
             Nazwisko = doktor.Nazwisko,
             NrTelefonu = doktor.NrTelefonu,
             Pesel = doktor.Pesel,
-            IdAdres = doktor.IdAdres
+            Ulica = adres.Ulica,
+            NrDomu = adres.NrDomu,
+            NrMieszkania = adres.NrMieszkania,
+            KodPocztowy = adres.KodPocztowy,
+            Miejscowosc = adres.Miejscowosc
         };
     }
 
@@ -72,7 +88,18 @@ public class DoktorServices : IDoktorServices
             return false;
         }
 
+        var imiona = await _context.Imiona.FindAsync(doktor.IdImion);
+        var adres = await _context.Adresy.FindAsync(doktor.IdAdres);
+
         _context.Doktorzy.Remove(doktor);
+        if (imiona != null)
+        {
+            _context.Imiona.Remove(imiona);
+        }
+        if (adres != null)
+        {
+            _context.Adresy.Remove(adres);
+        }
         await _context.SaveChangesAsync();
         return true;
     }

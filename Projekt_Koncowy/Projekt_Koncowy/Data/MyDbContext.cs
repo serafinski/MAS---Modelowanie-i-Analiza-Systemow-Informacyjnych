@@ -122,11 +122,13 @@ public class MyDbContext : DbContext
 
             e.HasOne(e => e.Imiona)
                 .WithMany(i => i.Osoby)
-                .HasForeignKey(e => e.IdImion);
+                .HasForeignKey(e => e.IdImion)
+                .OnDelete(DeleteBehavior.Cascade);
 
             e.HasOne(e => e.Adres)
                 .WithMany(a => a.Osoby)
-                .HasForeignKey(e => e.IdAdres);
+                .HasForeignKey(e => e.IdAdres)
+                .OnDelete(DeleteBehavior.Cascade);
         });
 
         //Konfiguracja dla Imiona
@@ -164,7 +166,44 @@ public class MyDbContext : DbContext
                 {
                     IdImiona = 4,
                     PierwszeImie = "Maria"
-                } 
+                },
+                new Imiona
+                {
+                    IdImiona = 5,
+                    PierwszeImie = "Michał"
+                },
+                new Imiona
+                {
+                    IdImiona = 6,
+                    PierwszeImie = "Anna",
+                    DrugieImie = "Maria"
+                },
+                new Imiona
+                {
+                    IdImiona = 7,
+                    PierwszeImie = "Katarzyna",
+                },
+                new Imiona
+                {
+                    IdImiona = 8,
+                    PierwszeImie = "Piotr"
+                },
+                new Imiona
+                {
+                    IdImiona = 9,
+                    PierwszeImie = "Agnieszka"
+                },
+                new Imiona
+                {
+                    IdImiona = 10,
+                    PierwszeImie = "Tomasz",
+                    DrugieImie = "Paweł"
+                },
+                new Imiona
+                {
+                    IdImiona = 11,
+                    PierwszeImie = "Julia"
+                }
             });
         });
 
@@ -227,8 +266,67 @@ public class MyDbContext : DbContext
                     NrDomu = "4",
                     KodPocztowy = "96-100",
                     Miejscowosc = "Skierniewice"
+                },
+                new Adres
+                {
+                    IdAdres = 5,
+                    Ulica = "Poznańska",
+                    NrDomu = "5",
+                    NrMieszkania = 10,
+                    KodPocztowy = "60-005",
+                    Miejscowosc = "Poznań"
+                },
+                new Adres
+                {
+                    IdAdres = 6,
+                    Ulica = "Wrocławska",
+                    NrDomu = "6",
+                    KodPocztowy = "50-006",
+                    Miejscowosc = "Wrocław"
+                },
+                new Adres
+                {
+                    IdAdres = 7,
+                    Ulica = "Łódzka",
+                    NrDomu = "7",
+                    NrMieszkania = 20,
+                    KodPocztowy = "90-007",
+                    Miejscowosc = "Łódź"
+                },
+                new Adres
+                {
+                    IdAdres = 8,
+                    Ulica = "Katowicka",
+                    NrDomu = "8",
+                    KodPocztowy = "40-008",
+                    Miejscowosc = "Katowice"
+                },
+                new Adres
+                {
+                    IdAdres = 9,
+                    Ulica = "Lubliniecka",
+                    NrDomu = "9",
+                    NrMieszkania = 5,
+                    KodPocztowy = "20-009",
+                    Miejscowosc = "Lublin"
+                },
+                new Adres
+                {
+                    IdAdres = 10,
+                    Ulica = "Białostocka",
+                    NrDomu = "10",
+                    KodPocztowy = "15-010",
+                    Miejscowosc = "Białystok"
+                },
+                new Adres
+                {
+                    IdAdres = 11,
+                    Ulica = "Szczecińska",
+                    NrDomu = "11",
+                    NrMieszkania = 11,
+                    KodPocztowy = "70-011",
+                    Miejscowosc = "Szczecin"
                 }
-                
             });
         });
 
@@ -263,7 +361,7 @@ public class MyDbContext : DbContext
                     IdImion = 4,
                     Nazwisko = "Wiśniewska",
                     Pesel = "95030378901",
-                    IdAdres = 3,
+                    IdAdres = 4,
                     NrPrawaWykonywaniaZawodu = "7654321",
                     NrTelefonu = "698 987 654"
                 }
@@ -291,8 +389,8 @@ public class MyDbContext : DbContext
                 new KierownikPlacowki
                 {
                     IdOsoba = 11,
-                    IdImion = 4,
-                    IdAdres = 3,
+                    IdImion = 11,
+                    IdAdres = 11,
                     Nazwisko = "Serafinska",
                     Pesel = "81061868372",
                     NrPrawaWykonywaniaZawodu = "1730501",
@@ -361,10 +459,10 @@ public class MyDbContext : DbContext
                 new Senior
                 {
                     IdOsoba = 5,
-                    IdImion = 1,
+                    IdImion = 5,
                     Nazwisko = "Nowicki",
                     Pesel = "65010112345",
-                    IdAdres = 1,
+                    IdAdres = 5,
                     NrKontaktuAlarmowego = "123456789",
                     RokPrzejsciaNaEmeryture = "2010",
                     NrTelefonu = "604 876 543"
@@ -372,10 +470,10 @@ public class MyDbContext : DbContext
                 new Senior
                 {
                     IdOsoba = 6,
-                    IdImion = 4,
+                    IdImion = 6,
                     Nazwisko = "Kowalska",
                     Pesel = "60030378901",
-                    IdAdres = 3,
+                    IdAdres = 6,
                     NrKontaktuAlarmowego = "987654321",
                     RokPrzejsciaNaEmeryture = "2005",
                     NrTelefonu = "723 567 890"
@@ -394,10 +492,10 @@ public class MyDbContext : DbContext
                 new Dziecko
                 {
                     IdOsoba = 7,
-                    IdImion = 2,
+                    IdImion = 7,
                     Nazwisko = "Zielinska",
                     Pesel = "12010112345",
-                    IdAdres = 2,
+                    IdAdres = 7,
                     NrKontaktuAlarmowego = "456123789",
                     NazwaSzkoly = "Szkoła Podstawowa nr 1",
                     NrTelefonu = "786 345 123"
@@ -405,10 +503,10 @@ public class MyDbContext : DbContext
                 new Dziecko
                 {
                     IdOsoba = 8,
-                    IdImion = 3,
+                    IdImion = 8,
                     Nazwisko = "Wojcik",
                     Pesel = "13020267890",
-                    IdAdres = 3,
+                    IdAdres = 8,
                     NrKontaktuAlarmowego = "789654321",
                     NazwaSzkoly = "Szkoła Podstawowa nr 2",
                     NrTelefonu = "693 876 234"
@@ -617,10 +715,10 @@ public class MyDbContext : DbContext
                 new Pielegniarka
                 {
                     IdOsoba = 9,
-                    IdImion = 4,
+                    IdImion = 9,
                     Nazwisko = "Kowalska",
                     Pesel = "85010112345",
-                    IdAdres = 1,
+                    IdAdres = 9,
                     NrPrawaWykonywaniaZawodu = "6543210",
                     Grafik = "Poniedziałek-Piątek, 8:00-16:00",
                     NrTelefonu = "699 543 210"
@@ -628,10 +726,10 @@ public class MyDbContext : DbContext
                 new Pielegniarka
                 {
                     IdOsoba = 10,
-                    IdImion = 2,
+                    IdImion = 10,
                     Nazwisko = "Nowak",
                     Pesel = "86020267890",
-                    IdAdres = 2,
+                    IdAdres = 10,
                     NrPrawaWykonywaniaZawodu = "1234560",
                     Grafik = "Poniedziałek-Piątek, 9:00-17:00",
                     NrTelefonu = "609 876 321"

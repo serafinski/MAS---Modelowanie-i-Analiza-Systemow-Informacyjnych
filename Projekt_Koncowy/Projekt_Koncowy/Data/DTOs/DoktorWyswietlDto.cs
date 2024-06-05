@@ -9,5 +9,9 @@ public class DoktorWyswietlDto
     public string NrPrawaWykonywaniaZawodu { get; set; } = null!;
     public string NrTelefonu { get; set; } = null!;
     public string Pesel { get; set; } = null!;
-    public int IdAdres { get; set; } 
+    public string Ulica { get; set; } = null!;
+    public string NrDomu { get; set; } = null!;
+    public int? NrMieszkania { get; set; }
+    public string KodPocztowy { get; set; } = null!;
+    public string Miejscowosc { get; set; } = null!;
 }
