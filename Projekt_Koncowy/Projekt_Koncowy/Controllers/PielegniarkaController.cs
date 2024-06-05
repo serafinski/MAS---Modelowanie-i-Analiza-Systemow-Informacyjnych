@@ -19,8 +19,15 @@ namespace Projekt_Koncowy.Controllers
         public async Task<IActionResult> DodajPielegniarke(DodajPielegniarkaDto pielegniarkaDto)
         {
             var result = await _service.DodajPielegniarke(pielegniarkaDto);
-            return CreatedAtAction(nameof(WyswietlDane), new { id = result.IdOsoba }, result);
+            return CreatedAtAction(nameof(DodajPielegniarke), new { id = result.IdOsoba }, result);
         }
+        
+        // [HttpPost("DodajPielegniarke")]
+        // public async Task<IActionResult> DodajPielegniarke(DodajPielegniarkaDto pielegniarkaDto)
+        // {
+        //     var result = await _service.DodajPielegniarke(pielegniarkaDto);
+        //     return CreatedAtAction(nameof(WyswietlDane), new { id = result.IdOsoba }, result);
+        // }
 
         [HttpDelete("UsunPielegniarke/{id}")]
         public async Task<IActionResult> UsunPielegniarke(int id)
@@ -33,17 +40,16 @@ namespace Projekt_Koncowy.Controllers
             return Ok($"Pielegniarka o ID: {id} zostala usunieta!");
         }
 
-        //TO MUSI WYLECIEĆ JAK ZROBIE GLOBALNY
-        [HttpGet("WyswietlDane/{id}")]
-        public async Task<IActionResult> WyswietlDane(int id)
-        {
-            var pielegniarka = await _service.WyswietlDane(id);
-            if (pielegniarka == null)
-            {
-                return NotFound($"Pielegniarka o ID: {id} nie istnieje!");
-            }
-            return Ok(pielegniarka);
-        }
+        // [HttpGet("WyswietlDane/{id}")]
+        // public async Task<IActionResult> WyswietlDane(int id)
+        // {
+        //     var pielegniarka = await _service.WyswietlDane(id);
+        //     if (pielegniarka == null)
+        //     {
+        //         return NotFound($"Pielegniarka o ID: {id} nie istnieje!");
+        //     }
+        //     return Ok(pielegniarka);
+        // }
 
         [HttpGet("WyswietlGrafik/{id}")]
         public async Task<IActionResult> WyswietlGrafik(int id)

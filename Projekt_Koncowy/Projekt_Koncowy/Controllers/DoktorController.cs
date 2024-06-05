@@ -15,14 +15,14 @@ namespace Projekt_Koncowy.Controllers
             _doktorServices = doktorServices;
         }
 
-        [HttpPost]
+        [HttpPost("DodajDoktora")]
         public async Task<ActionResult<WyswietlDoktorDto>> DodajDoktora(DodajDoktorDto dodajDoktorDto)
         {
             var doktor = await _doktorServices.DodajDoktora(dodajDoktorDto);
             return CreatedAtAction(nameof(DodajDoktora), new { id = doktor.IdDoktor }, doktor);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("UsunDoktora/{id}")]
         public async Task<IActionResult> UsunDoktora(int id)
         {
             var result = await _doktorServices.UsunDoktora(id);

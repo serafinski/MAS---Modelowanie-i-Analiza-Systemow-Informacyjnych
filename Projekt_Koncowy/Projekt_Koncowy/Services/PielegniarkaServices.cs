@@ -9,7 +9,7 @@ public interface IPielegniarkaServices
 {
     Task<PielegniarkaResponseDto> DodajPielegniarke(DodajPielegniarkaDto pielegniarkaDto);
     Task<bool> UsunPielegniarke(int id);
-    Task<WyswietlPielegniarkeDto?> WyswietlDane(int id);
+    //Task<WyswietlPielegniarkeDto?> WyswietlDane(int id);
     Task<string> WyswietlGrafik(int id);
 }
 
@@ -92,44 +92,44 @@ public class PielegniarkaServices : IPielegniarkaServices
         await _context.SaveChangesAsync();
         return true;
     }
-
-    public async Task<WyswietlPielegniarkeDto?> WyswietlDane(int id)
-    {
-        var pielegniarka = await _context.Pielegniarki
-            .Include(p => p.Imiona)
-            .Include(p => p.Adres)
-            .FirstOrDefaultAsync(p => p.IdOsoba == id);
     
-        if (pielegniarka == null)
-        {
-            return null;
-        }
-    
-        var imiona = new List<string> { pielegniarka.Imiona.PierwszeImie };
-        if (!string.IsNullOrEmpty(pielegniarka.Imiona.DrugieImie))
-        {
-            imiona.Add(pielegniarka.Imiona.DrugieImie);
-        }
-    
-        var adres = $"{pielegniarka.Adres.Ulica} {pielegniarka.Adres.NrDomu}";
-        if (pielegniarka.Adres.NrMieszkania.HasValue)
-        {
-            adres += $"/{pielegniarka.Adres.NrMieszkania}";
-        }
-        adres += $", {pielegniarka.Adres.KodPocztowy} {pielegniarka.Adres.Miejscowosc}";
-    
-        return new WyswietlPielegniarkeDto
-        {
-            IdOsoba = pielegniarka.IdOsoba,
-            Nazwisko = pielegniarka.Nazwisko,
-            Pesel = pielegniarka.Pesel,
-            Imiona = imiona,
-            Adres = adres,
-            NrPrawaWykonywaniaZawodu = pielegniarka.NrPrawaWykonywaniaZawodu,
-            Grafik = pielegniarka.Grafik,
-            NrTelefonu = pielegniarka.NrTelefonu
-        };
-    }
+    // public async Task<WyswietlPielegniarkeDto?> WyswietlDane(int id)
+    // {
+    //     var pielegniarka = await _context.Pielegniarki
+    //         .Include(p => p.Imiona)
+    //         .Include(p => p.Adres)
+    //         .FirstOrDefaultAsync(p => p.IdOsoba == id);
+    //
+    //     if (pielegniarka == null)
+    //     {
+    //         return null;
+    //     }
+    //
+    //     var imiona = new List<string> { pielegniarka.Imiona.PierwszeImie };
+    //     if (!string.IsNullOrEmpty(pielegniarka.Imiona.DrugieImie))
+    //     {
+    //         imiona.Add(pielegniarka.Imiona.DrugieImie);
+    //     }
+    //
+    //     var adres = $"{pielegniarka.Adres.Ulica} {pielegniarka.Adres.NrDomu}";
+    //     if (pielegniarka.Adres.NrMieszkania.HasValue)
+    //     {
+    //         adres += $"/{pielegniarka.Adres.NrMieszkania}";
+    //     }
+    //     adres += $", {pielegniarka.Adres.KodPocztowy} {pielegniarka.Adres.Miejscowosc}";
+    //
+    //     return new WyswietlPielegniarkeDto
+    //     {
+    //         IdOsoba = pielegniarka.IdOsoba,
+    //         Nazwisko = pielegniarka.Nazwisko,
+    //         Pesel = pielegniarka.Pesel,
+    //         Imiona = imiona,
+    //         Adres = adres,
+    //         NrPrawaWykonywaniaZawodu = pielegniarka.NrPrawaWykonywaniaZawodu,
+    //         Grafik = pielegniarka.Grafik,
+    //         NrTelefonu = pielegniarka.NrTelefonu
+    //     };
+    // }
 
     public async Task<string> WyswietlGrafik(int id)
     {
