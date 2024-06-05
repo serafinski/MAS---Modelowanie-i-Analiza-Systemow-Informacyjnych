@@ -1,5 +1,6 @@
 ﻿namespace Projekt_Koncowy.Data.Models;
 
+// DZIEDZICZENIE WIELOASPEKTOWE
 public class Dorosly : Pacjent
 {
     public int IdDorosly

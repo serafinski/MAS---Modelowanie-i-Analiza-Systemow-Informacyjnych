@@ -1,5 +1,6 @@
 ﻿namespace Projekt_Koncowy.Data.Models;
 
+// ATRYBUT POWTARZALNY
 public class Imiona
 {
     public int IdImiona { get; set; }

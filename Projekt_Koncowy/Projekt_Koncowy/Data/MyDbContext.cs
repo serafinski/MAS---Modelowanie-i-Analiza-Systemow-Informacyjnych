@@ -111,11 +111,13 @@ public class MyDbContext : DbContext
                 .HasMaxLength(11)
                 .IsRequired()
                 .IsFixedLength();
-
+            
+            //OGRANICZENIE ATRYBUTU
             e.Property(e => e.NrTelefonu)
                 .HasMaxLength(16)
                 .IsRequired();
-
+            
+            //OGRANICZENIE UNIQUE
             e.HasIndex(e => e.Pesel).IsUnique();
 
             e.HasOne(e => e.Imiona)
@@ -425,7 +427,8 @@ public class MyDbContext : DbContext
                 .WithMany(p => p.Wizyty)
                 .HasForeignKey(e => e.IdPacjent)
                 .OnDelete(DeleteBehavior.NoAction);
-
+            
+            //ASOCJACJA ZWYKŁA
             e.HasOne(e => e.Doktor)
                 .WithMany(p => p.Wizyty)
                 .HasForeignKey(e => e.IdDoktor)

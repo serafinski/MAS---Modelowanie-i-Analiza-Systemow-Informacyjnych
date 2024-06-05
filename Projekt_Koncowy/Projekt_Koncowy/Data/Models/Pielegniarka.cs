@@ -1,5 +1,6 @@
 ﻿namespace Projekt_Koncowy.Data.Models;
 
+// DZIEDZICZENIE WIELOASPEKTOWE
 public class Pielegniarka : Osoba
 {
     public int IdPielegniarka

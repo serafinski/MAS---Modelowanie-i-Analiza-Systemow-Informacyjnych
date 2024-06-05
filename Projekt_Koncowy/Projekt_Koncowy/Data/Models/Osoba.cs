@@ -7,6 +7,7 @@ public enum KategoriaWiekowa
     Senior
 }
 
+// KLASA ABSTRAKCYJNA
 public abstract class Osoba
 {
     public int IdOsoba { get; set; }
@@ -26,9 +27,11 @@ public abstract class Osoba
     //Virtuals
     public virtual Imiona Imiona { get; set; } = null!;
     public virtual Adres Adres { get; set; } = null!;
+    
+    // ATRYBUT KLASOWY
+    private const int MinimalnyWiekBezZgodyOpiekuna = 18;
 
-    private int MinimalnyWiekBezZgodyOpiekuna { get; set; } = 18;
-
+    // ATRYBUT POCHODNY
     public bool CzyNieletnia => ObliczWiek() < MinimalnyWiekBezZgodyOpiekuna;
 
     private int ObliczWiek()

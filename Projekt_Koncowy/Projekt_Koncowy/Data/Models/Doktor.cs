@@ -1,5 +1,6 @@
 ﻿namespace Projekt_Koncowy.Data.Models;
 
+// DZIEDZICZENIE WIELOASPEKTOWE
 public class Doktor : Osoba
 {
     public int IdDoktor
@@ -10,6 +11,7 @@ public class Doktor : Osoba
     public string NrPrawaWykonywaniaZawodu { get; set; } = null!;
     
     //Połączenie do Wizyty
+    //ASOCJACJA ZWYKŁA
     public virtual ICollection<Wizyta> Wizyty { get; set; } = null!;
     
     public override string WyswietlDane()
