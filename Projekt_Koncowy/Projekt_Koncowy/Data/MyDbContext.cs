@@ -18,7 +18,7 @@ public class MyDbContext : DbContext
     public DbSet<KierownikPlacowki> KierownicyPlacowek { get; set; }
     public DbSet<Lek> Leki { get; set; }
     public DbSet<LekNaRecepcie> LekiNaRecepcie { get; set; }
-    //Oddzialy
+    public DbSet<Oddzial> Oddzialy { get; set; }
     public DbSet<Osoba> Osoby { get; set; }
     public DbSet<Pacjent> Pacjenci { get; set; }
     public DbSet<Pielegniarka> Pielegniarki { get; set; }
@@ -29,6 +29,73 @@ public class MyDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        //Konfiguracja Placowka
+        modelBuilder.Entity<Placowka>(e =>
+        {
+            e.HasKey(p => p.IdPlacowka);
+            e.Property(p => p.Nazwa)
+                .HasMaxLength(255)
+                .IsRequired();
+
+            e.HasMany(p => p.Kierownicy)
+                .WithOne(k => k.Placowka)
+                .HasForeignKey(k => k.IdPlacowki);
+
+            e.HasMany(p => p.Wizyty)
+                .WithOne(w => w.Placowka)
+                .HasForeignKey(w => w.IdPlacowka);
+
+            e.HasMany(p => p.Oddzialy)
+                .WithOne(o => o.Placowka)
+                .HasForeignKey(o => o.IdPlacowki)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade);
+
+            e.HasData(new List<Placowka>
+            {
+                new Placowka
+                {
+                    IdPlacowka = 1,
+                    Nazwa = "Szpital Miejski"
+                },
+                new Placowka
+                {
+                    IdPlacowka = 2,
+                    Nazwa = "Klinika Specjalistyczna"
+                }
+            });
+        });
+        
+        modelBuilder.Entity<Oddzial>(e =>
+        {
+            e.HasKey(o => o.IdOddzial);
+            e.Property(o => o.NazwaOddzial)
+                .HasMaxLength(255)
+                .IsRequired();
+
+            e.HasOne(o => o.Placowka)
+                .WithMany(p => p.Oddzialy)
+                .HasForeignKey(o => o.IdPlacowki)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade);
+
+            e.HasData(new List<Oddzial>
+            {
+                new Oddzial
+                {
+                    IdOddzial = 1,
+                    NazwaOddzial = "Kardiologia",
+                    IdPlacowki = 2
+                },
+                new Oddzial
+                {
+                    IdOddzial = 2,
+                    NazwaOddzial = "Neurologia",
+                    IdPlacowki = 2
+                }
+            });
+        });
+        
         //Konfiguracja Osoba
         modelBuilder.Entity<Osoba>(e =>
         {
@@ -163,13 +230,13 @@ public class MyDbContext : DbContext
         modelBuilder.Entity<Doktor>(e =>
         {
             e.ToTable("Doktorzy");
-            
+        
             e.HasBaseType<Osoba>();
-            
+        
             e.Property(e => e.NrPrawaWykonywaniaZawodu)
                 .HasMaxLength(7)
                 .IsRequired();
-            
+        
             e.HasIndex(e => e.NrPrawaWykonywaniaZawodu).IsUnique();
             
             e.HasData(new List<Doktor>
@@ -181,7 +248,7 @@ public class MyDbContext : DbContext
                     Nazwisko = "Kowalski",
                     Pesel = "80010112345",
                     IdAdres = 1,
-                    NrPrawaWykonywaniaZawodu = "1234567"
+                    NrPrawaWykonywaniaZawodu = "1234567",
                 },
                 new Doktor
                 {
@@ -190,7 +257,39 @@ public class MyDbContext : DbContext
                     Nazwisko = "Wiśniewska",
                     Pesel = "95030378901",
                     IdAdres = 3,
-                    NrPrawaWykonywaniaZawodu = "7654321"
+                    NrPrawaWykonywaniaZawodu = "7654321",
+                }
+            });
+        });
+        
+        // Konfiguracja KierownikPlacowki
+        modelBuilder.Entity<KierownikPlacowki>(e =>
+        {
+            e.HasBaseType<Doktor>();
+
+            e.Property(k => k.DataObjeciaStanowiska).IsRequired();
+            
+            //By usunąć placówkę - trzeba usunąć kierownika
+            e.HasOne(k => k.Placowka)
+                .WithMany(p => p.Kierownicy)
+                .HasForeignKey(k => k.IdPlacowki)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Indeks dla kierownika w danej placowce
+            e.HasIndex(k => new { k.IdOsoba, k.IdPlacowki }).IsUnique();
+            
+            e.HasData(new List<KierownikPlacowki>
+            {
+                new KierownikPlacowki
+                {
+                    IdOsoba = 11,
+                    IdImion = 4,
+                    IdAdres = 3,
+                    Nazwisko = "Serafinska",
+                    Pesel = "81061868372",
+                    NrPrawaWykonywaniaZawodu = "1730501",
+                    IdPlacowki = 2,
+                    DataObjeciaStanowiska = new DateTime(2021, 2, 1)
                 }
             });
         });
@@ -301,8 +400,6 @@ public class MyDbContext : DbContext
                 }
             });
         });
-        
-        
         
         //Konfiguracja Wizyta
         modelBuilder.Entity<Wizyta>(e =>
@@ -520,70 +617,6 @@ public class MyDbContext : DbContext
                     IdAdres = 2,
                     NrPrawaWykonywaniaZawodu = "1234560",
                     Grafik = "Poniedziałek-Piątek, 9:00-17:00"
-                }
-            });
-        });
-        
-        //Konfiguracja Placowka
-        modelBuilder.Entity<Placowka>(e =>
-        {
-            e.HasKey(p => p.IdPlacowka);
-            e.Property(p => p.Nazwa)
-                .HasMaxLength(255)
-                .IsRequired();
-
-            e.HasMany(p => p.Kierownicy)
-                .WithOne(k => k.Placowka)
-                .HasForeignKey(k => k.IdPlacowki);
-
-            e.HasMany(p => p.Wizyty)
-                .WithOne(w => w.Placowka)
-                .HasForeignKey(w => w.IdPlacowka);
-
-            e.HasData(new List<Placowka>
-            {
-                new Placowka
-                {
-                    IdPlacowka = 1,
-                    Nazwa = "Szpital Miejski"
-                },
-                new Placowka
-                {
-                    IdPlacowka = 2,
-                    Nazwa = "Klinika Specjalistyczna"
-                }
-            });
-        });
-
-        
-        // Konfiguracja KierownikPlacowki
-        modelBuilder.Entity<KierownikPlacowki>(e =>
-        {
-            e.HasBaseType<Doktor>();
-
-            e.Property(k => k.DataObjeciaStanowiska).IsRequired();
-            
-            //By usunąć placówkę - trzeba usunąć kierownika
-            e.HasOne(k => k.Placowka)
-                .WithMany(p => p.Kierownicy)
-                .HasForeignKey(k => k.IdPlacowki)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            // Indeks dla kierownika w danej placowce
-            e.HasIndex(k => new { k.IdOsoba, k.IdPlacowki }).IsUnique();
-            
-            e.HasData(new List<KierownikPlacowki>
-            {
-                new KierownikPlacowki
-                {
-                    IdOsoba = 11,
-                    IdImion = 4,
-                    IdAdres = 3,
-                    Nazwisko = "Serafinska",
-                    Pesel = "81061868372",
-                    NrPrawaWykonywaniaZawodu = "1730501",
-                    IdPlacowki = 2,
-                    DataObjeciaStanowiska = new DateTime(2021, 2, 1)
                 }
             });
         });

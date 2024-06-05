@@ -12,5 +12,5 @@ public class Placowka
     public virtual ICollection<Wizyta> Wizyty { get; set; } = null!;
     
     //Powiązanie do oddzialu
-    //public virtual ICollection<Oddzial> Oddzialy { get; set; } = null!;
+    public virtual ICollection<Oddzial> Oddzialy { get; set; } = null!;
 }
