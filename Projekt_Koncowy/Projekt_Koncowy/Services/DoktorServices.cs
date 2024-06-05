@@ -6,7 +6,7 @@ namespace Projekt_Koncowy.Services;
 
 public interface IDoktorServices
 {
-    Task<WyswietlDoktorDto> DodajDoktora(DodajDoktorDto dodajDoktorDto);
+    Task<DoktorWyswietlDto> DodajDoktora(DoktorDodajDto doktorDodajDto);
     Task<bool> UsunDoktora(int id);
 }
 
@@ -19,13 +19,13 @@ public class DoktorServices : IDoktorServices
         _context = context;
     }
 
-    public async Task<WyswietlDoktorDto> DodajDoktora(DodajDoktorDto dodajDoktorDto)
+    public async Task<DoktorWyswietlDto> DodajDoktora(DoktorDodajDto doktorDodajDto)
     {
         var imiona = new Imiona
         {
-            PierwszeImie = dodajDoktorDto.Imie,
+            PierwszeImie = doktorDodajDto.Imie,
             // Może być null
-            DrugieImie = dodajDoktorDto.DrugieImie 
+            DrugieImie = doktorDodajDto.DrugieImie 
         };
 
         // Dodaj obiekt Imiona do kontekstu i zapisz zmiany, aby uzyskać IdImiona
@@ -34,13 +34,13 @@ public class DoktorServices : IDoktorServices
 
         var doktor = new Doktor
         {
-            NrPrawaWykonywaniaZawodu = dodajDoktorDto.NrPrawaWykonywaniaZawodu,
+            NrPrawaWykonywaniaZawodu = doktorDodajDto.NrPrawaWykonywaniaZawodu,
             // Przypisz IdImiona do właściwości IdImion
             IdImion = imiona.IdImiona, 
-            Nazwisko = dodajDoktorDto.Nazwisko,
-            NrTelefonu = dodajDoktorDto.NrTelefonu,
-            Pesel = dodajDoktorDto.Pesel,
-            IdAdres = dodajDoktorDto.IdAdres
+            Nazwisko = doktorDodajDto.Nazwisko,
+            NrTelefonu = doktorDodajDto.NrTelefonu,
+            Pesel = doktorDodajDto.Pesel,
+            IdAdres = doktorDodajDto.IdAdres
         };
 
         _context.Doktorzy.Add(doktor);
@@ -51,7 +51,7 @@ public class DoktorServices : IDoktorServices
         _context.Doktorzy.Update(doktor);
         await _context.SaveChangesAsync();
 
-        return new WyswietlDoktorDto
+        return new DoktorWyswietlDto
         {
             IdDoktor = doktor.IdDoktor,
             NrPrawaWykonywaniaZawodu = doktor.NrPrawaWykonywaniaZawodu,

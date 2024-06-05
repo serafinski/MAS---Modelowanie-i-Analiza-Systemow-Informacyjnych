@@ -1,7 +1,7 @@
 ﻿namespace Projekt_Koncowy.Data.DTOs;
 
-public class DodajOddzialDto
+public class OddzialyWyswietlDto
 {
+    public int IdOddzial { get; set; }
     public string NazwaOddzial { get; set; } = null!;
-    public int IdPlacowki { get; set; }
 }

@@ -1,7 +1,8 @@
 ﻿namespace Projekt_Koncowy.Data.DTOs;
 
-public class DodajDoktorDto
+public class PielegniarkaWyswietlDto
 {
+    public int IdPielegniarka { get; set; }
     public string Imie { get; set; } = null!;
     public string? DrugieImie { get; set; }
     public string Nazwisko { get; set; } = null!;
@@ -9,4 +10,5 @@ public class DodajDoktorDto
     public string NrTelefonu { get; set; } = null!;
     public string Pesel { get; set; } = null!;
     public int IdAdres { get; set; }
+    public string Grafik { get; set; } = null!;
 }

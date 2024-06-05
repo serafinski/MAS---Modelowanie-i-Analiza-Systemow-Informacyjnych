@@ -7,10 +7,10 @@ namespace Projekt_Koncowy.Services;
 
 public interface IOddzialServices
 {
-    Task<OddzialResponseDto> DodajOddzial(DodajOddzialDto dodajOddzialDto);
+    Task<OddzialResponseDto> DodajOddzial(OddzialDodajDto oddzialDodajDto);
     Task<bool> UsunOddzial(int id);
-    Task<WyswietlOddzialDto> WyswietlOddzial(int id);
-    Task<List<WyswietlOddzialyDto>> WyswietlWszystkieOddzialy(int idPlacowki);
+    Task<OddzialWyswietlDto> WyswietlOddzial(int id);
+    Task<List<OddzialyWyswietlDto>> WyswietlWszystkieOddzialy(int idPlacowki);
 }
 
 public class OddzialServices : IOddzialServices
@@ -22,12 +22,12 @@ public class OddzialServices : IOddzialServices
         _context = context;
     }
 
-    public async Task<OddzialResponseDto> DodajOddzial(DodajOddzialDto dodajOddzialDto)
+    public async Task<OddzialResponseDto> DodajOddzial(OddzialDodajDto oddzialDodajDto)
     {
         var oddzial = new Oddzial
         {
-            NazwaOddzial = dodajOddzialDto.NazwaOddzial,
-            IdPlacowki = dodajOddzialDto.IdPlacowki
+            NazwaOddzial = oddzialDodajDto.NazwaOddzial,
+            IdPlacowki = oddzialDodajDto.IdPlacowki
         };
 
         _context.Oddzialy.Add(oddzial);
@@ -64,13 +64,13 @@ public class OddzialServices : IOddzialServices
         return true;
     }
 
-    public async Task<WyswietlOddzialDto> WyswietlOddzial(int id)
+    public async Task<OddzialWyswietlDto> WyswietlOddzial(int id)
     {
         var oddzial = await _context.Oddzialy.Include(o => o.Placowka)
             .FirstOrDefaultAsync(o => o.IdOddzial == id);
         if (oddzial == null) return null;
 
-        return new WyswietlOddzialDto
+        return new OddzialWyswietlDto
         {
             NazwaOddzial = oddzial.NazwaOddzial,
             IdPlacowki = oddzial.IdPlacowki,
@@ -78,11 +78,11 @@ public class OddzialServices : IOddzialServices
         };
     }
 
-    public async Task<List<WyswietlOddzialyDto>> WyswietlWszystkieOddzialy(int idPlacowki)
+    public async Task<List<OddzialyWyswietlDto>> WyswietlWszystkieOddzialy(int idPlacowki)
     {
         return await _context.Oddzialy
             .Where(o => o.IdPlacowki == idPlacowki)
-            .Select(o => new WyswietlOddzialyDto
+            .Select(o => new OddzialyWyswietlDto
             {
                 IdOddzial = o.IdOddzial,
                 NazwaOddzial = o.NazwaOddzial

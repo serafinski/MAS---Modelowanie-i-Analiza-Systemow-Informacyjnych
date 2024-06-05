@@ -16,9 +16,9 @@ namespace Projekt_Koncowy.Controllers
         }
 
         [HttpPost("DodajOddzial")]
-        public async Task<IActionResult> DodajOddzial(DodajOddzialDto dodajOddzialDto)
+        public async Task<IActionResult> DodajOddzial(OddzialDodajDto oddzialDodajDto)
         {
-            var nowyOddzial = await _oddzialServices.DodajOddzial(dodajOddzialDto);
+            var nowyOddzial = await _oddzialServices.DodajOddzial(oddzialDodajDto);
             return CreatedAtAction(nameof(WyswietlOddzial), new { id = nowyOddzial.IdOddzial }, nowyOddzial);
         }
         
@@ -48,7 +48,7 @@ namespace Projekt_Koncowy.Controllers
         }
 
         [HttpGet("WyswietlWszystkieOddzialy/{idPlacowki}")]
-        public async Task<ActionResult<List<WyswietlOddzialyDto>>> WyswietlWszystkieOddzialy(int idPlacowki)
+        public async Task<ActionResult<List<OddzialyWyswietlDto>>> WyswietlWszystkieOddzialy(int idPlacowki)
         {
             var oddzialy = await _oddzialServices.WyswietlWszystkieOddzialy(idPlacowki);
             return Ok(oddzialy);

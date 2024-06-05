@@ -16,9 +16,9 @@ namespace Projekt_Koncowy.Controllers
         }
 
         [HttpPost("DodajDoktora")]
-        public async Task<ActionResult<WyswietlDoktorDto>> DodajDoktora(DodajDoktorDto dodajDoktorDto)
+        public async Task<ActionResult<DoktorWyswietlDto>> DodajDoktora(DoktorDodajDto doktorDodajDto)
         {
-            var doktor = await _doktorServices.DodajDoktora(dodajDoktorDto);
+            var doktor = await _doktorServices.DodajDoktora(doktorDodajDto);
             return CreatedAtAction(nameof(DodajDoktora), new { id = doktor.IdDoktor }, doktor);
         }
 
