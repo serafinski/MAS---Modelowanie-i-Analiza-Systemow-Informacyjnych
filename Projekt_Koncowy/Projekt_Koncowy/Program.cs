@@ -19,6 +19,9 @@ builder.Services.AddDbContext<MyDbContext>(
 // Serwis PielegniarkaService
 builder.Services.AddScoped<PielegniarkaServices>();
 
+//Serwis OddzialService
+builder.Services.AddScoped<OddzialServices>();
+
 // Configure Swagger
 builder.Services.AddSwaggerGen(c =>
 {
