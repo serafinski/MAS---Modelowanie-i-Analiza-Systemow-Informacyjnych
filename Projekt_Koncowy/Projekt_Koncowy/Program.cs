@@ -34,6 +34,9 @@ builder.Services.AddScoped<DzieckoServices>();
 //Serwis Senior
 builder.Services.AddScoped<SeniorServices>();
 
+//Serwis Wizyta
+builder.Services.AddScoped<WizytaServices>();
+
 // Configure Swagger
 builder.Services.AddSwaggerGen(c =>
 {
