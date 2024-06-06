@@ -15,14 +15,14 @@ namespace Projekt_Koncowy.Controllers
             _doroslyServices = doroslyServices;
         }
 
-        [HttpPost("DodajDorosly")]
+        [HttpPost("DodajDoroslego")]
         public async Task<ActionResult<DoroslyWyswietlDto>> DodajDorosly(DoroslyDodajDto dto)
         {
             var dorosly = await _doroslyServices.DodajDorosly(dto);
             return CreatedAtAction(nameof(DodajDorosly), new { id = dorosly.IdPacjenta }, dorosly);
         }
 
-        [HttpDelete("UsunDorosly/{id}")]
+        [HttpDelete("UsunDoroslego/{id}")]
         public async Task<IActionResult> UsunDorosly(int id)
         {
             var result = await _doroslyServices.UsunDorosly(id);

@@ -409,7 +409,7 @@ public class MyDbContext : DbContext
             e.HasBaseType<Osoba>();
             
             e.Property(e => e.NrKontaktuAlarmowego)
-                .HasMaxLength(15)
+                .HasMaxLength(16)
                 .IsRequired();
         });
         
@@ -485,7 +485,8 @@ public class MyDbContext : DbContext
         modelBuilder.Entity<Dziecko>(e =>
         {
             e.Property(e => e.NazwaSzkoly)
-                .IsRequired();
+                .IsRequired()
+                .HasMaxLength(255);
             
             e.HasData(new List<Dziecko>
             {

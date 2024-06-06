@@ -15,14 +15,14 @@ namespace Projekt_Koncowy.Controllers
             _seniorServices = seniorServices;
         }
 
-        [HttpPost("DodajSenior")]
+        [HttpPost("DodajSeniora")]
         public async Task<ActionResult<SeniorWyswietlDto>> DodajSenior(SeniorDodajDto dto)
         {
             var senior = await _seniorServices.DodajSenior(dto);
             return CreatedAtAction(nameof(DodajSenior), new { id = senior.IdPacjenta }, senior);
         }
 
-        [HttpDelete("UsunSenior/{id}")]
+        [HttpDelete("UsunSeniora/{id}")]
         public async Task<IActionResult> UsunSenior(int id)
         {
             var result = await _seniorServices.UsunSenior(id);
