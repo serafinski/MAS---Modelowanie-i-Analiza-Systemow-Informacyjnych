@@ -37,6 +37,9 @@ builder.Services.AddScoped<SeniorServices>();
 //Serwis Wizyta
 builder.Services.AddScoped<WizytaServices>();
 
+//Serwis Recepta
+builder.Services.AddScoped<ReceptaServices>();
+
 // Configure Swagger
 builder.Services.AddSwaggerGen(c =>
 {

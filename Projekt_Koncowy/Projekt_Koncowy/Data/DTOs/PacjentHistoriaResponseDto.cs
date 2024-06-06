@@ -2,6 +2,7 @@
 
 public class PacjentHistoriaResponseDto
 {
-    public object Pacjent { get; set; } = null!; // Może to być DoroslyDto, DzieckoDto lub SeniorDto
+    // Może to być DoroslyDto, DzieckoDto lub SeniorDto
+    public object Pacjent { get; set; } = null!; 
     public List<WizytaHistoriaDodajDto> Wizyty { get; set; } = new List<WizytaHistoriaDodajDto>();
 }

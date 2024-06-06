@@ -626,6 +626,31 @@ public class MyDbContext : DbContext
                 {
                     IdLek = 2,
                     NazwaLeku = "Ibuprofen"
+                },
+                new Lek
+                {
+                    IdLek = 3,
+                    NazwaLeku = "Aspirin"
+                },
+                new Lek
+                {
+                    IdLek = 4,
+                    NazwaLeku = "Metformin"
+                },
+                new Lek
+                {
+                    IdLek = 5,
+                    NazwaLeku = "Amoxicillin"
+                },
+                new Lek
+                {
+                    IdLek = 6,
+                    NazwaLeku = "Lisinopril"
+                },
+                new Lek
+                {
+                    IdLek = 7,
+                    NazwaLeku = "Omeprazole"
                 }
             });
         });
@@ -650,6 +675,36 @@ public class MyDbContext : DbContext
                     IdRecepta = 1,
                     DataWystawienia = new DateTime(2024, 6, 2),
                     IdWizyta = 1
+                },
+                new Recepta
+                {
+                    IdRecepta = 2,
+                    DataWystawienia = new DateTime(2024, 6, 3),
+                    IdWizyta = 2
+                },
+                new Recepta
+                {
+                    IdRecepta = 3,
+                    DataWystawienia = new DateTime(2024, 6, 4),
+                    IdWizyta = 3
+                },
+                new Recepta
+                {
+                    IdRecepta = 4,
+                    DataWystawienia = new DateTime(2024, 6, 5),
+                    IdWizyta = 4
+                },
+                new Recepta
+                {
+                    IdRecepta = 5,
+                    DataWystawienia = new DateTime(2024, 6, 6),
+                    IdWizyta = 5
+                },
+                new Recepta
+                {
+                    IdRecepta = 6,
+                    DataWystawienia = new DateTime(2024, 6, 7),
+                    IdWizyta = 6
                 }
             });
         });
@@ -692,6 +747,55 @@ public class MyDbContext : DbContext
                     IdRecepta = 1,
                     Ilosc = "1 tabletka",
                     Dawkowanie = "2x dziennie"
+                },
+                new LekNaRecepcie
+                {
+                    IdLek = 3,
+                    IdRecepta = 2,
+                    Ilosc = "1 tabletka",
+                    Dawkowanie = "1x dziennie"
+                },
+                new LekNaRecepcie
+                {
+                    IdLek = 4,
+                    IdRecepta = 2,
+                    Ilosc = "500 mg",
+                    Dawkowanie = "2x dziennie"
+                },
+                new LekNaRecepcie
+                {
+                    IdLek = 5,
+                    IdRecepta = 3,
+                    Ilosc = "250 mg",
+                    Dawkowanie = "3x dziennie"
+                },
+                new LekNaRecepcie
+                {
+                    IdLek = 6,
+                    IdRecepta = 4,
+                    Ilosc = "10 mg",
+                    Dawkowanie = "1x dziennie"
+                },
+                new LekNaRecepcie
+                {
+                    IdLek = 7,
+                    IdRecepta = 5,
+                    Ilosc = "20 mg",
+                    Dawkowanie = "1x dziennie"
+                },
+                new LekNaRecepcie
+                {
+                    IdLek = 3,
+                    IdRecepta = 6,
+                    Ilosc = "1 tabletka",
+                    Dawkowanie = "2x dziennie"
+                },
+                new LekNaRecepcie
+                {
+                    IdLek = 1,
+                    IdRecepta = 6,
+                    Ilosc = "2 tabletki",
+                    Dawkowanie = "4x dziennie"
                 }
             });
         });
