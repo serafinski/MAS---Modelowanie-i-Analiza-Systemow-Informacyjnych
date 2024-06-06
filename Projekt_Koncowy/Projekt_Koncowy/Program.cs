@@ -25,6 +25,15 @@ builder.Services.AddScoped<OddzialServices>();
 //Serwis Doktor
 builder.Services.AddScoped<DoktorServices>();
 
+//Serwis Dorosly
+builder.Services.AddScoped<DoroslyServices>();
+
+//Serwis Dziecko
+builder.Services.AddScoped<DzieckoServices>();
+
+//Serwis Senior
+builder.Services.AddScoped<SeniorServices>();
+
 // Configure Swagger
 builder.Services.AddSwaggerGen(c =>
 {

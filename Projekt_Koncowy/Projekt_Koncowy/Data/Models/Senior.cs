@@ -8,7 +8,7 @@ public class Senior : Pacjent
         get => IdOsoba; 
         set => IdOsoba = value;
     }
-    public string RokPrzejsciaNaEmeryture { get; set; } = null!;
+    public int RokPrzejsciaNaEmeryture { get; set; }
     
     //Wyświetlenie danych
     public override string WyswietlDane()

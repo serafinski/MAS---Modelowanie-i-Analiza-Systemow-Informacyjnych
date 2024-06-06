@@ -464,7 +464,7 @@ public class MyDbContext : DbContext
                     Pesel = "65010112345",
                     IdAdres = 5,
                     NrKontaktuAlarmowego = "123456789",
-                    RokPrzejsciaNaEmeryture = "2010",
+                    RokPrzejsciaNaEmeryture = 2010,
                     NrTelefonu = "604 876 543"
                 },
                 new Senior
@@ -475,7 +475,7 @@ public class MyDbContext : DbContext
                     Pesel = "60030378901",
                     IdAdres = 6,
                     NrKontaktuAlarmowego = "987654321",
-                    RokPrzejsciaNaEmeryture = "2005",
+                    RokPrzejsciaNaEmeryture = 2005,
                     NrTelefonu = "723 567 890"
                 }
             });
