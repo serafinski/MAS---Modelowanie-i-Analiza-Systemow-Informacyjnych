@@ -40,8 +40,15 @@ namespace Projekt_Koncowy.Controllers
         [HttpPost("DodajWizyte")]
         public async Task<ActionResult<WizytaDto>> DodajWizyte([FromBody] WizytaDodajDto dto)
         {
-            var wizytaResponse = await _wizytaService.DodajWizyteAsync(dto);
-            return Ok(wizytaResponse);
+            try
+            {
+                var wizytaResponse = await _wizytaService.DodajWizyteAsync(dto);
+                return Ok(wizytaResponse);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpDelete("UsunWizyte/{idWizyty}")]

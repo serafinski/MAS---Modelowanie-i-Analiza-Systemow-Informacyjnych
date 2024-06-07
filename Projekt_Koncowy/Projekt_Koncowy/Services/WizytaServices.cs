@@ -16,12 +16,23 @@ public interface IWizytaServices
 public class WizytaServices : IWizytaServices
 {
     private readonly MyDbContext _context;
+    private const int MaxLiczbaWizytNaDzien = 10;
 
     public WizytaServices(MyDbContext context)
     {
         _context = context;
     }
-        
+    
+    // Metoda sprawdzająca, czy doktor osiągnął limit wizyt w danym dniu
+    private async Task<bool> CzyDoktorMaWolneTerminyAsync(int idDoktor, DateTime dataWizyty)
+    {
+        var liczbaWizyt = await _context.Wizyty
+            .Where(w => w.IdDoktor == idDoktor && w.DataWizyty.Date == dataWizyty.Date)
+            .CountAsync();
+
+        return liczbaWizyt < MaxLiczbaWizytNaDzien;
+    }
+    
     private static object GetPacjentDto(Pacjent pacjent)
     {
         if (pacjent is Dorosly dorosly)
@@ -182,6 +193,14 @@ public class WizytaServices : IWizytaServices
 
     public async Task<WizytaDto> DodajWizyteAsync(WizytaDodajDto dto)
     {
+        // Sprawdź, czy doktor ma wolne terminy w danym dniu
+        bool doktorMaWolneTerminy = await CzyDoktorMaWolneTerminyAsync(dto.IdDoktor, dto.DataWizyty);
+
+        if (!doktorMaWolneTerminy)
+        {
+            throw new InvalidOperationException("Doktor nie może przyjąć więcej niż 10 pacjentów w jednym dniu.");
+        }
+
         var wizyta = new Wizyta
         {
             IdPacjent = dto.IdPacjent,

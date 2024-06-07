@@ -537,7 +537,8 @@ public class MyDbContext : DbContext
                 .WithMany(p => p.Wizyty)
                 .HasForeignKey(e => e.IdPlacowka)
                 .OnDelete(DeleteBehavior.NoAction);
-
+            
+            //Doktor id 1 - 9 wizyt do pokazania wlasnego ograniczenia!
             e.HasData(new List<Wizyta>
             {
                 new Wizyta
@@ -554,7 +555,7 @@ public class MyDbContext : DbContext
                     IdWizyty = 2,
                     DataWizyty = new DateTime(2024, 6, 3),
                     OpisWizyty = "Wizyta specjalistyczna",
-                    IdDoktor = 4,
+                    IdDoktor = 1,
                     IdPacjent = 2,
                     IdPlacowka = 2
                 },
@@ -581,7 +582,7 @@ public class MyDbContext : DbContext
                     IdWizyty = 5,
                     DataWizyty = new DateTime(2024, 6, 6),
                     OpisWizyty = "Wizyta kontrolna",
-                    IdDoktor = 4,
+                    IdDoktor = 1,
                     IdPacjent = 8,
                     IdPlacowka = 2
                 },
@@ -599,9 +600,90 @@ public class MyDbContext : DbContext
                     IdWizyty = 7,
                     DataWizyty = new DateTime(2024, 6, 8),
                     OpisWizyty = "Wizyta kontrolna",
-                    IdDoktor = 4,
+                    IdDoktor = 1,
                     IdPacjent = 6,
                     IdPlacowka = 2
+                },
+                new Wizyta
+                {
+                    IdWizyty = 8,
+                    DataWizyty = DateTime.Now,
+                    OpisWizyty = "Wizyta kontrolna",
+                    IdDoktor = 4,
+                    IdPacjent = 2,
+                    IdPlacowka = 1
+                },
+                new Wizyta
+                {
+                    IdWizyty = 9,
+                    DataWizyty = DateTime.Now,
+                    OpisWizyty = "Wizyta specjalistyczna",
+                    IdDoktor = 4,
+                    IdPacjent = 3,
+                    IdPlacowka = 1
+                },
+                new Wizyta
+                {
+                    IdWizyty = 10,
+                    DataWizyty = DateTime.Now,
+                    OpisWizyty = "Wizyta rutynowa",
+                    IdDoktor = 4,
+                    IdPacjent = 7,
+                    IdPlacowka = 1
+                },
+                new Wizyta
+                {
+                    IdWizyty = 11,
+                    DataWizyty = DateTime.Now,
+                    OpisWizyty = "Wizyta kontrolna",
+                    IdDoktor = 4,
+                    IdPacjent = 8,
+                    IdPlacowka = 1
+                },
+                new Wizyta
+                {
+                    IdWizyty = 12,
+                    DataWizyty = DateTime.Now,
+                    OpisWizyty = "Wizyta kontrolna",
+                    IdDoktor = 4,
+                    IdPacjent = 5,
+                    IdPlacowka = 1
+                },
+                new Wizyta
+                {
+                    IdWizyty = 13,
+                    DataWizyty = DateTime.Now,
+                    OpisWizyty = "Wizyta specjalistyczna",
+                    IdDoktor = 4,
+                    IdPacjent = 6,
+                    IdPlacowka = 1
+                },
+                new Wizyta
+                {
+                    IdWizyty = 14,
+                    DataWizyty = DateTime.Now,
+                    OpisWizyty = "Wizyta kontrolna",
+                    IdDoktor = 4,
+                    IdPacjent = 2,
+                    IdPlacowka = 1
+                },
+                new Wizyta
+                {
+                    IdWizyty = 15,
+                    DataWizyty = DateTime.Now,
+                    OpisWizyty = "Wizyta kontrolna",
+                    IdDoktor = 4,
+                    IdPacjent = 3,
+                    IdPlacowka = 1
+                },
+                new Wizyta
+                {
+                    IdWizyty = 16,
+                    DataWizyty = DateTime.Now,
+                    OpisWizyty = "Wizyta kontrolna",
+                    IdDoktor = 4,
+                    IdPacjent = 7,
+                    IdPlacowka = 1
                 }
             });
         });

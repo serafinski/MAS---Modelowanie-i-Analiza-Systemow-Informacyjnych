@@ -138,8 +138,8 @@ else
         {
             showAddWizytaForm = true;
             wizyta.IdPacjent = pacjent.IdPacjent;
-            // Przypisz pierwszego doktora z wizyt pacjenta lub domyślnego
-            wizyta.IdDoktor = pacjent.Wizyty.FirstOrDefault()?.IdDoktor ?? 1;
+            // Przypisz przypisujemy do doktora nr 1 bo dr 4 ma obrazowac ograniczenie wlasne!
+            wizyta.IdDoktor = 1;
             
             //Na sztywno przypisujemy 1 - kwestia pokazania działania
             wizyta.IdPlacowka = 1;
