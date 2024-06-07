@@ -16,8 +16,11 @@ public class Dorosly : Pacjent
         return $"Pacjent:\nID: {IdPacjent}" +
                $"\nImie: {Imiona.PierwszeImie} {Imiona.DrugieImie}" +
                $"\nNazwisko: {Nazwisko}" +
+               $"\nNr Telefonu: {NrTelefonu}" +
                $"\nPESEL: {Pesel}" +
                $"\nAdres: {Adres.Ulica} {Adres.NrDomu} M:{Adres.NrMieszkania} {Adres.KodPocztowy} {Adres.Miejscowosc}" +
+               $"\nCzy jest osobą nieletnią: {CzyNieletnia}" +
+               $"\nNumer kontaktu alarmowego: {NrKontaktuAlarmowego}" +
                $"\nNIP Pracodawcy: {NipPracodawcy}";
     }
 }

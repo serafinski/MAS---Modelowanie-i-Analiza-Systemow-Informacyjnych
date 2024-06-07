@@ -22,6 +22,11 @@ public class KierownikPlacowki : Doktor
         return $"Kierownik Placowki:\nID: {IdKierownik}" +
                $"\nImie: {Imiona.PierwszeImie} {Imiona.DrugieImie}" +
                $"\nNazwisko: {Nazwisko}" +
+               $"\nNr Telefonu: {NrTelefonu}" +
+               $"\nPESEL: {Pesel}" +
+               $"\nAdres: {Adres.Ulica} {Adres.NrDomu} M:{Adres.NrMieszkania} {Adres.KodPocztowy} {Adres.Miejscowosc}" +
+               $"\nCzy jest osobą nieletnią: {CzyNieletnia}" +
+               $"\nNumer prawa wykonywania zawodu: {NrPrawaWykonywaniaZawodu}" +
                $"\nIdPlacowki: {IdPlacowki}" +
                $"\nData objecia stanowiska: {DataObjeciaStanowiska}";
     }

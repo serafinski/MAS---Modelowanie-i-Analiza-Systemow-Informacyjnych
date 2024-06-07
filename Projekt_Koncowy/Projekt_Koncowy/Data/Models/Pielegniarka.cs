@@ -16,6 +16,11 @@ public class Pielegniarka : Osoba
         return $"Pielegniarka:\nID: {IdPielegniarka}" +
                $"\nImie: {Imiona.PierwszeImie} {Imiona.DrugieImie}" +
                $"\nNazwisko: {Nazwisko}" +
-               $"\nNumer prawa wykonywania zawodu: {NrPrawaWykonywaniaZawodu}";
+               $"\nNr Telefonu: {NrTelefonu}" +
+               $"\nPESEL: {Pesel}" +
+               $"\nAdres: {Adres.Ulica} {Adres.NrDomu} M:{Adres.NrMieszkania} {Adres.KodPocztowy} {Adres.Miejscowosc}" +
+               $"\nCzy jest osobą nieletnią?: {CzyNieletnia}" +
+               $"\nNumer prawa wykonywania zawodu: {NrPrawaWykonywaniaZawodu}" +
+               $"\nGrafik: {Grafik}";
     }
 }
