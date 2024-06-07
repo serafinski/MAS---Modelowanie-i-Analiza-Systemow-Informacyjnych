@@ -1,8 +1,8 @@
 ﻿@page "/wizyta"
-@inject MyDbContext _context
-@using Microsoft.EntityFrameworkCore
-@using Projekt_Koncowy.Data
-@using Projekt_Koncowy.Data.Models
+@inject WizytaServices _wizytaServices
+@inject GuiServices _pacjentServices
+@using Projekt_Koncowy.Data.DTOs
+@using Projekt_Koncowy.Services
 
 <PageTitle>Dodanie nowej wizyty</PageTitle>
 
@@ -34,36 +34,66 @@ else
         {
             <div>
                 <h4>Dane pacjenta</h4>
-                <p>Imię: @(pacjent.Imiona.PierwszeImie)</p>
-                <p>Drugie Imię: @(pacjent.Imiona.DrugieImie ?? "Brak danych")</p>
-                <p>Nazwisko: @pacjent.Nazwisko</p>
-                <p>Numer telefonu: @pacjent.NrTelefonu</p>
-                <p>PESEL: @pacjent.Pesel</p>
-                <p>Adres: @($"{pacjent.Adres.Ulica} {pacjent.Adres.NrDomu}" +
-                    $"{(pacjent.Adres.NrMieszkania.HasValue ? $"/{pacjent.Adres.NrMieszkania.Value}, " : $"{string.Empty}, ")}" +
-                    $"{pacjent.Adres.Miejscowosc}, {pacjent.Adres.KodPocztowy}")</p>
-                <p>Kontakt alarmowy: @pacjent.NrKontaktuAlarmowego</p>
+                @if (pacjent is DoroslyGuiDto)
+                {
+                    var dorosly = (DoroslyGuiDto)pacjent;
+                    <p>Imię: @dorosly.Imie</p>
+                    <p>Drugie Imię: @(string.IsNullOrEmpty(dorosly.DrugieImie) ? "Brak danych" : dorosly.DrugieImie)</p>
+                    <p>Nazwisko: @dorosly.Nazwisko</p>
+                    <p>Numer telefonu: @dorosly.NrTelefonu</p>
+                    <p>PESEL: @dorosly.Pesel</p>
+                    <p>Adres: @($"{dorosly.Ulica} {dorosly.NrDomu}{(dorosly.NrMieszkania.HasValue ? "/" + dorosly.NrMieszkania.Value : "")}, {dorosly.Miejscowosc}, {dorosly.KodPocztowy}")</p>
+                    <p>Kontakt alarmowy: @dorosly.NrKontaktuAlarmowego</p>
+                    <p>NIP Pracodawcy: @dorosly.NipPracodawcy</p>
 
-                @if (pacjent is Dorosly)
-                {
-                    <p>NIP Pracodawcy: @((pacjent as Dorosly).NipPracodawcy)</p>
+                    <h4>Historia wizyt</h4>
+                    <ul>
+                        @foreach (var w in dorosly.Wizyty.OrderBy(w => w.DataWizyty))
+                        {
+                            <li>@w.DataWizyty.ToShortDateString() - @(w.Doktor != null ? $"{w.Doktor.Imie} {w.Doktor.Nazwisko}" : "Brak danych"): @w.OpisWizyty</li>
+                        }
+                    </ul>
                 }
-                else if (pacjent is Dziecko)
+                else if (pacjent is DzieckoGuiDto)
                 {
-                    <p>Nazwa Szkoły: @((pacjent as Dziecko).NazwaSzkoly)</p>
-                }
-                else if (pacjent is Senior)
-                {
-                    <p>Rok przejścia na emeryturę: @((pacjent as Senior).RokPrzejsciaNaEmeryture)</p>
-                }
+                    var dziecko = (DzieckoGuiDto)pacjent;
+                    <p>Imię: @dziecko.Imie</p>
+                    <p>Drugie Imię: @(string.IsNullOrEmpty(dziecko.DrugieImie) ? "Brak danych" : dziecko.DrugieImie)</p>
+                    <p>Nazwisko: @dziecko.Nazwisko</p>
+                    <p>Numer telefonu: @dziecko.NrTelefonu</p>
+                    <p>PESEL: @dziecko.Pesel</p>
+                    <p>Adres: @($"{dziecko.Ulica} {dziecko.NrDomu}{(dziecko.NrMieszkania.HasValue ? "/" + dziecko.NrMieszkania.Value : "")}, {dziecko.Miejscowosc}, {dziecko.KodPocztowy}")</p>
+                    <p>Kontakt alarmowy: @dziecko.NrKontaktuAlarmowego</p>
+                    <p>Nazwa Szkoły: @dziecko.NazwaSzkoly</p>
 
-                <h4>Historia wizyt</h4>
-                <ul>
-                    @foreach (var w in pacjent.Wizyty.OrderBy(w => w.DataWizyty)) // Sortowanie wizyt chronologicznie
-                    {
-                        <li>@w.DataWizyty.ToShortDateString() - @(w.Doktor != null ? $"{w.Doktor.Imiona?.PierwszeImie} {w.Doktor.Nazwisko}" : "Brak danych"): @w.OpisWizyty</li>
-                    }
-                </ul>
+                    <h4>Historia wizyt</h4>
+                    <ul>
+                        @foreach (var w in dziecko.Wizyty.OrderBy(w => w.DataWizyty))
+                        {
+                            <li>@w.DataWizyty.ToShortDateString() - @(w.Doktor != null ? $"{w.Doktor.Imie} {w.Doktor.Nazwisko}" : "Brak danych"): @w.OpisWizyty</li>
+                        }
+                    </ul>
+                }
+                else if (pacjent is SeniorGuiDto)
+                {
+                    var senior = (SeniorGuiDto)pacjent;
+                    <p>Imię: @senior.Imie</p>
+                    <p>Drugie Imię: @(string.IsNullOrEmpty(senior.DrugieImie) ? "Brak danych" : senior.DrugieImie)</p>
+                    <p>Nazwisko: @senior.Nazwisko</p>
+                    <p>Numer telefonu: @senior.NrTelefonu</p>
+                    <p>PESEL: @senior.Pesel</p>
+                    <p>Adres: @($"{senior.Ulica} {senior.NrDomu}{(senior.NrMieszkania.HasValue ? "/" + senior.NrMieszkania.Value : "")}, {senior.Miejscowosc}, {senior.KodPocztowy}")</p>
+                    <p>Kontakt alarmowy: @senior.NrKontaktuAlarmowego</p>
+                    <p>Rok przejścia na emeryturę: @senior.RokPrzejsciaNaEmeryture</p>
+
+                    <h4>Historia wizyt</h4>
+                    <ul>
+                        @foreach (var w in senior.Wizyty.OrderBy(w => w.DataWizyty))
+                        {
+                            <li>@w.DataWizyty.ToShortDateString() - @(w.Doktor != null ? $"{w.Doktor.Imie} {w.Doktor.Nazwisko}" : "Brak danych"): @w.OpisWizyty</li>
+                        }
+                    </ul>
+                }
 
                 <button type="button" class="btn btn-success" @onclick="ShowAddWizytaForm">Dodaj wizytę</button>
 
@@ -91,9 +121,9 @@ else
 
 @code {
     private string pesel;
-    private Pacjent pacjent;
-    // Inicjalizujemy DataWizyty jako DateTime
-    private Wizyta wizyta = new Wizyta { DataWizyty = DateTime.Now }; 
+    // Obiekt by móc ogarniać typy - senior, dziecko, dorosly
+    private object pacjent;
+    private WizytaDodajDto wizyta = new WizytaDodajDto { DataWizyty = DateTime.Now }; 
     private bool loading;
     private bool showAddWizytaForm;
     private string errorMessage;
@@ -107,21 +137,12 @@ else
 
         try
         {
-            pacjent = await _context.Pacjenci
-                .Include(p => p.Imiona)
-                .Include(p => p.Adres)
-                .Include(p => p.Wizyty)
-                .ThenInclude(w => w.Doktor)
-                .FirstOrDefaultAsync(p => p.Pesel == pesel);
+            // Pobierz pacienta z bazy na podstawie PESELu
+            pacjent = await _pacjentServices.GetDoroslyByPesel(pesel) ?? (object)await _pacjentServices.GetDzieckoByPesel(pesel) ?? await _pacjentServices.GetSeniorByPesel(pesel);
 
             if (pacjent == null)
             {
                 errorMessage = "Pacjent o podanym numerze PESEL nie istnieje w bazie danych.";
-            }
-            else
-            {
-                // Sortowanie wizyt chronologicznie
-                pacjent.Wizyty = pacjent.Wizyty.OrderBy(w => w.DataWizyty).ToList();
             }
         }
         catch (Exception ex)
@@ -137,19 +158,18 @@ else
         if (pacjent != null)
         {
             showAddWizytaForm = true;
-            wizyta.IdPacjent = pacjent.IdPacjent;
-            // Przypisz przypisujemy do doktora nr 1 bo dr 4 ma obrazowac ograniczenie wlasne!
-            wizyta.IdDoktor = 1;
-            
-            //Na sztywno przypisujemy 1 - kwestia pokazania działania
+            wizyta.IdPacjent = pacjent is DoroslyGuiDto dorosly ? dorosly.IdPacjenta :
+                               pacjent is DzieckoGuiDto dziecko ? dziecko.IdPacjenta :
+                               pacjent is SeniorGuiDto senior ? senior.IdPacjenta : 0;
+            //Ustawione stale wartosci dla demonstaracji
+            wizyta.IdDoktor = 1; 
             wizyta.IdPlacowka = 1;
         }
     }
 
     private async Task HandleValidSubmit()
     {
-        // Resetowanie błędów
-        errorMessage = string.Empty; 
+        errorMessage = string.Empty;
         if (string.IsNullOrEmpty(wizyta.OpisWizyty))
         {
             errorMessage = "Opis wizyty nie może być pusty.";
@@ -158,14 +178,34 @@ else
 
         try
         {
-            _context.Wizyty.Add(wizyta);
-            await _context.SaveChangesAsync();
-            successMessage = $"Wizyta dodana poprawnie: " +
-                $"Imię: {pacjent.Imiona?.PierwszeImie} {pacjent.Imiona?.DrugieImie ?? string.Empty}, " +
-                $"Nazwisko: {pacjent.Nazwisko}, " +
-                $"PESEL: {pacjent.Pesel}, " +
-                $"Data wizyty: {wizyta.DataWizyty.ToShortDateString()}, " +
-                $"Opis wizyty: {wizyta.OpisWizyty}";
+            var response = await _wizytaServices.DodajWizyteAsync(wizyta);
+            if (pacjent is DoroslyGuiDto dorosly)
+            {
+                successMessage = $"Wizyta dodana poprawnie: " +
+                    $"Imię: {dorosly.Imie} {dorosly.DrugieImie ?? string.Empty}, " +
+                    $"Nazwisko: {dorosly.Nazwisko}, " +
+                    $"PESEL: {dorosly.Pesel}, " +
+                    $"Data wizyty: {wizyta.DataWizyty.ToShortDateString()}, " +
+                    $"Opis wizyty: {wizyta.OpisWizyty}";
+            }
+            else if (pacjent is DzieckoGuiDto dziecko)
+            {
+                successMessage = $"Wizyta dodana poprawnie: " +
+                    $"Imię: {dziecko.Imie} {dziecko.DrugieImie ?? string.Empty}, " +
+                    $"Nazwisko: {dziecko.Nazwisko}, " +
+                    $"PESEL: {dziecko.Pesel}, " +
+                    $"Data wizyty: {wizyta.DataWizyty.ToShortDateString()}, " +
+                    $"Opis wizyty: {wizyta.OpisWizyty}";
+            }
+            else if (pacjent is SeniorGuiDto senior)
+            {
+                successMessage = $"Wizyta dodana poprawnie: " +
+                    $"Imię: {senior.Imie} {senior.DrugieImie ?? string.Empty}, " +
+                    $"Nazwisko: {senior.Nazwisko}, " +
+                    $"PESEL: {senior.Pesel}, " +
+                    $"Data wizyty: {wizyta.DataWizyty.ToShortDateString()}, " +
+                    $"Opis wizyty: {wizyta.OpisWizyty}";
+            }
             ResetForm();
         }
         catch (Exception ex)
@@ -178,7 +218,6 @@ else
     {
         if (e.Key == "Enter")
         {
-            // Dodanie krótkiego opóźnienia by nie wyświetlił się błąd
             await Task.Delay(100); 
             await FetchPacjentData();
         }
@@ -186,7 +225,7 @@ else
 
     private void ResetForm()
     {
-        wizyta = new Wizyta { DataWizyty = DateTime.Now };
+        wizyta = new WizytaDodajDto { DataWizyty = DateTime.Now };
         showAddWizytaForm = false;
         pacjent = null;
     }

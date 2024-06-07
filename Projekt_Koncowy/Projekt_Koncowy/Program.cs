@@ -40,6 +40,9 @@ builder.Services.AddScoped<WizytaServices>();
 //Serwis Recepta
 builder.Services.AddScoped<ReceptaServices>();
 
+//Serwis do GUI
+builder.Services.AddScoped<GuiServices>();
+
 // Configure Swagger
 builder.Services.AddSwaggerGen(c =>
 {
