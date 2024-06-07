@@ -15,6 +15,7 @@ public class MyDbContext : DbContext
     public DbSet<Dorosly> Dorosli { get; set; }
     public DbSet<Dziecko> Dzieci { get; set; }
     public DbSet<Imiona> Imiona { get; set; }
+    public DbSet<InterakcjaLeku> InterakcjeLekow { get; set; }
     public DbSet<KierownikPlacowki> KierownicyPlacowek { get; set; }
     public DbSet<Lek> Leki { get; set; }
     public DbSet<LekNaRecepcie> LekiNaRecepcie { get; set; }
@@ -736,7 +737,27 @@ public class MyDbContext : DbContext
                 }
             });
         });
+        
+        modelBuilder.Entity<InterakcjaLeku>(e =>
+        {
+            e.HasKey(e => new { e.IdLek1, e.IdLek2 });
 
+            e.HasOne(e => e.Lek1)
+                .WithMany()
+                .HasForeignKey(e => e.IdLek1)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            e.HasOne(e => e.Lek2)
+                .WithMany()
+                .HasForeignKey(e => e.IdLek2)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            e.HasData(new List<InterakcjaLeku>
+            {
+                new InterakcjaLeku { IdLek1 = 5, IdLek2 = 6 }
+            });
+        });
+        
         //Konfiguracja Recepta
         modelBuilder.Entity<Recepta>(e =>
         {

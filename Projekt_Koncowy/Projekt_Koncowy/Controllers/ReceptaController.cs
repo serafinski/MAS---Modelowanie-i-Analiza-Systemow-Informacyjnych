@@ -31,15 +31,15 @@ namespace Projekt_Koncowy.Controllers
 
 
 
-        [HttpDelete("UsunRecepte/{idRecepta}")]
-        public async Task<ActionResult> UsunRecepte(int idRecepta)
+        [HttpDelete("UsunRecepte/{id}")]
+        public async Task<ActionResult> UsunRecepte(int id)
         {
-            var result = await _receptaService.UsunRecepte(idRecepta);
+            var result = await _receptaService.UsunRecepte(id);
             if (!result)
             {
-                return NotFound();
+                return NotFound($"Recepta o ID: {id} nie istnieje!");
             }
-            return NoContent();
+            return Ok($"Recepta o ID: {id} zostala usunięta!");
         }
     }
 }

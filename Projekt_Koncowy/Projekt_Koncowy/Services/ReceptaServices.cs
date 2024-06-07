@@ -99,19 +99,51 @@ public class ReceptaServices : IReceptaServices
                 }
             },
             LekiNaRecepcie = r.LekiNaRecepcie
-                    //OGRANICZENIE ORDERED
+                //OGRANICZENIE ORDERED
                 .OrderBy(lnr => lnr.Lek?.NazwaLeku)
                 .Select(lnr => new LekNaRecepcieWyswietlDto
-            {
-                NazwaLeku = lnr.Lek?.NazwaLeku ?? string.Empty,
-                Ilosc = lnr.Ilosc,
-                Dawkowanie = lnr.Dawkowanie
-            }).ToList()
+                {
+                    NazwaLeku = lnr.Lek?.NazwaLeku ?? string.Empty,
+                    Ilosc = lnr.Ilosc,
+                    Dawkowanie = lnr.Dawkowanie
+                }).ToList()
         }).ToList();
     }
 
     public async Task<ReceptaResponseDto> DodajRecepte(int idWizyta, List<LekNaRecepcieDodajDto> lekiNaRecepcie)
     {
+        // Pobierz wizytę
+        var wizyta = await _context.Wizyty
+            .Include(w => w.Recepty)
+            .ThenInclude(r => r.LekiNaRecepcie)
+            .ThenInclude(lnr => lnr.Lek)
+            .FirstOrDefaultAsync(w => w.IdWizyty == idWizyta);
+
+        if (wizyta == null)
+        {
+            throw new Exception("Wizyta nie istnieje.");
+        }
+
+        // Sprawdź interakcje pomiędzy nowymi lekami
+        for (int i = 0; i < lekiNaRecepcie.Count; i++)
+        {
+            for (int j = i + 1; j < lekiNaRecepcie.Count; j++)
+            {
+                var lek1Id = lekiNaRecepcie[i].IdLek;
+                var lek2Id = lekiNaRecepcie[j].IdLek;
+
+                var interactionExists = await _context.InterakcjeLekow.AnyAsync(i =>
+                    (i.IdLek1 == lek1Id && i.IdLek2 == lek2Id) ||
+                    (i.IdLek1 == lek2Id && i.IdLek2 == lek1Id));
+
+                if (interactionExists)
+                {
+                    throw new Exception($"Lek {lek1Id} wchodzi w interakcje z lekiem {lek2Id}.");
+                }
+            }
+        }
+
+        // Tworzenie nowej recepty
         var recepta = new Recepta
         {
             DataWystawienia = DateTime.Now,
@@ -172,6 +204,7 @@ public class ReceptaServices : IReceptaServices
             }).ToList()
         };
     }
+
     
     public async Task<bool> UsunRecepte(int idRecepta)
     {

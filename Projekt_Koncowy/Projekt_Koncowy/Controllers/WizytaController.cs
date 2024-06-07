@@ -26,13 +26,13 @@ namespace Projekt_Koncowy.Controllers
             return Ok(historiaWizyt);
         }
 
-        [HttpGet("WyswietlWizyte/{idWizyty}")]
-        public async Task<ActionResult<WizytaResponseDto>> WyswietlWizyte(int idWizyty)
+        [HttpGet("WyswietlWizyte/{id}")]
+        public async Task<ActionResult<WizytaResponseDto>> WyswietlWizyte(int id)
         {
-            var wizyta = await _wizytaService.WyswietlWizyteAsync(idWizyty);
+            var wizyta = await _wizytaService.WyswietlWizyteAsync(id);
             if (wizyta == null)
             {
-                return NotFound($"Wizyta o ID: {idWizyty} nie istnieje!");
+                return NotFound($"Wizyta o ID: {id} nie istnieje!");
             }
             return Ok(wizyta);
         }
@@ -51,15 +51,15 @@ namespace Projekt_Koncowy.Controllers
             }
         }
 
-        [HttpDelete("UsunWizyte/{idWizyty}")]
-        public async Task<ActionResult> UsunWizyte(int idWizyty)
+        [HttpDelete("UsunWizyte/{id}")]
+        public async Task<ActionResult> UsunWizyte(int id)
         {
-            bool isDeleted = await _wizytaService.UsunWizyteAsync(idWizyty);
+            bool isDeleted = await _wizytaService.UsunWizyteAsync(id);
             if (!isDeleted)
             {
-                return NotFound($"Wizyta o ID: {idWizyty} nie istnieje!");
+                return NotFound($"Wizyta o ID: {id} nie istnieje!");
             }
-            return Ok($"Wizyta o ID: {idWizyty} została usunięta!");
+            return Ok($"Wizyta o ID: {id} została usunięta!");
         }
     }
 }

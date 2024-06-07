@@ -33,13 +33,13 @@ namespace Projekt_Koncowy.Controllers
             return Ok($"Pielegniarka o ID: {id} zostala usunieta!");
         }
 
-        [HttpGet("WyswietlGrafik/{id}")]
-        public async Task<IActionResult> WyswietlGrafik(int id)
+        [HttpGet("WyswietlGrafik/{idPielegniarki}")]
+        public async Task<IActionResult> WyswietlGrafik(int idPielegniarki)
         {
-            var grafik = await _pielegniarkaServices.WyswietlGrafik(id);
+            var grafik = await _pielegniarkaServices.WyswietlGrafik(idPielegniarki);
             if (grafik == null)
             {
-                return NotFound($"Pielegniarka o ID: {id} nie istnieje!");
+                return NotFound($"Pielegniarka o ID: {idPielegniarki} nie istnieje!");
             }
             return Ok(grafik);
         }
