@@ -178,7 +178,7 @@ else
 
         try
         {
-            var response = await _wizytaServices.DodajWizyteAsync(wizyta);
+            var response = await _wizytaServices.DodajWizyte(wizyta);
             if (pacjent is DoroslyGuiDto dorosly)
             {
                 successMessage = $"Wizyta dodana poprawnie: " +

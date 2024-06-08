@@ -157,6 +157,10 @@ ID: 16
 ID: 2
 ### Wyswietl wizyte o danym ID
 ID: 1
+### Wyświelt wizyty w danym zakresie czasowym
+ID: 2
+From: 2024-06-02
+To: 2024-06-03 / 2024-06-07
 ### Dodaj Wizyte
 ```json
 {

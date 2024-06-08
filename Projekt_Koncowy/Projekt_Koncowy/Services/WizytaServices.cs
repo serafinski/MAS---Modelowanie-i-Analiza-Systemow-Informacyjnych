@@ -7,10 +7,12 @@ namespace Projekt_Koncowy.Services;
 
 public interface IWizytaServices
 {
-    Task<PacjentHistoriaResponseDto> WyswietlHistorieWizytAsync(int idPacjent);
-    Task<WizytaResponseDto?> WyswietlWizyteAsync(int idWizyty);
-    Task<WizytaDto> DodajWizyteAsync(WizytaDodajDto dto);
-    Task<bool> UsunWizyteAsync(int idWizyty);
+    Task<PacjentHistoriaResponseDto> WyswietlHistorieWizyt(int idPacjent);
+    Task<WizytaResponseDto?> WyswietlWizyte(int idWizyty);
+    Task<List<WizytaResponseDto>> WyswietlWizytyZakres(int idPacjent, DateTime from, DateTime to);
+
+    Task<WizytaDto> DodajWizyte(WizytaDodajDto dto);
+    Task<bool> UsunWizyte(int idWizyty);
 }
 
 public class WizytaServices : IWizytaServices
@@ -24,7 +26,7 @@ public class WizytaServices : IWizytaServices
     }
     
     // Metoda sprawdzająca, czy doktor osiągnął limit wizyt w danym dniu
-    private async Task<bool> CzyDoktorMaWolneTerminyAsync(int idDoktor, DateTime dataWizyty)
+    private async Task<bool> CzyDoktorMaWolneTerminy(int idDoktor, DateTime dataWizyty)
     {
         var liczbaWizyt = await _context.Wizyty
             .Where(w => w.IdDoktor == idDoktor && w.DataWizyty.Date == dataWizyty.Date)
@@ -119,7 +121,7 @@ public class WizytaServices : IWizytaServices
     }
 
         
-    public async Task<PacjentHistoriaResponseDto> WyswietlHistorieWizytAsync(int idPacjent)
+    public async Task<PacjentHistoriaResponseDto> WyswietlHistorieWizyt(int idPacjent)
     {
         var pacjent = await _context.Pacjenci
             .Include(p => p.Imiona)
@@ -160,7 +162,7 @@ public class WizytaServices : IWizytaServices
         };
     }
 
-    public async Task<WizytaResponseDto?> WyswietlWizyteAsync(int idWizyty)
+    public async Task<WizytaResponseDto?> WyswietlWizyte(int idWizyty)
     {
         var wizyta = await _context.Wizyty
             .Include(w => w.Doktor).ThenInclude(d => d.Imiona)
@@ -189,12 +191,42 @@ public class WizytaServices : IWizytaServices
 
         return wizyta;
     }
+    
+    public async Task<List<WizytaResponseDto>> WyswietlWizytyZakres(int idPacjent, DateTime from, DateTime to)
+    {
+        var wizyty = await _context.Wizyty
+            .Include(w => w.Doktor).ThenInclude(d => d.Imiona)
+            .Include(w => w.Pacjent).ThenInclude(p => p.Imiona)
+            .Include(w => w.Pacjent).ThenInclude(p => p.Adres)
+            .Include(w => w.Placowka)
+            .Where(w => w.IdPacjent == idPacjent && w.DataWizyty >= from && w.DataWizyty <= to)
+            .Select(w => new WizytaResponseDto
+        {
+            DataWizyty = w.DataWizyty,
+            OpisWizyty = w.OpisWizyty,
+            Doktor = new DoktorDto
+            {
+                IdDoktor = w.Doktor.IdDoktor,
+                Imie = w.Doktor.Imiona.PierwszeImie,
+                Nazwisko = w.Doktor.Nazwisko,
+                NrPrawaWykonywaniaZawodu = w.Doktor.NrPrawaWykonywaniaZawodu
+            },
+            Pacjent = GetPacjentWithIdDto(w.Pacjent),
+            Placowka = new PlacowkaDto
+            {
+                IdPlacowka = w.Placowka.IdPlacowka,
+                Nazwa = w.Placowka.Nazwa
+            }
+        }).ToListAsync();
+
+        return wizyty;
+    }
 
 
-    public async Task<WizytaDto> DodajWizyteAsync(WizytaDodajDto dto)
+    public async Task<WizytaDto> DodajWizyte(WizytaDodajDto dto)
     {
         // Sprawdź, czy doktor ma wolne terminy w danym dniu
-        bool doktorMaWolneTerminy = await CzyDoktorMaWolneTerminyAsync(dto.IdDoktor, dto.DataWizyty);
+        bool doktorMaWolneTerminy = await CzyDoktorMaWolneTerminy(dto.IdDoktor, dto.DataWizyty);
 
         if (!doktorMaWolneTerminy)
         {
@@ -246,7 +278,7 @@ public class WizytaServices : IWizytaServices
         };
     }
 
-    public async Task<bool> UsunWizyteAsync(int idWizyty)
+    public async Task<bool> UsunWizyte(int idWizyty)
     {
         var wizyta = await _context.Wizyty.FindAsync(idWizyty);
         if (wizyta == null)
