@@ -155,8 +155,8 @@ ID: 16
 ## Wizyta
 ### Wyswietl Historie Wizyt Pacjenta o danym ID
 ID: 2
-### Wyswietl wizyte o danym ID
-ID: 1
+### Wyswietl wizyte o danym numerze Wizyty
+nrWizyty: ABC123
 ### Wyświelt wizyty w danym zakresie czasowym
 ID: 2
 From: 2024-06-02

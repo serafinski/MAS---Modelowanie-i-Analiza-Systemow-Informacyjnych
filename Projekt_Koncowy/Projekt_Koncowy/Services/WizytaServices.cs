@@ -8,7 +8,7 @@ namespace Projekt_Koncowy.Services;
 public interface IWizytaServices
 {
     Task<PacjentHistoriaResponseDto> WyswietlHistorieWizyt(int idPacjent);
-    Task<WizytaResponseDto?> WyswietlWizyte(int idWizyty);
+    Task<WizytaResponseDto?> WyswietlWizyte(string nrWizyty);
     Task<PacjentHistoriaResponseDto> WyswietlHistorieWizyt(int idPacjent, DateTime from, DateTime to);
     Task<WizytaDto> DodajWizyte(WizytaDodajDto dto);
     Task<bool> UsunWizyte(int idWizyty);
@@ -136,6 +136,7 @@ public class WizytaServices : IWizytaServices
             .Select(w => new WizytaHistoriaDodajDto
             {
                 IdWizyty = w.IdWizyty,
+                NrWizyty = w.NrWizyty,
                 DataWizyty = w.DataWizyty,
                 OpisWizyty = w.OpisWizyty,
                 Doktor = new DoktorDto
@@ -161,15 +162,14 @@ public class WizytaServices : IWizytaServices
         };
     }
     
-    // ASOCJACJA KWALIFIKOWANA
-    public async Task<WizytaResponseDto?> WyswietlWizyte(int idWizyty)
+    public async Task<WizytaResponseDto?> WyswietlWizyte(string nrWizyty)
     {
         var wizyta = await _context.Wizyty
             .Include(w => w.Doktor).ThenInclude(d => d.Imiona)
             .Include(w => w.Pacjent).ThenInclude(p => p.Imiona)
             .Include(w => w.Pacjent).ThenInclude(p => p.Adres)
             .Include(w => w.Placowka)
-            .Where(w => w.IdWizyty == idWizyty)
+            .Where(w => w.NrWizyty == nrWizyty)
             .Select(w => new WizytaResponseDto
             {
                 DataWizyty = w.DataWizyty,
@@ -191,6 +191,7 @@ public class WizytaServices : IWizytaServices
 
         return wizyta;
     }
+
     
     public async Task<PacjentHistoriaResponseDto> WyswietlHistorieWizyt(int idPacjent, DateTime from, DateTime to)
     {
@@ -208,6 +209,7 @@ public class WizytaServices : IWizytaServices
             .Select(w => new WizytaHistoriaDodajDto
             {
                 IdWizyty = w.IdWizyty,
+                NrWizyty = w.NrWizyty,
                 DataWizyty = w.DataWizyty,
                 OpisWizyty = w.OpisWizyty,
                 Doktor = new DoktorDto
@@ -250,7 +252,9 @@ public class WizytaServices : IWizytaServices
             IdDoktor = dto.IdDoktor,
             OpisWizyty = dto.OpisWizyty,
             DataWizyty = dto.DataWizyty,
-            IdPlacowka = dto.IdPlacowka
+            IdPlacowka = dto.IdPlacowka,
+            // Generowanie losowego stringa
+            NrWizyty = GenerateRandomString(10) 
         };
 
         _context.Wizyty.Add(wizyta);
@@ -280,8 +284,17 @@ public class WizytaServices : IWizytaServices
             {
                 IdPlacowka = savedWizyta.Placowka.IdPlacowka,
                 Nazwa = savedWizyta.Placowka.Nazwa
-            }
+            },
+            NrWizyty = savedWizyta.NrWizyty
         };
+    }
+
+    private static string GenerateRandomString(int length)
+    {
+        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        var random = new Random();
+        return new string(Enumerable.Repeat(chars, length)
+            .Select(s => s[random.Next(s.Length)]).ToArray());
     }
 
     public async Task<bool> UsunWizyte(int idWizyty)

@@ -36,10 +36,9 @@ Asocjacja między:
 * `Recepta.cs`
 <br>przez klasę pośredniczącą `LekNaRecepcie.cs`
 Asocjacje bezpośrednio widoczne w `MyDbContext.cs` w LekNaRecepcie.
-### DO WERYFIKACJI - Asocjacja Kwalifikowana
-
-
-
+### Asocjacja Kwalifikowana
+`WizytaServices.cs` - Każda wizyta dostaje swój unikatowy NrWizyty.
+<br>Pacjent może sprawdzić swoją wizytę za pomocą metody `WyswietlWizyte(nrWizyty)`
 ### Kompozycja
 `MyDbContext.cs` - jest wymagane by Oddział był przypisany do Placówki
 `Oddzial.cs` - bezpośrednie odwołanie do Placówki poprzez `IdPlacowki`.

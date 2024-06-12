@@ -598,6 +598,14 @@ public class MyDbContext : DbContext
                 .HasForeignKey(e => e.IdPlacowka)
                 .OnDelete(DeleteBehavior.NoAction);
             
+            // Pole do asocjacji kwalifikowanej
+            e.Property(e => e.NrWizyty)
+                .HasMaxLength(10)
+                .IsRequired();
+            
+            // NrWizyty musi być unikatowy
+            e.HasIndex(e => e.NrWizyty).IsUnique();
+            
             //Doktor z id 1 -> 9 wizyt do pokazania wlasnego ograniczenia!
             e.HasData(new List<Wizyta>
             {
@@ -608,7 +616,8 @@ public class MyDbContext : DbContext
                     OpisWizyty = "Wizyta kontrolna",
                     IdDoktor = 1,
                     IdPacjent = 2,
-                    IdPlacowka = 1
+                    IdPlacowka = 1,
+                    NrWizyty = "ABC123"
                 },
                 new Wizyta
                 {
@@ -617,7 +626,8 @@ public class MyDbContext : DbContext
                     OpisWizyty = "Wizyta specjalistyczna",
                     IdDoktor = 1,
                     IdPacjent = 2,
-                    IdPlacowka = 2
+                    IdPlacowka = 2,
+                    NrWizyty = "DEF456"
                 },
                 new Wizyta
                 {
@@ -626,7 +636,8 @@ public class MyDbContext : DbContext
                     OpisWizyty = "Wizyta rutynowa",
                     IdDoktor = 1,
                     IdPacjent = 3,
-                    IdPlacowka = 1
+                    IdPlacowka = 1,
+                    NrWizyty = "GHI789"
                 },
                 new Wizyta
                 {
@@ -635,7 +646,8 @@ public class MyDbContext : DbContext
                     OpisWizyty = "Wizyta kontrolna",
                     IdDoktor = 1,
                     IdPacjent = 7,
-                    IdPlacowka = 1
+                    IdPlacowka = 1,
+                    NrWizyty = "JKL012"
                 },
                 new Wizyta
                 {
@@ -644,7 +656,8 @@ public class MyDbContext : DbContext
                     OpisWizyty = "Wizyta kontrolna",
                     IdDoktor = 1,
                     IdPacjent = 8,
-                    IdPlacowka = 2
+                    IdPlacowka = 2,
+                    NrWizyty = "MNO345"
                 },
                 new Wizyta
                 {
@@ -653,7 +666,8 @@ public class MyDbContext : DbContext
                     OpisWizyty = "Wizyta specjalistyczna",
                     IdDoktor = 1,
                     IdPacjent = 5,
-                    IdPlacowka = 1
+                    IdPlacowka = 1,
+                    NrWizyty = "PQR678"
                 },
                 new Wizyta
                 {
@@ -662,7 +676,8 @@ public class MyDbContext : DbContext
                     OpisWizyty = "Wizyta kontrolna",
                     IdDoktor = 1,
                     IdPacjent = 6,
-                    IdPlacowka = 2
+                    IdPlacowka = 2,
+                    NrWizyty = "STU901"
                 },
                 new Wizyta
                 {
@@ -671,7 +686,8 @@ public class MyDbContext : DbContext
                     OpisWizyty = "Wizyta kontrolna",
                     IdDoktor = 4,
                     IdPacjent = 2,
-                    IdPlacowka = 1
+                    IdPlacowka = 1,
+                    NrWizyty = "VWX234"
                 },
                 new Wizyta
                 {
@@ -680,7 +696,8 @@ public class MyDbContext : DbContext
                     OpisWizyty = "Wizyta specjalistyczna",
                     IdDoktor = 4,
                     IdPacjent = 3,
-                    IdPlacowka = 1
+                    IdPlacowka = 1,
+                    NrWizyty = "YZA567"
                 },
                 new Wizyta
                 {
@@ -689,7 +706,8 @@ public class MyDbContext : DbContext
                     OpisWizyty = "Wizyta rutynowa",
                     IdDoktor = 4,
                     IdPacjent = 7,
-                    IdPlacowka = 1
+                    IdPlacowka = 1,
+                    NrWizyty = "BCD890"
                 },
                 new Wizyta
                 {
@@ -698,7 +716,8 @@ public class MyDbContext : DbContext
                     OpisWizyty = "Wizyta kontrolna",
                     IdDoktor = 4,
                     IdPacjent = 8,
-                    IdPlacowka = 1
+                    IdPlacowka = 1,
+                    NrWizyty = "EFG123"
                 },
                 new Wizyta
                 {
@@ -707,7 +726,8 @@ public class MyDbContext : DbContext
                     OpisWizyty = "Wizyta kontrolna",
                     IdDoktor = 4,
                     IdPacjent = 5,
-                    IdPlacowka = 1
+                    IdPlacowka = 1,
+                    NrWizyty = "HIJ456"
                 },
                 new Wizyta
                 {
@@ -716,7 +736,8 @@ public class MyDbContext : DbContext
                     OpisWizyty = "Wizyta specjalistyczna",
                     IdDoktor = 4,
                     IdPacjent = 6,
-                    IdPlacowka = 1
+                    IdPlacowka = 1,
+                    NrWizyty = "KLM789"
                 },
                 new Wizyta
                 {
@@ -725,7 +746,8 @@ public class MyDbContext : DbContext
                     OpisWizyty = "Wizyta kontrolna",
                     IdDoktor = 4,
                     IdPacjent = 2,
-                    IdPlacowka = 1
+                    IdPlacowka = 1,
+                    NrWizyty = "NOP012"
                 },
                 new Wizyta
                 {
@@ -734,7 +756,8 @@ public class MyDbContext : DbContext
                     OpisWizyty = "Wizyta kontrolna",
                     IdDoktor = 4,
                     IdPacjent = 3,
-                    IdPlacowka = 1
+                    IdPlacowka = 1,
+                    NrWizyty = "QRS345"
                 },
                 new Wizyta
                 {
@@ -743,7 +766,8 @@ public class MyDbContext : DbContext
                     OpisWizyty = "Wizyta kontrolna",
                     IdDoktor = 4,
                     IdPacjent = 7,
-                    IdPlacowka = 1
+                    IdPlacowka = 1,
+                    NrWizyty = "TUV678"
                 }
             });
         });

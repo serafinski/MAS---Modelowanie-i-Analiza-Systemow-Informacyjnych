@@ -15,6 +15,9 @@ public class Wizyta
     //Połączenie z placówką
     public int IdPlacowka { get; set; }
     
+    //Dodanie kwalifikatora
+    public string NrWizyty { get; set; } = null!;
+    
     public virtual Doktor Doktor { get; set; } = null!;
     public virtual Pacjent Pacjent { get; set; } = null!;
     public virtual Placowka Placowka { get; set; } = null!;

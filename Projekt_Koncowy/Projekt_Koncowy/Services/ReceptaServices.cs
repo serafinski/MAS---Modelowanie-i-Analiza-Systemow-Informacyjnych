@@ -83,6 +83,7 @@ public class ReceptaServices : IReceptaServices
             Wizyta = new WizytaHistoriaDodajDto
             {
                 IdWizyty = r.Wizyta.IdWizyty,
+                NrWizyty = r.Wizyta.NrWizyty,
                 DataWizyty = r.Wizyta.DataWizyty,
                 OpisWizyty = r.Wizyta.OpisWizyty,
                 Doktor = new DoktorDto

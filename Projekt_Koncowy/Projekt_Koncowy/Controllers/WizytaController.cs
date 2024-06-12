@@ -26,13 +26,13 @@ namespace Projekt_Koncowy.Controllers
             return Ok(historiaWizyt);
         }
 
-        [HttpGet("WyswietlWizyte/{id}")]
-        public async Task<ActionResult<WizytaResponseDto>> WyswietlWizyte(int id)
+        [HttpGet("WyswietlWizyte/{nrWizyty}")]
+        public async Task<ActionResult<WizytaResponseDto>> WyswietlWizyte(string nrWizyty)
         {
-            var wizyta = await _wizytaService.WyswietlWizyte(id);
+            var wizyta = await _wizytaService.WyswietlWizyte(nrWizyty);
             if (wizyta == null)
             {
-                return NotFound($"Wizyta o ID: {id} nie istnieje!");
+                return NotFound($"Wizyta o numerze: {nrWizyty} nie istnieje!");
             }
             return Ok(wizyta);
         }
