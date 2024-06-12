@@ -31,7 +31,7 @@ namespace Projekt_Koncowy.Controllers
                 return NotFound($"Doktor o ID: {id} nie istnieje!");
             }
 
-            return Ok($"Doktor o ID: {id} zostal usuniety!");
+            return Ok($"Doktor o ID: {id} został usunięty!");
         }
     }
 }

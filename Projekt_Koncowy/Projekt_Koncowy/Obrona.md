@@ -1,13 +1,12 @@
 ﻿# INFO
 Ten plik istnieje tylko po to by sprawdzanie/obrona projektu była szybsza.
-Przykładowe dane dla przetestowania endpointów zapewniłem w TestData.md 
+Przykładowe dane dla przetestowania endpointów zapewniłem w `TestData.md` 
 ## Z góry osiągnięte (bo baza danych)
 * Ekstensja
 * Ekstensja - trwałość
 * Model relacyjny - klasy
 * Model relacyjny - Asocjacje
 * Model relacyjny - Dziedziczenie
-
 ## Implementacja
 ### Atr. złożony
 `MyDbContext.cs` - powiązania z Osobą
@@ -74,15 +73,18 @@ Jeżeli występuje interakcja - nie pozwalamy dodać recepty.
 która sprawdza czy doktor ma mniej niż 10 wizyt dziennie. Jeżeli ma 10 wizyt - nie pozwala dodać więcej.
 
 **_To ograniczenie zostało nieuwzględnione w GUI, ponieważ nie uwzględniono takiego alternatywnego przepływu zdarzeń._**
-### DO WERYFIKACJI - Met. klasowa
-
+### Met. klasowa
+`DoctorServices.cs` - Użyłem Helper'a `DoctorHelper` by metody były statyczne.
+<br>Metody dostają DbContext jako parametr - dzięki temu jest dostęp do kontekstu bez instancji klasy - wywołanie niezależne od `DoctorServices`.
 ### Przeciążenie
 `WizytaServices.cs` - Metoda `WyswietlHistorieWizyt` może być wywołana na 2 sposoby:
 * `WyswietlHistorieWizyt(int idPacjent)` - metoda, która zwróci wszystkie wizyty Pacjenta
 * `WyswietlHistorieWizyt(int idPacjent, DateTime from, DateTime to)` - metoda, która zwróci wszystkie wizyty w danym zakresie
-### DO WERYFIKACJI - Dziedziczenie Wieloaspektowe
+### Dziedziczenie Wieloaspektowe
 Dziedziczenie podzielono w taki sposób, by miało to sens.
 * `Osoba.cs` - klasa bazowa, pola + metody
 * `Pacjent.cs` - dziedziczy po `Osoba.cs` + dodaje właściwości specyficzne dla pacjenta + przesłania metodę
 * `Dorosly.cs`, `Dziecko.cs`, `Senior.cs` - dziedziczą po `Pacjent.cs` + dodają specyficzne pola + przesłaniają metodę
 * `Doktor.cs`, `Pielegniarka.cs` - dziedziczą po `Osoba.cs` + dodają specyficzne pola + przesłaniają metodę
+
+*_Tutaj zakładam, że ta implementacja jest niepełna - ponieważ nie udało mi się zaimplementować overlappingu dla Doktora i Pielęgniarki._*

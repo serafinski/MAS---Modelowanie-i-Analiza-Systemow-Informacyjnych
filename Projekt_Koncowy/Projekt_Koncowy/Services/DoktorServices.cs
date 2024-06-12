@@ -21,16 +21,27 @@ public class DoktorServices : IDoktorServices
 
     public async Task<DoktorWyswietlDto> DodajDoktora(DoktorDodajDto doktorDodajDto)
     {
+        return await DoktorHelper.DodajDoktora(_context, doktorDodajDto);
+    }
+
+    public async Task<bool> UsunDoktora(int id)
+    {
+        return await DoktorHelper.UsunDoktora(_context, id);
+    }
+}
+
+public static class DoktorHelper
+{
+    public static async Task<DoktorWyswietlDto> DodajDoktora(MyDbContext context, DoktorDodajDto doktorDodajDto)
+    {
         var imiona = new Imiona
         {
             PierwszeImie = doktorDodajDto.Imie,
-            // Może być null
-            DrugieImie = doktorDodajDto.DrugieImie 
+            DrugieImie = doktorDodajDto.DrugieImie // Może być null
         };
 
-        // Dodaj obiekt Imiona do kontekstu i zapisz zmiany, aby uzyskać IdImiona
-        _context.Imiona.Add(imiona);
-        await _context.SaveChangesAsync();
+        context.Imiona.Add(imiona);
+        await context.SaveChangesAsync();
 
         var adres = new Adres
         {
@@ -41,27 +52,25 @@ public class DoktorServices : IDoktorServices
             Miejscowosc = doktorDodajDto.Miejscowosc
         };
 
-        _context.Adresy.Add(adres);
-        await _context.SaveChangesAsync();
+        context.Adresy.Add(adres);
+        await context.SaveChangesAsync();
 
         var doktor = new Doktor
         {
             NrPrawaWykonywaniaZawodu = doktorDodajDto.NrPrawaWykonywaniaZawodu,
-            // Przypisz IdImiona do właściwości IdImion
-            IdImion = imiona.IdImiona, 
+            IdImion = imiona.IdImiona,
             Nazwisko = doktorDodajDto.Nazwisko,
             NrTelefonu = doktorDodajDto.NrTelefonu,
             Pesel = doktorDodajDto.Pesel,
             IdAdres = adres.IdAdres
         };
 
-        _context.Doktorzy.Add(doktor);
-        await _context.SaveChangesAsync();
+        context.Doktorzy.Add(doktor);
+        await context.SaveChangesAsync();
 
-        // Ustawienie IdDoktor po zapisaniu
         doktor.IdDoktor = doktor.IdOsoba;
-        _context.Doktorzy.Update(doktor);
-        await _context.SaveChangesAsync();
+        context.Doktorzy.Update(doktor);
+        await context.SaveChangesAsync();
 
         return new DoktorWyswietlDto
         {
@@ -80,27 +89,27 @@ public class DoktorServices : IDoktorServices
         };
     }
 
-    public async Task<bool> UsunDoktora(int id)
+    public static async Task<bool> UsunDoktora(MyDbContext context, int id)
     {
-        var doktor = await _context.Doktorzy.FindAsync(id);
+        var doktor = await context.Doktorzy.FindAsync(id);
         if (doktor == null)
         {
             return false;
         }
 
-        var imiona = await _context.Imiona.FindAsync(doktor.IdImion);
-        var adres = await _context.Adresy.FindAsync(doktor.IdAdres);
+        var imiona = await context.Imiona.FindAsync(doktor.IdImion);
+        var adres = await context.Adresy.FindAsync(doktor.IdAdres);
 
-        _context.Doktorzy.Remove(doktor);
+        context.Doktorzy.Remove(doktor);
         if (imiona != null)
         {
-            _context.Imiona.Remove(imiona);
+            context.Imiona.Remove(imiona);
         }
         if (adres != null)
         {
-            _context.Adresy.Remove(adres);
+            context.Adresy.Remove(adres);
         }
-        await _context.SaveChangesAsync();
+        await context.SaveChangesAsync();
         return true;
     }
 }
