@@ -9,7 +9,7 @@ public interface IWizytaServices
 {
     Task<PacjentHistoriaResponseDto> WyswietlHistorieWizyt(int idPacjent);
     Task<WizytaResponseDto?> WyswietlWizyte(int idWizyty);
-    Task<List<WizytaResponseDto>> WyswietlWizytyZakres(int idPacjent, DateTime from, DateTime to);
+    Task<PacjentHistoriaResponseDto> WyswietlHistorieWizyt(int idPacjent, DateTime from, DateTime to);
     Task<WizytaDto> DodajWizyte(WizytaDodajDto dto);
     Task<bool> UsunWizyte(int idWizyty);
 }
@@ -192,34 +192,45 @@ public class WizytaServices : IWizytaServices
         return wizyta;
     }
     
-    public async Task<List<WizytaResponseDto>> WyswietlWizytyZakres(int idPacjent, DateTime from, DateTime to)
+    public async Task<PacjentHistoriaResponseDto> WyswietlHistorieWizyt(int idPacjent, DateTime from, DateTime to)
     {
+        var pacjent = await _context.Pacjenci
+            .Include(p => p.Imiona)
+            .Include(p => p.Adres)
+            .FirstOrDefaultAsync(p => p.IdPacjent == idPacjent);
+
+        if (pacjent == null) return null;
+
         var wizyty = await _context.Wizyty
             .Include(w => w.Doktor).ThenInclude(d => d.Imiona)
-            .Include(w => w.Pacjent).ThenInclude(p => p.Imiona)
-            .Include(w => w.Pacjent).ThenInclude(p => p.Adres)
             .Include(w => w.Placowka)
             .Where(w => w.IdPacjent == idPacjent && w.DataWizyty >= from && w.DataWizyty <= to)
-            .Select(w => new WizytaResponseDto
-        {
-            DataWizyty = w.DataWizyty,
-            OpisWizyty = w.OpisWizyty,
-            Doktor = new DoktorDto
+            .Select(w => new WizytaHistoriaDodajDto
             {
-                IdDoktor = w.Doktor.IdDoktor,
-                Imie = w.Doktor.Imiona.PierwszeImie,
-                Nazwisko = w.Doktor.Nazwisko,
-                NrPrawaWykonywaniaZawodu = w.Doktor.NrPrawaWykonywaniaZawodu
-            },
-            Pacjent = GetPacjentWithIdDto(w.Pacjent),
-            Placowka = new PlacowkaDto
-            {
-                IdPlacowka = w.Placowka.IdPlacowka,
-                Nazwa = w.Placowka.Nazwa
-            }
-        }).ToListAsync();
+                IdWizyty = w.IdWizyty,
+                DataWizyty = w.DataWizyty,
+                OpisWizyty = w.OpisWizyty,
+                Doktor = new DoktorDto
+                {
+                    IdDoktor = w.Doktor.IdDoktor,
+                    Imie = w.Doktor.Imiona.PierwszeImie,
+                    Nazwisko = w.Doktor.Nazwisko,
+                    NrPrawaWykonywaniaZawodu = w.Doktor.NrPrawaWykonywaniaZawodu
+                },
+                Placowka = new PlacowkaDto
+                {
+                    IdPlacowka = w.Placowka.IdPlacowka,
+                    Nazwa = w.Placowka.Nazwa
+                }
+            }).ToListAsync();
 
-        return wizyty;
+        var pacjentDto = GetPacjentDto(pacjent);
+
+        return new PacjentHistoriaResponseDto
+        {
+            Pacjent = pacjentDto,
+            Wizyty = wizyty
+        };
     }
 
 

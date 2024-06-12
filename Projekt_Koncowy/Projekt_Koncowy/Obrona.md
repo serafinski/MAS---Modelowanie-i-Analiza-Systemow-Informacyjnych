@@ -77,8 +77,10 @@ która sprawdza czy doktor ma mniej niż 10 wizyt dziennie. Jeżeli ma 10 wizyt 
 **_To ograniczenie zostało nieuwzględnione w GUI, ponieważ nie uwzględniono takiego alternatywnego przepływu zdarzeń._**
 ### DO WERYFIKACJI - Met. klasowa
 
-### DO WERYFIKACJI - Przeciążenie
-
+### Przeciążenie
+`WizytaServices.cs` - Metoda `WyswietlHistorieWizyt` może być wywołana na 2 sposoby:
+* `WyswietlHistorieWizyt(int idPacjent)` - metoda, która zwróci wszystkie wizyty Pacjenta
+* `WyswietlHistorieWizyt(int idPacjent, DateTime from, DateTime to)` - metoda, która zwróci wszystkie wizyty w danym zakresie
 ### DO WERYFIKACJI - Dziedziczenie Wieloaspektowe
 Dziedziczenie podzielono w taki sposób, by miało to sens.
 * `Osoba.cs` - klasa bazowa, pola + metody

@@ -37,15 +37,15 @@ namespace Projekt_Koncowy.Controllers
             return Ok(wizyta);
         }
         
-        [HttpGet("WyswietlWizytyWZakresie")]
-        public async Task<ActionResult<List<WizytaResponseDto>>> WyswietlWizytyZakres(int idPacjent, DateTime from, DateTime to)
+        [HttpGet("WyswietlHistorieWizyt/{idPacjent}/{from}/{to}")]
+        public async Task<ActionResult<PacjentHistoriaResponseDto>> WyswietlHistorieWizyt(int idPacjent, DateTime from, DateTime to)
         {
-            var wizyty = await _wizytaService.WyswietlWizytyZakres(idPacjent, from, to);
-            if (wizyty == null || wizyty.Count == 0)
+            var historiaWizyt = await _wizytaService.WyswietlHistorieWizyt(idPacjent, from, to);
+            if (historiaWizyt == null || historiaWizyt.Wizyty.Count == 0)
             {
-                return NotFound($"Brak wizyt dla pacjenta o ID: {idPacjent} w podanym zakresie czasowym od {from.ToString("yyyy-MM-dd")} do {to.ToString("yyyy-MM-dd")}.");
+                return NotFound($"Brak wizyt dla pacjenta o ID: {idPacjent} w podanym zakresie czasowym od {from:yyyy-MM-dd} do {to:yyyy-MM-dd}.");
             }
-            return Ok(wizyty);
+            return Ok(historiaWizyt);
         }
 
         
