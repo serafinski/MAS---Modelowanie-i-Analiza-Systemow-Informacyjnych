@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Projekt_Koncowy.Data;
 using Projekt_Koncowy.Data.DTOs;
 
@@ -29,7 +28,6 @@ public class GuiServices : IGuiServices
             .FirstOrDefaultAsync(p => p.Pesel == pesel);
 
         if (dorosly == null) return null;
-
         return new DoroslyGuiDto
         {
             IdPacjenta = dorosly.IdDorosly,
