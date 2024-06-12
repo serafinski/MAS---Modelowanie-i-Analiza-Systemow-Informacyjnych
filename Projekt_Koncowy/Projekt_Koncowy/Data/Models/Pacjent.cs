@@ -13,6 +13,7 @@ public abstract class Pacjent : Osoba
     //Połączenie do Wizyty
     public virtual ICollection<Wizyta> Wizyty { get; set; } = null!;
     
+    // PRZESŁONIĘCIE
     public override string WyswietlDane()
     {
         return $"Pacjent:\nID: {IdPacjent}" +

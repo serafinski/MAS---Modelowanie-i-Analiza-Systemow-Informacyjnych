@@ -9,7 +9,7 @@ public class MyDbContext : DbContext
     {
         
     }
-    
+    // ATRYBUT ZŁOŻONY - TABELA ADRES
     public DbSet<Adres> Adresy { get; set; }
     public DbSet<Doktor> Doktorzy { get; set; }
     public DbSet<Dorosly> Dorosli { get; set; }
@@ -33,19 +33,26 @@ public class MyDbContext : DbContext
         //Konfiguracja Placowka
         modelBuilder.Entity<Placowka>(e =>
         {
+            //Klucz główny
             e.HasKey(p => p.IdPlacowka);
+            // Nazwa placówki jest wymagana i ma max 255 znaków
             e.Property(p => p.Nazwa)
                 .HasMaxLength(255)
                 .IsRequired();
-
+            
+            // Placówka może mieć wielu kierowników, połączenie klucz obcy
             e.HasMany(p => p.Kierownicy)
                 .WithOne(k => k.Placowka)
                 .HasForeignKey(k => k.IdPlacowki);
-
+            
+            // W placówce może odbywać się wiele wizyt, połączenie klucz obcy
             e.HasMany(p => p.Wizyty)
                 .WithOne(w => w.Placowka)
                 .HasForeignKey(w => w.IdPlacowka);
-
+            
+            // KOMPOZYCJA 
+            // Placówka może mieć wiele oddziałów, połączenie przez wymagany klucz obcy
+            // Jeżeli placówka zostanie usunięta - wszystkie oddziały zostaną również usunięte
             e.HasMany(p => p.Oddzialy)
                 .WithOne(o => o.Placowka)
                 .HasForeignKey(o => o.IdPlacowki)
@@ -67,13 +74,19 @@ public class MyDbContext : DbContext
             });
         });
         
+        //Konfiguracja oddział
         modelBuilder.Entity<Oddzial>(e =>
         {
+            // Klucz główny
             e.HasKey(o => o.IdOddzial);
+            // Nazwa oddziału jest wymagana i ma max 255 znaków
             e.Property(o => o.NazwaOddzial)
                 .HasMaxLength(255)
                 .IsRequired();
-
+            
+            // KOMPOZYCJA
+            // Placówka może mieć wiele oddziałów, połączenie przez wymagany klucz obcy
+            // Jeżeli placówka zostanie usunięta - wszystkie oddziały zostaną również usunięte
             e.HasOne(o => o.Placowka)
                 .WithMany(p => p.Oddzialy)
                 .HasForeignKey(o => o.IdPlacowki)
@@ -100,47 +113,62 @@ public class MyDbContext : DbContext
         //Konfiguracja Osoba
         modelBuilder.Entity<Osoba>(e =>
         {
+            // Klucz główny - będzie również używany przez inne klasy pochodne!
             e.HasKey(e => e.IdOsoba);
-
+            
+            // Generujemy ID osoby przy jej dodaniu
             e.Property(e => e.IdOsoba).ValueGeneratedOnAdd();
-
+            
+            // Nazwisko jest wymagane i może mieć max. 255 znaków
             e.Property(e => e.Nazwisko)
                 .HasMaxLength(255)
                 .IsRequired();
-
+            
+            // OGRANICZENIE ATRYBUTU
+            // Nr telefonu może mieć max. 16 znaków
+            e.Property(e => e.NrTelefonu)
+                .HasMaxLength(16)
+                .IsRequired();
+            
+            // PESEL jest wymagany i ma mieć dokładnie 11 znaków 
             e.Property(e => e.Pesel)
                 .HasMaxLength(11)
                 .IsRequired()
                 .IsFixedLength();
             
-            //OGRANICZENIE ATRYBUTU
-            e.Property(e => e.NrTelefonu)
-                .HasMaxLength(16)
-                .IsRequired();
-            
-            //OGRANICZENIE UNIQUE
+            // OGRANICZENIE UNIQUE
+            // Pesel musi być unikalny!
             e.HasIndex(e => e.Pesel).IsUnique();
 
+            // Połączenie kluczem obcym z imionami
+            // Osoba zostanie usunięta - usuń zestaw imion
             e.HasOne(e => e.Imiona)
                 .WithMany(i => i.Osoby)
                 .HasForeignKey(e => e.IdImion)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            // Połączenie kluczem obcym z adresami
+            // Osoba zostanie usunięta - usuń adres do niej przypisany
             e.HasOne(e => e.Adres)
                 .WithMany(a => a.Osoby)
                 .HasForeignKey(e => e.IdAdres)
                 .OnDelete(DeleteBehavior.Cascade);
+            
+            //Brak przykładowych danych, bo pozostałe klasy dziedziczą po osobie - tam będzie definicja
         });
 
         //Konfiguracja dla Imiona
         modelBuilder.Entity<Imiona>(e =>
         {
+            // Klucz główny
             e.HasKey(e => e.IdImiona);
-
+            
+            // Max. długośc 50, wymagane
             e.Property(e => e.PierwszeImie)
                 .HasMaxLength(50)
                 .IsRequired();
 
+            // Max. długość 50, Osoba może nie mieć drugiego imienia!
             e.Property(e => e.DrugieImie)
                 .HasMaxLength(50);
 
@@ -209,25 +237,32 @@ public class MyDbContext : DbContext
         });
 
         //Konfiguracja dla Adres
+        // ATRYBUT ZŁOŻONY - TABELA ADRES
         modelBuilder.Entity<Adres>(e =>
         {
+            // Klucz główny
             e.HasKey(e => e.IdAdres);
 
+            // Ulica jest wymagana, max. 255 znaków
             e.Property(e => e.Ulica)
                 .HasMaxLength(255)
                 .IsRequired();
-
+            
+            // Nr domu jest wymgany, max. 255 znaków
             e.Property(e => e.NrDomu)
                 .HasMaxLength(10)
                 .IsRequired();
 
+            // Nr mieszkania nie jest wymagany, max. 6 znaków
             e.Property(e => e.NrMieszkania)
                 .HasMaxLength(6);
 
+            // Kod pocztowy jest wymagany, max. 6 znaków
             e.Property(e => e.KodPocztowy)
                 .HasMaxLength(6)
                 .IsRequired();
 
+            // Miejscowość jest wymagana, max. 255 znaków
             e.Property(e => e.Miejscowosc)
                 .HasMaxLength(255)
                 .IsRequired();
@@ -334,14 +369,18 @@ public class MyDbContext : DbContext
         //Konfiguracja Doktor
         modelBuilder.Entity<Doktor>(e =>
         {
+            // Do tabeli Doktorzy
             e.ToTable("Doktorzy");
         
+            // Bazowy typ Osoba
             e.HasBaseType<Osoba>();
         
+            // Nr. prawa wykonywania zawodu jest wymagany - max. 7 znaków
             e.Property(e => e.NrPrawaWykonywaniaZawodu)
                 .HasMaxLength(7)
                 .IsRequired();
         
+            // Nr. prawa wykonywania zawodu jest wymagany musi być unikalny!
             e.HasIndex(e => e.NrPrawaWykonywaniaZawodu).IsUnique();
             
             e.HasData(new List<Doktor>
@@ -372,17 +411,21 @@ public class MyDbContext : DbContext
         // Konfiguracja KierownikPlacowki
         modelBuilder.Entity<KierownikPlacowki>(e =>
         {
+            // Typ bazowy Doktor - by być kierownikem musi być doktorem 
             e.HasBaseType<Doktor>();
 
+            //Data objęcia stanowiska jest wymagana
             e.Property(k => k.DataObjeciaStanowiska).IsRequired();
             
-            //By usunąć placówkę - trzeba usunąć kierownika
+            // Powiązanie kluczem obcym z Placówką - kierownik kieruje placówką 
+            // By usunąć placówkę - trzeba usunąć kierownika
             e.HasOne(k => k.Placowka)
                 .WithMany(p => p.Kierownicy)
                 .HasForeignKey(k => k.IdPlacowki)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // Indeks dla kierownika w danej placowce
+            // Indeks dla kierownika w danej placowce - musi być unkatowy
+            // Kierownik nie może kierować 2 placówkami - to to zapewnia
             e.HasIndex(k => new { k.IdOsoba, k.IdPlacowki }).IsUnique();
             
             e.HasData(new List<KierownikPlacowki>
@@ -405,18 +448,24 @@ public class MyDbContext : DbContext
         //Konfiguracja Pacjent
         modelBuilder.Entity<Pacjent>(e =>
         {
+            // Do tabeli Pacjenci 
             e.ToTable("Pacjenci");
             
+            // Typ bazowy Osoba - dziedziczenie z klasy abstrakcyjnej Osoba
             e.HasBaseType<Osoba>();
             
+            // Pacjent 
             e.Property(e => e.NrKontaktuAlarmowego)
                 .HasMaxLength(16)
                 .IsRequired();
+            
+            // Brak danych tutaj bo Pacjent dzieli się na Dorosłego, Dziecko i Seniora
         });
         
         //Konfiguracja Dorosly
         modelBuilder.Entity<Dorosly>(e =>
         {
+            // NIP pracodawcy jest wymagany, max. 11 znaków
             e.Property(e => e.NipPracodawcy)
                 .HasMaxLength(11)
                 .IsRequired();
@@ -451,6 +500,7 @@ public class MyDbContext : DbContext
         //Konfiguracja Senior
         modelBuilder.Entity<Senior>(e =>
         {
+            // Rok przejścia na emeryturę jest wymagany, max. 4 znaki
             e.Property(e => e.RokPrzejsciaNaEmeryture)
                 .HasMaxLength(4)
                 .IsRequired();
@@ -462,7 +512,7 @@ public class MyDbContext : DbContext
                     IdOsoba = 5,
                     IdImion = 5,
                     Nazwisko = "Nowicki",
-                    Pesel = "65010112345",
+                    Pesel = "63010112345",
                     IdAdres = 5,
                     NrKontaktuAlarmowego = "123456789",
                     RokPrzejsciaNaEmeryture = 2010,
@@ -485,6 +535,7 @@ public class MyDbContext : DbContext
         //Konfiguracja Dziecko
         modelBuilder.Entity<Dziecko>(e =>
         {
+            // Nazwa szkoły jest wymagana, max. 255 znaków
             e.Property(e => e.NazwaSzkoly)
                 .IsRequired()
                 .HasMaxLength(255);
@@ -519,27 +570,35 @@ public class MyDbContext : DbContext
         //Konfiguracja Wizyta
         modelBuilder.Entity<Wizyta>(e =>
         {
+            // Klucz główny
             e.HasKey(e => e.IdWizyty);
 
-            e.Property(e => e.OpisWizyty);
+            // Opis wizyty jest wymagany
+            e.Property(e => e.OpisWizyty).IsRequired();
 
+            // Połączenie kluczem obcym z Pacjentem,
+            // Usunięcie wizyty nie usuwa Pacjenta
             e.HasOne(e => e.Pacjent)
                 .WithMany(p => p.Wizyty)
                 .HasForeignKey(e => e.IdPacjent)
                 .OnDelete(DeleteBehavior.NoAction);
             
-            //ASOCJACJA ZWYKŁA
+            // ASOCJACJA ZWYKŁA
+            // Połączenie kluczem obcym z Doktorem,
+            // Usunięcie wizyty nie usuwa Doktora
             e.HasOne(e => e.Doktor)
                 .WithMany(p => p.Wizyty)
                 .HasForeignKey(e => e.IdDoktor)
                 .OnDelete(DeleteBehavior.NoAction);
 
+            // Połączenie kluczem obcym z Placówką,
+            // Usunięcie wizyty nie usuwa Placówki
             e.HasOne(e => e.Placowka)
                 .WithMany(p => p.Wizyty)
                 .HasForeignKey(e => e.IdPlacowka)
                 .OnDelete(DeleteBehavior.NoAction);
             
-            //Doktor id 1 - 9 wizyt do pokazania wlasnego ograniczenia!
+            //Doktor z id 1 -> 9 wizyt do pokazania wlasnego ograniczenia!
             e.HasData(new List<Wizyta>
             {
                 new Wizyta
@@ -692,8 +751,10 @@ public class MyDbContext : DbContext
         //Konfiguracja Lek
         modelBuilder.Entity<Lek>(e =>
         {
+            // Klucz główny
             e.HasKey(e => e.IdLek);
             
+            // Nazwa leku jest wymagana, max. 255 znaków
             e.Property(e => e.NazwaLeku)
                 .HasMaxLength(255)
                 .IsRequired();
@@ -738,15 +799,21 @@ public class MyDbContext : DbContext
             });
         });
         
+        // Konfiguracja interakcji leków
         modelBuilder.Entity<InterakcjaLeku>(e =>
         {
+            // Klucz główny - kombinacja interakcji musi być unikalna
             e.HasKey(e => new { e.IdLek1, e.IdLek2 });
 
+            // Powiązanie kluczem obcym z Lek1
+            // Nie można usunąć leku jeżeli jest on na liście interakcji
             e.HasOne(e => e.Lek1)
                 .WithMany()
                 .HasForeignKey(e => e.IdLek1)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            // Powiązanie kluczem obcym z Lek2
+            // Nie można usunąć leku jeżeli jest on na liście interakcji
             e.HasOne(e => e.Lek2)
                 .WithMany()
                 .HasForeignKey(e => e.IdLek2)
@@ -761,11 +828,15 @@ public class MyDbContext : DbContext
         //Konfiguracja Recepta
         modelBuilder.Entity<Recepta>(e =>
         {
+            // Klucz główny
             e.HasKey(e => e.IdRecepta);
             
+            // Data wystawienia recepty jest wymagana
             e.Property(e => e.DataWystawienia)
                 .IsRequired();
-
+            
+            // Na jednej wizycie może być wiele recept,
+            // Usunięcie wizyty spowoduje usunięcie recepty
             e.HasOne(e => e.Wizyta)
                 .WithMany(w => w.Recepty)
                 .HasForeignKey(e => e.IdWizyta)
@@ -815,21 +886,30 @@ public class MyDbContext : DbContext
         //Konfiguracja LekNaRecepcie
         modelBuilder.Entity<LekNaRecepcie>(e =>
         {
+            // Klucz główny - kombinacja leku i recepty musi być unikalna
             e.HasKey(e => new { e.IdLek, e.IdRecepta });
             
+            // Ilość jest wymagana, max. 255 znaków
             e.Property(e => e.Ilosc)
                 .HasMaxLength(255)
                 .IsRequired();
             
+            // Dawkowanie jest wymagane, max. 255 znaków
             e.Property(e => e.Dawkowanie)
                 .HasMaxLength(255)
                 .IsRequired();
-                
+            
+            //ASOCJACJA Z ATRYBUTEM
+            
+            // Powiązanie z lekiem
+            // Jeżeli lek zostanie usunięty - usunie LekNaRecepcie
             e.HasOne(e => e.Lek)
                 .WithMany(l => l.LekiNaRecepcie)
                 .HasForeignKey(e => e.IdLek)
                 .OnDelete(DeleteBehavior.Cascade);
-                
+            
+            // Powiązanie z receptą
+            // Jeżeli recepta zostanie usunięta - usunie LekNaRecepcie
             e.HasOne(e => e.Recepta)
                 .WithMany(r => r.LekiNaRecepcie)
                 .HasForeignKey(e => e.IdRecepta)
@@ -906,17 +986,22 @@ public class MyDbContext : DbContext
         //Konfiguracja Pielegniarek
         modelBuilder.Entity<Pielegniarka>(e =>
         {
+            // Do tabeli Pielegniarki
             e.ToTable("Pielegniarki");
             
+            // Podstawowy typ Osoba
             e.HasBaseType<Osoba>();
             
+            // Nr. prawa wykonywania zawodu jest wymagany - max. 7 znaków
             e.Property(e => e.NrPrawaWykonywaniaZawodu)
                 .HasMaxLength(7)
                 .IsRequired();
-
-            e.Property(e => e.Grafik).IsRequired();
-        
+            
+            // Nr. prawa wykonywania zawodu musi być unikalny
             e.HasIndex(e => e.NrPrawaWykonywaniaZawodu).IsUnique();
+            
+            // Grafik jest wymagany
+            e.Property(e => e.Grafik).IsRequired();
 
             e.HasData(new List<Pielegniarka>
             {

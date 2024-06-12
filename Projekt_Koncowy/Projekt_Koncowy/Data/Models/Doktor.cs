@@ -14,6 +14,7 @@ public class Doktor : Osoba
     //ASOCJACJA ZWYKŁA
     public virtual ICollection<Wizyta> Wizyty { get; set; } = null!;
     
+    // PRZESŁONIĘCIE
     public override string WyswietlDane()
     {
         return $"Doktor:\nID: {IdDoktor}" +
@@ -23,6 +24,7 @@ public class Doktor : Osoba
                $"\nPESEL: {Pesel}" +
                $"\nAdres: {Adres.Ulica} {Adres.NrDomu} M:{Adres.NrMieszkania} {Adres.KodPocztowy} {Adres.Miejscowosc}" +
                $"\nCzy jest osobą nieletnią?: {CzyNieletnia}" +
+               $"\nKategoria wiekowa : {JakaKategoria()}" +
                $"\nNumer prawa wykonywania zawodu: {NrPrawaWykonywaniaZawodu}";
     }
 }

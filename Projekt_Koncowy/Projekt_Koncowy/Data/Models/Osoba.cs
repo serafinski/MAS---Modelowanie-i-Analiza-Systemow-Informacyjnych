@@ -68,7 +68,7 @@ public abstract class Osoba
         {
             return KategoriaWiekowa.Dziecko;
         }
-        if (wiek < 65)
+        if (wiek < 60)
         {
             return KategoriaWiekowa.Dorosly;
         }
@@ -76,5 +76,6 @@ public abstract class Osoba
         return KategoriaWiekowa.Senior;
     }
 
+    // METODA KTÓRA BĘDZIE PRZESŁANIANA
     public abstract string WyswietlDane();
 }

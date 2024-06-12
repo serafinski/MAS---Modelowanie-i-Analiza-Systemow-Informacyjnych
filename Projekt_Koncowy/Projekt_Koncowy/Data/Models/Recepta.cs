@@ -1,5 +1,5 @@
 ﻿namespace Projekt_Koncowy.Data.Models;
-
+// ASOCJACJA Z ATRYBUTEM
 public class Recepta
 {
     public int IdRecepta { get; set; }

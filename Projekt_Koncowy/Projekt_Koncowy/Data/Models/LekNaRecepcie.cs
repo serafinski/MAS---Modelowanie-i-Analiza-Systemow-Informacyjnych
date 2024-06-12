@@ -1,5 +1,6 @@
 ﻿namespace Projekt_Koncowy.Data.Models;
 
+// ASOCJACJA Z ATRYBUTEM
 public class LekNaRecepcie
 {
     public string Ilosc { get; set; } = null!;

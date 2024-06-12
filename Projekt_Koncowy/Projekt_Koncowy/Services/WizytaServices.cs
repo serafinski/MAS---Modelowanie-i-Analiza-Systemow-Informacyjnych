@@ -10,7 +10,6 @@ public interface IWizytaServices
     Task<PacjentHistoriaResponseDto> WyswietlHistorieWizyt(int idPacjent);
     Task<WizytaResponseDto?> WyswietlWizyte(int idWizyty);
     Task<List<WizytaResponseDto>> WyswietlWizytyZakres(int idPacjent, DateTime from, DateTime to);
-
     Task<WizytaDto> DodajWizyte(WizytaDodajDto dto);
     Task<bool> UsunWizyte(int idWizyty);
 }
@@ -73,7 +72,7 @@ public class WizytaServices : IWizytaServices
             };
         }
 
-        throw new ArgumentException("Unknown patient type");
+        throw new ArgumentException("Nieznany typ pacjenta!");
     }
         
     private static object GetPacjentWithIdDto(Pacjent pacjent)
@@ -117,7 +116,7 @@ public class WizytaServices : IWizytaServices
             };
         }
 
-        throw new ArgumentException("Unknown patient type");
+        throw new ArgumentException("Nieznany typ pacjenta!");
     }
 
         
@@ -161,7 +160,8 @@ public class WizytaServices : IWizytaServices
             Wizyty = wizyty
         };
     }
-
+    
+    // ASOCJACJA KWALIFIKOWANA
     public async Task<WizytaResponseDto?> WyswietlWizyte(int idWizyty)
     {
         var wizyta = await _context.Wizyty
@@ -251,11 +251,6 @@ public class WizytaServices : IWizytaServices
             .Include(w => w.Pacjent).ThenInclude(p => p.Adres)
             .Include(w => w.Placowka)
             .FirstOrDefaultAsync(w => w.IdWizyty == wizyta.IdWizyty);
-
-        if (savedWizyta == null)
-        {
-            throw new Exception("Failed to retrieve saved visit details.");
-        }
 
         return new WizytaDto
         {

@@ -123,7 +123,8 @@ public class ReceptaServices : IReceptaServices
         {
             throw new Exception("Wizyta nie istnieje.");
         }
-
+        
+        //OGRANICZENIE XOR
         // Sprawdź interakcje pomiędzy nowymi lekami
         for (int i = 0; i < lekiNaRecepcie.Count; i++)
         {
@@ -132,6 +133,7 @@ public class ReceptaServices : IReceptaServices
                 var lek1Id = lekiNaRecepcie[i].IdLek;
                 var lek2Id = lekiNaRecepcie[j].IdLek;
 
+                //Czy istnieje interakcja w tabeli interakcji?
                 var interactionExists = await _context.InterakcjeLekow.AnyAsync(i =>
                     (i.IdLek1 == lek1Id && i.IdLek2 == lek2Id) ||
                     (i.IdLek1 == lek2Id && i.IdLek2 == lek1Id));

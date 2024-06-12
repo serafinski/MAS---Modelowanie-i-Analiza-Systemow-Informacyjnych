@@ -10,7 +10,7 @@ public class Senior : Pacjent
     }
     public int RokPrzejsciaNaEmeryture { get; set; }
     
-    //Wyświetlenie danych
+    // PRZESŁONIĘCIE
     public override string WyswietlDane()
     {
         return $"Pacjent:\nID: {IdPacjent}" +
@@ -20,6 +20,7 @@ public class Senior : Pacjent
                $"\nPESEL: {Pesel}" +
                $"\nAdres: {Adres.Ulica} {Adres.NrDomu} M:{Adres.NrMieszkania} {Adres.KodPocztowy} {Adres.Miejscowosc}" +
                $"\nCzy jest osobą nieletnią: {CzyNieletnia}" +
+               $"\nKategoria wiekowa : {JakaKategoria()}" +
                $"\nNumer kontaktu alarmowego: {NrKontaktuAlarmowego}" +
                $"\nRok przejscia na emeryture: {RokPrzejsciaNaEmeryture}";
     }

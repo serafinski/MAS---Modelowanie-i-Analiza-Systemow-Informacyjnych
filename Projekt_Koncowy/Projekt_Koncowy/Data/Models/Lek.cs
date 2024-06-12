@@ -1,5 +1,6 @@
 ﻿namespace Projekt_Koncowy.Data.Models;
 
+// ASOCJACJA Z ATRYBUTEM
 public class Lek
 {
     public int IdLek { get; set; }
