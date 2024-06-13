@@ -8,42 +8,43 @@ Przykładowe dane dla przetestowania endpointów zapewniłem w `TestData.md`
 * Model relacyjny - Asocjacje
 * Model relacyjny - Dziedziczenie
 ## Implementacja
-### Atr. złożony
+### Atrybut złożony
 `MyDbContext.cs` - powiązania z Osobą
-<br>`Adres.cs` - faktyczna klasa posiadająca atrybuty
-### Atr. opcjonalny
-`MyDbContext.cs` - brak `.IsRequired()`
-<br>`Adres.cs` - `NrMieszkania` nie jest wymagany
-### Atr. powtarzalny
+<br>`Adres.cs` - faktyczna klasa posiadająca atrybuty dla Adresu
+### Atrybut opcjonalny
+`MyDbContext.cs` - brak `.IsRequired()` dla `NrMieszkania`
+<br>`Adres.cs` - `NrMieszkania` nie jest wymagany - `int? NrMieszkania`
+### Atrybut powtarzalny
 `MyDbContext.cs` - powiązania z Osobą
-<br>`Imiona.cs` - faktyczna klasa posiadająca atrybuty
-### Atr. klasowy
-`Osoba.cs` - `MinimalnyWiekBezZgodyOpiekuna` jest taki sam dla każdego obiektu klasy.
-### Atr. pochodny
+<br>`Imiona.cs` - faktyczna klasa posiadająca atrybuty gdzie pierwsze imię jest obowiązkowe a drugie jest opcjonalne
+### Atrybut klasowy
+`Osoba.cs` - `private const int MinimalnyWiekBezZgodyOpiekuna = 18;` atrybut jest taki sam dla każdego obiektu klasy.
+### Atrybut pochodny
 `Osoba.cs` - `CzyNieletnia` wylicza czy osoba ma mniej niż 18 lat
 ### Przesłonięcie
 `Osoba.cs` - Klasa abstrakcyjna, z której przesłaniamy metodę `WyswietlDane()`
 Klasy, w których będziemy przesłaniać tę metodę:
-* `Doktor.cs` które potem jest dalej przesłonięte w `KierownikPlacowki.cs`
-* `Pacjent.cs` które potem jest dalej przesłonięte w `Dorosly.cs`,`Dziecko.cs` i `Senior.cs`
+* `Doktor.cs` gdzie potem metoda jest dalej przesłaniana w `KierownikPlacowki.cs`
+* `Pacjent.cs` gdzie potem metoda jest dalej przesłaniana w `Dorosly.cs`,`Dziecko.cs` i `Senior.cs`
 * `Pielegniarka.cs`
 ### Asocjacja “Zwykła”
-`MyDbContext.cs` - Tak naprawdę, jakakolwiek asocjacja - np. Wizyta - Doktor  
+`MyDbContext.cs` - Tak naprawdę, jakakolwiek asocjacja - np. Wizyta - Doktor
+<br> Dodatkowo `Virtuals` w klasie `Wizyta.cs` i `Doktor.cs`
 ### Asocjacja z atrybutem
 Asocjacja między:
 * `Lek.cs`
 * `Recepta.cs`
 <br>przez klasę pośredniczącą `LekNaRecepcie.cs`
-Asocjacje bezpośrednio widoczne w `MyDbContext.cs` w LekNaRecepcie.
+Asocjacje bezpośrednio widoczne w `MyDbContext.cs` w LekNaRecepcie oraz za pomocą `Virtuals` w klasach.
 ### Asocjacja Kwalifikowana
-`WizytaServices.cs` - Każda wizyta dostaje swój unikatowy NrWizyty.
+`WizytaServices.cs` - Każda wizyta dostaje swój unikatowy losowy NrWizyty.
 <br>Pacjent może sprawdzić swoją wizytę za pomocą metody `WyswietlWizyte(nrWizyty)`
 ### Kompozycja
-`MyDbContext.cs` - jest wymagane by Oddział był przypisany do Placówki
+`MyDbContext.cs` - wymagane jest by Oddział był przypisany do Placówki
 `Oddzial.cs` - bezpośrednie odwołanie do Placówki poprzez `IdPlacowki`.
 ### Klasa Abstrakcyjna i polimorficzne wołanie metod
 `Osoba.cs` - klasa abstrakcyjna z metodą `WyswietlDane()`
-Klasy, w których będziemy wołać polimorficznie metodę:
+Klasy, z których będziemy wołać polimorficznie metodę:
 * `Doktor.cs`  
 * `KierownikPlacowki.cs`
 * `Dorosly.cs`
@@ -53,10 +54,10 @@ Klasy, w których będziemy wołać polimorficznie metodę:
 <br>Endpoint `WyswietlDane` dostępny w `OsobyController.cs`
 ### Ograniczenie atrybutu
 `Osoba.cs` - w tej klasie znajduje się `NrTelefonu`,
-który jest ograniczony w `MyDbContext.cs` i ma mieć max. 16 znaków.
+który jest ograniczony w `MyDbContext.cs` za pomocą `Property.HasMaxLength` i ma mieć max. 16 znaków.
 ### Ograniczenie unique
 `Osoba.cs` - w tej klasie znajduje się `Pesel`,
-który jest ograniczony w `MyDbContext.cs` i ma być unikalny!
+który jest ograniczony w `MyDbContext.cs` za pomocą `HasIndex.IsUnique` i ma być unikalny!
 ### Ograniczenie Subset
 By zostać kierownikiem - Doktor musi być pracownikiem danej placówki.
 <br>`KierownikPlacowki.cs` - dziedziczy po `Doktor.cs` - musi być Doktorem.
@@ -64,16 +65,16 @@ Dodatkowo bezpośrednie powiązanie Kierownika z Placówką poprzez `IdPlacowki`
 ### Ograniczenie Ordered
 Leki na Recepcie są przechowywanie w kolejności alfabetycznej.
 <br> `ReceptaServices.cs` - metoda `WyswietlRecepty(int idPacjent)`
-sortuje leki w taki sposób by zwrócić je w kolejności alfabetycznej.
+sortuje leki za pomocą `OrderBy` w taki sposób, by zwrócić je w kolejności alfabetycznej.
 ### Ogranicznie XOR
-`ReceptaServices.cs` - W metodzie `DodajRecepte()` - sprawdzamy czy istnieje interakcja między lekami.
+`ReceptaServices.cs` - W metodzie `DodajRecepte()` - sprawdzamy czy istnieje interakcja między lekami, które dodajemy na receptę.
 Jeżeli występuje interakcja - nie pozwalamy dodać recepty.
 ### Ograniczenie własne
 `WizytaServices.cs` - W metodzie `DodajWizyte()` wywołujemy metodę `CzyDoktorMaWolneTerminy()`,
 która sprawdza czy doktor ma mniej niż 10 wizyt dziennie. Jeżeli ma 10 wizyt - nie pozwala dodać więcej.
 
 **_To ograniczenie zostało nieuwzględnione w GUI, ponieważ nie uwzględniono takiego alternatywnego przepływu zdarzeń._**
-### Met. klasowa
+### Metoda klasowa
 `DoctorServices.cs` - Użyłem Helper'a `DoctorHelper` by metody były statyczne.
 <br>Metody dostają DbContext jako parametr - dzięki temu jest dostęp do kontekstu bez instancji klasy - wywołanie niezależne od `DoctorServices`.
 ### Przeciążenie
