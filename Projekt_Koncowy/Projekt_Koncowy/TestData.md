@@ -162,6 +162,7 @@ ID: 2
 From: 2024-06-02
 To: 2024-06-03 / 2024-07-03
 ### Dodaj Wizyte
+UWAGA: DANE JAK SĄ SEEDOWANE SĄ NA DATETIME.NOW - SKORYGUJ DATE W REQUESCIE!
 ```json
 {
   "idPacjent": 2,
