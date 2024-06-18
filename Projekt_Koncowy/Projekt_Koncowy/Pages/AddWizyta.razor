@@ -1,0 +1,253 @@
+﻿@*URL strony*@
+@page "/wizyta"
+
+@*Importy modeli i wstrzyknięcie serwisów*@
+@inject WizytaServices _wizytaServices
+@inject GuiServices _guiServices
+@using Projekt_Koncowy.Data.DTOs
+@using Projekt_Koncowy.Services
+
+<PageTitle>Dodanie nowej wizyty</PageTitle>
+
+<h3>Dodanie nowej wizyty</h3>
+
+@*Potrzebne do wyświetlania komunikatów o błędzie*@
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <p class="text-danger">@errorMessage</p>
+}
+
+@*Potrzebne do wyświetlania komunikatów o sukcesie*@
+@if (!string.IsNullOrEmpty(successMessage))
+{
+    <div class="alert alert-success">@successMessage</div>
+}
+
+@*Front-end*@
+<div>
+    @*Pole tekstowe do wprowadzenia PESELu*@
+    <div class="form-group">
+        <label for="pesel">PESEL Pacjenta:</label>
+        <InputText id="pesel" @bind-Value="pesel" class="form-control" @onkeypress="HandleKeyPress"/>
+    </div>
+    @*Przycisk do pobrania danych Pacjenta*@
+    <button type="button" class="btn btn-primary" @onclick="FetchPacjentData">Wyświetl dane pacjenta</button>
+
+    @*Jeżeli pacjent istnieje*@
+    @if (pacjent != null)
+    {
+        <div>
+            <h4>Dane pacjenta</h4>
+            @*Jeżeli Pacjent jest Dorosłym*@
+            @if (pacjent is DoroslyGuiDto)
+            {
+                var dorosly = (DoroslyGuiDto)pacjent;
+                <p>Imię: @dorosly.Imie</p>
+                <p>Drugie Imię: @(string.IsNullOrEmpty(dorosly.DrugieImie) ? "Brak danych" : dorosly.DrugieImie)</p>
+                <p>Nazwisko: @dorosly.Nazwisko</p>
+                <p>Numer telefonu: @dorosly.NrTelefonu</p>
+                <p>PESEL: @dorosly.Pesel</p>
+                <p>Adres: @($"{dorosly.Ulica} {dorosly.NrDomu}{(dorosly.NrMieszkania.HasValue ? "/" + dorosly.NrMieszkania.Value : "")}, {dorosly.Miejscowosc}, {dorosly.KodPocztowy}")</p>
+                <p>Kontakt alarmowy: @dorosly.NrKontaktuAlarmowego</p>
+                <p>NIP Pracodawcy: @dorosly.NipPracodawcy</p>
+
+                <h4>Historia wizyt</h4>
+                <ul>
+                    @*Pobieranie wizyt i listowanie ich*@
+                    @foreach (var w in dorosly.Wizyty.OrderBy(w => w.DataWizyty))
+                    {
+                        <li>@w.DataWizyty.ToShortDateString() - @(w.Doktor != null ? $"{w.Doktor.Imie} {w.Doktor.Nazwisko}" : "Brak danych"): @w.OpisWizyty</li>
+                    }
+                </ul>
+            }
+            
+            @*Jeżeli Pacjent jest Dzieckiem*@
+            else if (pacjent is DzieckoGuiDto)
+            {
+                var dziecko = (DzieckoGuiDto)pacjent;
+                <p>Imię: @dziecko.Imie</p>
+                <p>Drugie Imię: @(string.IsNullOrEmpty(dziecko.DrugieImie) ? "Brak danych" : dziecko.DrugieImie)</p>
+                <p>Nazwisko: @dziecko.Nazwisko</p>
+                <p>Numer telefonu: @dziecko.NrTelefonu</p>
+                <p>PESEL: @dziecko.Pesel</p>
+                <p>Adres: @($"{dziecko.Ulica} {dziecko.NrDomu}{(dziecko.NrMieszkania.HasValue ? "/" + dziecko.NrMieszkania.Value : "")}, {dziecko.Miejscowosc}, {dziecko.KodPocztowy}")</p>
+                <p>Kontakt alarmowy: @dziecko.NrKontaktuAlarmowego</p>
+                <p>Nazwa Szkoły: @dziecko.NazwaSzkoly</p>
+
+                <h4>Historia wizyt</h4>
+                <ul>
+                    @*Pobieranie wizyt i listowanie ich*@
+                    @foreach (var w in dziecko.Wizyty.OrderBy(w => w.DataWizyty))
+                    {
+                        <li>@w.DataWizyty.ToShortDateString() - @(w.Doktor != null ? $"{w.Doktor.Imie} {w.Doktor.Nazwisko}" : "Brak danych"): @w.OpisWizyty</li>
+                    }
+                </ul>
+            }
+            
+            @*Jeżeli Pacjent jest Seniorem*@
+            else if (pacjent is SeniorGuiDto)
+            {
+                var senior = (SeniorGuiDto)pacjent;
+                <p>Imię: @senior.Imie</p>
+                <p>Drugie Imię: @(string.IsNullOrEmpty(senior.DrugieImie) ? "Brak danych" : senior.DrugieImie)</p>
+                <p>Nazwisko: @senior.Nazwisko</p>
+                <p>Numer telefonu: @senior.NrTelefonu</p>
+                <p>PESEL: @senior.Pesel</p>
+                <p>Adres: @($"{senior.Ulica} {senior.NrDomu}{(senior.NrMieszkania.HasValue ? "/" + senior.NrMieszkania.Value : "")}, {senior.Miejscowosc}, {senior.KodPocztowy}")</p>
+                <p>Kontakt alarmowy: @senior.NrKontaktuAlarmowego</p>
+                <p>Rok przejścia na emeryturę: @senior.RokPrzejsciaNaEmeryture</p>
+
+                <h4>Historia wizyt</h4>
+                <ul>
+                    @*Pobieranie wizyt i listowanie ich*@
+                    @foreach (var w in senior.Wizyty.OrderBy(w => w.DataWizyty))
+                    {
+                        <li>@w.DataWizyty.ToShortDateString() - @(w.Doktor != null ? $"{w.Doktor.Imie} {w.Doktor.Nazwisko}" : "Brak danych"): @w.OpisWizyty</li>
+                    }
+                </ul>
+            }
+            
+            @*Przycisk do wyświetlenia formularza do dodawania wizyty*@
+            <button type="button" class="btn btn-success" @onclick="ShowAddWizytaForm">Dodaj wizytę</button>
+
+            @if (showAddWizytaForm)
+            {
+                @*Formularz dodania daty oraz opisu wizyty*@
+                <EditForm Model="@wizyta" OnValidSubmit="HandleValidSubmit">
+                    <DataAnnotationsValidator/>
+                    <ValidationSummary/>
+
+                    <div class="form-group">
+                        <label for="dataWizyty">Data wizyty:</label>
+                        @*Ustawienie daty wizyty*@
+                        <InputDate id="dataWizyty" @bind-Value="wizyta.DataWizyty" class="form-control"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="opisWizyty">Opis wizyty:</label>
+                        @*Ustawienie opisu wizyty*@
+                        <InputTextArea id="opisWizyty" @bind-Value="wizyta.OpisWizyty" class="form-control"/>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Zatwierdź</button>
+                </EditForm>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    private string pesel;
+    // Obiekt by móc ogarniać typy - senior, dziecko, dorosly
+    private object pacjent;
+    private WizytaDodajDto wizyta = new WizytaDodajDto { DataWizyty = DateTime.Now }; 
+    private bool loading;
+    private bool showAddWizytaForm;
+    private string errorMessage;
+    private string successMessage;
+
+    private async Task FetchPacjentData()
+    {
+        loading = true;
+        errorMessage = string.Empty;
+        successMessage = string.Empty;
+
+        try
+        {
+            // Pobierz pacienta z bazy na podstawie PESELu
+            pacjent = await _guiServices.GetDoroslyByPesel(pesel);
+
+            if (pacjent == null)
+            {
+                errorMessage = "Pacjent o podanym numerze PESEL nie istnieje w bazie danych.";
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Błąd: {ex.Message}";
+        }
+
+        loading = false;
+    }
+
+    private void ShowAddWizytaForm()
+    {
+        if (pacjent != null)
+        {
+            showAddWizytaForm = true;
+            
+            //Ustawienie IdPacjenta
+            wizyta.IdPacjent = pacjent is DoroslyGuiDto dorosly ? dorosly.IdPacjenta :
+                pacjent is DzieckoGuiDto dziecko ? dziecko.IdPacjenta :
+                pacjent is SeniorGuiDto senior ? senior.IdPacjenta : 0;
+            
+            //Ustawione stale wartosci dla demonstaracji
+            wizyta.IdDoktor = 1; 
+            wizyta.IdPlacowka = 1;
+        }
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        errorMessage = string.Empty;
+        
+        //Jeżeli nie podamy opisu wizyty
+        if (string.IsNullOrEmpty(wizyta.OpisWizyty))
+        {
+            errorMessage = "Opis wizyty nie może być pusty.";
+            return;
+        }
+
+        try
+        {
+            var response = await _wizytaServices.DodajWizyte(wizyta);
+            if (pacjent is DoroslyGuiDto dorosly)
+            {
+                successMessage = $"Wizyta dodana poprawnie: " +
+                                 $"Imię: {dorosly.Imie} {dorosly.DrugieImie ?? string.Empty}, " +
+                                 $"Nazwisko: {dorosly.Nazwisko}, " +
+                                 $"PESEL: {dorosly.Pesel}, " +
+                                 $"Data wizyty: {wizyta.DataWizyty.ToShortDateString()}, " +
+                                 $"Opis wizyty: {wizyta.OpisWizyty}";
+            }
+            else if (pacjent is DzieckoGuiDto dziecko)
+            {
+                successMessage = $"Wizyta dodana poprawnie: " +
+                                 $"Imię: {dziecko.Imie} {dziecko.DrugieImie ?? string.Empty}, " +
+                                 $"Nazwisko: {dziecko.Nazwisko}, " +
+                                 $"PESEL: {dziecko.Pesel}, " +
+                                 $"Data wizyty: {wizyta.DataWizyty.ToShortDateString()}, " +
+                                 $"Opis wizyty: {wizyta.OpisWizyty}";
+            }
+            else if (pacjent is SeniorGuiDto senior)
+            {
+                successMessage = $"Wizyta dodana poprawnie: " +
+                                 $"Imię: {senior.Imie} {senior.DrugieImie ?? string.Empty}, " +
+                                 $"Nazwisko: {senior.Nazwisko}, " +
+                                 $"PESEL: {senior.Pesel}, " +
+                                 $"Data wizyty: {wizyta.DataWizyty.ToShortDateString()}, " +
+                                 $"Opis wizyty: {wizyta.OpisWizyty}";
+            }
+            ResetForm();
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Błąd: {ex.Message}";
+        }
+    }
+
+    //Metoda która pozwala na kliknięcie ENTER gdy wprowadzimy PESEL i chcemy zatwierdzić
+    private async Task HandleKeyPress(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            await Task.Delay(100); 
+            await FetchPacjentData();
+        }
+    }
+
+    private void ResetForm()
+    {
+        wizyta = new WizytaDodajDto { DataWizyty = DateTime.Now };
+        showAddWizytaForm = false;
+        pacjent = null;
+    }
+}
